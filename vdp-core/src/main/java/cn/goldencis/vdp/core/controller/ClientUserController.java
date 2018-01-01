@@ -39,6 +39,7 @@ public class ClientUserController implements ServletContextAware {
         ModelAndView model = new ModelAndView();
         model.setViewName("/user/clientUser/index");
 
+        //根据当前用户查询部门信息，放到模型中返回前端
         String zNodes = departmentService.getNodesByLogin();
         model.addObject("zNodes", zNodes);
 

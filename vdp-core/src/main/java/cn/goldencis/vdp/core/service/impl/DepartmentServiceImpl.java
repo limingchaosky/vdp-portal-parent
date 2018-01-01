@@ -83,16 +83,6 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
 
     }
 
-    /*
-     * (non-Javadoc)
-     * @see cn.goldencis.tsa.system.service.IDepartmentService#updatedept(cn.goldencis.tsa.system.entity.DepartmentDO)
-     */
-/*    @Transactional
-    public boolean updatedept(DepartmentDO bean) {
-        bean.setStatus(1);
-        mapper.updateByPrimaryKeySelective(bean);
-        return true;
-    }*/
     @Transactional
     public boolean updatedept(DepartmentDO bean) {
 
@@ -332,12 +322,19 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
     @Transactional
     public boolean addDepartment(DepartmentDO bean) {
 
+        //插入当前传入的部门，注意：要在mybatis的配置文件中使用keyProperty将主键id传回。
         mapper.insertSelective(bean);
+
+        //查询与父类部门相关联的用户集合
         UserDepartmentDOCriteria example = new UserDepartmentDOCriteria();
         example.createCriteria().andDepartmentIdEqualTo(bean.getParentId());
         List<UserDepartmentDO> list = udmapper.selectByExample(example);
+
+        //传入插入sql时回传的部门id
         List<Integer> dids = new ArrayList<>();
         dids.add(bean.getId());
+
+        //将新增部门和父类部门下的关联用户进行关联。
         cmapper.addUserDeparts(addRole(list, dids));
         return true;
     }

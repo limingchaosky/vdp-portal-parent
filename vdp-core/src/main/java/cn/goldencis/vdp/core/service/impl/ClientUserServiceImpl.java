@@ -9,6 +9,8 @@ import cn.goldencis.vdp.core.service.IClientUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by limingchao on 2017/12/22.
  */
@@ -29,4 +31,8 @@ public class ClientUserServiceImpl extends AbstractBaseServiceImpl<ClientUserDO 
         return getDao().selectByPrimaryKey(primaryKey);
     }
 
+    @Override
+    public List<ClientUserDO> getClientUserListByDepartmentId() {
+        return null;
+    }
 }

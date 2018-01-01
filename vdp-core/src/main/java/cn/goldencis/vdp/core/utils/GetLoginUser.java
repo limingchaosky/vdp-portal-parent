@@ -56,10 +56,7 @@ public class GetLoginUser {
      * @return
      */
     public static DepartmentDO getSuperDept() {
-
-        DepartmentDO superDept = getLoginUser.userService.getSuperDepartment();
-        return superDept;
-
+        return null;
     }
 
     /**
