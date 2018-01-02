@@ -7,14 +7,6 @@
     background-image: url(../images/icons/nav/about.png);
 }
 
-.nav_device {
-    background-image: url(../images/icons/nav/device.png);
-}
-
-.nav_map {
-    background-image: url(../images/icons/nav/map.png);
-}
-
 .nav_report {
     background-image: url(../images/icons/nav/report.png);
 }
@@ -25,4 +17,16 @@
 
 .nav_system {
     background-image: url(../images/icons/nav/system.png);
+}
+
+.nav_check {
+    background-image: url(../images/icons/nav/check.png);
+}
+
+.nav_policy {
+    background-image: url(../images/icons/nav/policy.png);
+}
+
+.nav_approve {
+    background-image: url(../images/icons/nav/approve.png);
 }

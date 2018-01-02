@@ -455,62 +455,52 @@ public class ClientUserDOCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andDeptguidEqualTo(String value) {
+        public Criteria andDeptguidEqualTo(Integer value) {
             addCriterion("deptguid =", value, "deptguid");
             return (Criteria) this;
         }
 
-        public Criteria andDeptguidNotEqualTo(String value) {
+        public Criteria andDeptguidNotEqualTo(Integer value) {
             addCriterion("deptguid <>", value, "deptguid");
             return (Criteria) this;
         }
 
-        public Criteria andDeptguidGreaterThan(String value) {
+        public Criteria andDeptguidGreaterThan(Integer value) {
             addCriterion("deptguid >", value, "deptguid");
             return (Criteria) this;
         }
 
-        public Criteria andDeptguidGreaterThanOrEqualTo(String value) {
+        public Criteria andDeptguidGreaterThanOrEqualTo(Integer value) {
             addCriterion("deptguid >=", value, "deptguid");
             return (Criteria) this;
         }
 
-        public Criteria andDeptguidLessThan(String value) {
+        public Criteria andDeptguidLessThan(Integer value) {
             addCriterion("deptguid <", value, "deptguid");
             return (Criteria) this;
         }
 
-        public Criteria andDeptguidLessThanOrEqualTo(String value) {
+        public Criteria andDeptguidLessThanOrEqualTo(Integer value) {
             addCriterion("deptguid <=", value, "deptguid");
             return (Criteria) this;
         }
 
-        public Criteria andDeptguidLike(String value) {
-            addCriterion("deptguid like", value, "deptguid");
-            return (Criteria) this;
-        }
-
-        public Criteria andDeptguidNotLike(String value) {
-            addCriterion("deptguid not like", value, "deptguid");
-            return (Criteria) this;
-        }
-
-        public Criteria andDeptguidIn(List<String> values) {
+        public Criteria andDeptguidIn(List<Integer> values) {
             addCriterion("deptguid in", values, "deptguid");
             return (Criteria) this;
         }
 
-        public Criteria andDeptguidNotIn(List<String> values) {
+        public Criteria andDeptguidNotIn(List<Integer> values) {
             addCriterion("deptguid not in", values, "deptguid");
             return (Criteria) this;
         }
 
-        public Criteria andDeptguidBetween(String value1, String value2) {
+        public Criteria andDeptguidBetween(Integer value1, Integer value2) {
             addCriterion("deptguid between", value1, value2, "deptguid");
             return (Criteria) this;
         }
 
-        public Criteria andDeptguidNotBetween(String value1, String value2) {
+        public Criteria andDeptguidNotBetween(Integer value1, Integer value2) {
             addCriterion("deptguid not between", value1, value2, "deptguid");
             return (Criteria) this;
         }
@@ -1122,11 +1112,6 @@ public class ClientUserDOCriteria {
 
         public Criteria andTruenameLikeInsensitive(String value) {
             addCriterion("upper(truename) like", value.toUpperCase(), "truename");
-            return (Criteria) this;
-        }
-
-        public Criteria andDeptguidLikeInsensitive(String value) {
-            addCriterion("upper(deptguid) like", value.toUpperCase(), "deptguid");
             return (Criteria) this;
         }
 

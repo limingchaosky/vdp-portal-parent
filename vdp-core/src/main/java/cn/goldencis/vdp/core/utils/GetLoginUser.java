@@ -52,19 +52,11 @@ public class GetLoginUser {
     }
 
     /**
-     * 获取部门权限
-     * @return
-     */
-    public static DepartmentDO getSuperDept() {
-        return null;
-    }
-
-    /**
      * 关联用户部门表
      * 获取用户对应的部门权限
      * @return
      */
-    public static List<DepartmentDO> getDeptRole() {
+    public static List<DepartmentDO> getDepartmentListWithLoginUser() {
 
         String user_name = "";
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

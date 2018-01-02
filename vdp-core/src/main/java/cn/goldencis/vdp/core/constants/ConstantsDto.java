@@ -25,6 +25,8 @@ public class ConstantsDto {
     public static final String ADMIN_NAME = "system";
     public static final String ADMIN_ID = "-1";
 
+    public static final Integer DEFAULT_POLICY_ID = 1;
+
     public static final String MANUAL_CREATION_WORK_ORDER = "MANUAL_CREATION_WORK_ORDER";
 
     public static final String CHILD_TASK_DOING = "1";
@@ -67,19 +69,19 @@ public class ConstantsDto {
 
     public static final String NO_OUTGOING_SEQUENCE = "No outgoing sequence flow of the exclusive gateway";
 
-    public static final String PROCJECT_IDENTIFICATION = "OMS";
+    public static final String PROCJECT_IDENTIFICATION = "VDP";
 
     public static final String READ_OMS_AUTH_FILE_NAME = "readomsauth.out";
 
     public static final String LONG_TIME_LIMIT = "永久";
 
-    public static final String APP_FILE_NAME = "oms.apk";
+    public static final String APP_FILE_NAME = "vdp.apk";
 
     public static final String APP_FILE_CATALOG = "/apk";
 
-    public static final String APP_PACKAGE = "cn.goldencis.oms";
+    public static final String APP_PACKAGE = "cn.goldencis.vdp";
 
-    public static final String APP_NAME = "OMS运维管理系统";
+    public static final String APP_NAME = "VDP视频数据安全防护系统";
 
     public static final String SEC_CODE = "SEC_CODE";
     public static final String SEC_CODE_FLAG = "SEC_CODE_FLAG";

@@ -1,12 +1,17 @@
 package cn.goldencis.vdp.core.controller;
 
+import cn.goldencis.vdp.core.constants.ConstantsDto;
+import cn.goldencis.vdp.core.entity.DepartmentDO;
+import cn.goldencis.vdp.core.entity.ResultMsg;
 import cn.goldencis.vdp.core.service.IDepartmentService;
 import cn.goldencis.vdp.core.entity.ClientUserDO;
-import cn.goldencis.vdp.core.entity.ClientUserDOCriteria;
 import cn.goldencis.vdp.core.service.IClientUserService;
+import cn.goldencis.vdp.core.utils.GetLoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,6 +39,10 @@ public class ClientUserController implements ServletContextAware {
         this.servletContext = servletContext;
     }
 
+    /**
+     * 用户管理主页面
+     * @return
+     */
     @RequestMapping(value = "/index")
     public ModelAndView index() {
         ModelAndView model = new ModelAndView();
@@ -46,13 +55,107 @@ public class ClientUserController implements ServletContextAware {
         return model;
     }
 
+    /**
+     * 请求指定部门下的用户列表
+     * @param departmentId 指定部门id
+     * @param start
+     * @param length
+     * @param ordercase 查询条件
+     * @return
+     */
     @ResponseBody
-    @RequestMapping(value = "getAllClientUsers")
-    public List<ClientUserDO> getAllClientUsers(int start, int length) {
-        ClientUserDOCriteria example = new ClientUserDOCriteria();
-        List<ClientUserDO> clientUsers = clientUserService.listPage(start, length, example);
+    @RequestMapping(value = "/getClientUserPageByDepartmentId")
+    public ResultMsg getAllClientUsers(@RequestParam(defaultValue = "1") Integer departmentId, int start, int length,
+                                       @RequestParam(value = "draw", required = false) String draw,
+                                       @RequestParam(value = "ordercase", required = false) String ordercase) {
 
-        return clientUsers;
+        //根据部门参数不同查询部门集合，当部门id为顶级部门时，需要判断账户部门权限，
+        List<DepartmentDO> departmentList = null;
+        //重新查询账户的关联部门，查询其部门权限集合，如果包含顶级部门，则查询查询全部部门，否则查询该账户部门权限下的部门
+        if (departmentId == 1) {
+            departmentList = GetLoginUser.getDepartmentListWithLoginUser();
+        } else {
+            //如果不是顶级部门，查询该部门下所有部门的集合
+            departmentList = departmentService.getDeptarMentListByParent(departmentId);
+        }
+
+        ResultMsg resultMsg = new ResultMsg();
+        if (departmentList != null && departmentList.size() > 0) {
+            int conut = (int)clientUserService.conutClientUserListByDepartmentId(departmentList);
+            List<ClientUserDO> clientUsers = clientUserService.getClientUserListByDepartmentId(departmentList, start, length);
+            resultMsg.setData(clientUsers);
+            resultMsg.setExportlength(length);
+            resultMsg.setExportstart(start);
+            resultMsg.setRecordsFiltered(conut);
+            resultMsg.setRecordsTotal(conut);
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
+            return resultMsg;
+        }
+
+        return resultMsg;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/addClientUser",method = RequestMethod.POST)
+    public ResultMsg addClientUser(ClientUserDO clientUser) {
+
+        ResultMsg resultMsg = new ResultMsg();
+        try {
+            ClientUserDO clientUserInDB = clientUserService.getByPrimaryKey(clientUser.toString());
+            if (clientUserInDB != null){
+                resultMsg.setResultCode(ConstantsDto.RESULT_CODE_FALSE);
+                resultMsg.setResultMsg("用户名重复！");
+                return resultMsg;
+            } else {
+                int conut = clientUserService.addClientUser(clientUser);
+                resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
+                resultMsg.setResultMsg("插入成功！");
+                return resultMsg;
+            }
+        } catch (Exception e) {
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
+            resultMsg.setResultMsg("插入错误");
+            return resultMsg;
+        }
+
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateClientUser",method = RequestMethod.POST)
+    public ResultMsg updateClientUser(ClientUserDO clientUser) {
+        ResultMsg resultMsg = new ResultMsg();
+        try {
+            //判断用户名是否重复
+            boolean flag = clientUserService.checkClientUserNameDuplicate(clientUser.getUsername());
+            if (!flag) {
+                resultMsg.setResultCode(ConstantsDto.RESULT_CODE_FALSE);
+                resultMsg.setResultMsg("用户名重复！");
+            }
+
+            clientUserService.updateClientUser(clientUser);
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
+            resultMsg.setResultMsg("更新成功！");
+        } catch (Exception e) {
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
+            resultMsg.setResultMsg("更新异常");
+        }
+        return resultMsg;
+    }
+
+    @RequestMapping(value = "/deleteClientUser")
+    public ResultMsg deleteClientUser(Integer id) {
+        ResultMsg resultMsg = new ResultMsg();
+
+        try {
+            clientUserService.deleteClientUserById(id);
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
+            resultMsg.setResultMsg("删除成功！");
+            return resultMsg;
+        } catch (Exception e) {
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
+            resultMsg.setResultMsg("删除错误！");
+            return resultMsg;
+        }
     }
 
 }

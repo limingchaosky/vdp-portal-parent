@@ -63,7 +63,7 @@
             height:'50px',
             backgroundImage:bgurl,
             backgroundRepeat:'no-repeat',
-            backgroundPositionY: '-8px'
+            backgroundPositionY: '5px'
         });
 })
 

@@ -27,8 +27,8 @@
                     <input id="bar_searchstr" type="text" placeholder="部门名称">
                     <i id="bar_searchstr_icon" class="icon-search"></i>
                 </div>
-                <a id="bar_add_dept" class="bar-item bar-item-icon icon-add" title="添加部门"></a>
-                <a id="bar_export" class="bar-item bar-item-icon icon-export" title="导出"></a>
+                <a id="bar_add_dept" class="bar-item bar-item-icon iconfont icon-btn-add" title="添加部门"></a>
+                <a id="bar_export" class="bar-item bar-item-icon iconfont icon-btn-export1" title="导出"></a>
             </div>
         </div>
         <!--右侧顶部操作结束-->
@@ -81,7 +81,7 @@
 <!--部门表操作模板-->
 <script id="temp_opt_box" type="text/html">
     <div class="table-opt-box">
-        <i class="icon-setting table-opt-icon"></i>
+        <i class="iconfont icon-nav-system table-opt-icon"></i>
         <div class="opt-hover-box">
             <div class="opt-hover-row j-opt-hover-edit" data-id="{{id}}">
                 <i class="icon-bianji"></i>

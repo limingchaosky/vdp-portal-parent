@@ -43,7 +43,7 @@ $(function () {
             wcontent.css("left", leftMargin + "px");
             mul1.parent().removeClass("havelist");
             menushow = 0;
-            $("#wlogo").css("background-position-x", "-47px");
+            $("#wlogo").css("background-position-x", "13px");
             $(".nameshow").removeClass("nameshow").addClass("namehide");
             localStorage.menushow = 1;
         }
@@ -69,7 +69,7 @@ $(function () {
             $("#deviceList").css({
                 "width": "100%"
             })
-            $("#wlogo").css("background-position-x", "-47px");
+            $("#wlogo").css("background-position-x", "13px");
         }
         $('.dataTables_scrollHead table').css('width', $('.dataTables_scrollBody table').width());
         $('.dataTables_scrollBody').each(function (index, obj) {

@@ -135,6 +135,11 @@ function initEvents() {
             rules: {
               name: {
                 required: true,
+                remote:{
+                  data:{
+                    pid:''
+                  }
+                }
               },
               owner: {
               },
@@ -178,7 +183,7 @@ function initEvents() {
               layer.close(index);
               layer.msg('编辑成功！', { icon: 1 });
               //更新部门树
-              getAjax(ctx + '/department/getnodes', '', function (msg) {
+              getAjax(ctx + '/department/getDepartmentNodesByLoginUser', '', function (msg) {
                 zNodes = JSON.parse(msg);
                 var selectID = deptTree.getSelectedNodes()[0].id;
                 deptTree.destroy();
@@ -217,10 +222,8 @@ function initEvents() {
             }
           };
           //部门树
-          console.log(zNodes)
 
           var zNodesBak = $.grep(zNodes, function (obj) {
-            // console.log(obj.treePath)
             return obj.treePath.indexOf(',' + id + ',') < 0 && obj.id !== id;
           });
           parentDeptTree = $.fn.zTree.init($("#openWind .j-parent-dept-tree"), setting, zNodesBak);

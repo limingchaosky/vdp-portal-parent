@@ -1,48 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/common/taglibs.jsp"%>
-<!--<style type="text/css">-->
-    <!--.numbermess {-->
-        <!--margin-top: 30px;-->
-        <!--margin-bottom: 10px;-->
-        <!--margin-left: 20px;-->
-    <!--}-->
-
-    <!--.tishi {-->
-        <!--margin-left: 20px;-->
-    <!--}-->
-
-    <!--#wmessage {-->
-        <!--position: relative;-->
-    <!--}-->
-
-    <!--.mestop {-->
-        <!--overflow-x: hidden;-->
-        <!--position: absolute;-->
-        <!--left: 5px;-->
-        <!--top: 10px;-->
-        <!--background: red;-->
-        <!--height: 10px;-->
-        <!--width: 10px;-->
-        <!--line-height: 20px;-->
-        <!--text-align: center;-->
-        <!-- -webkit-border-radius: 50%;-->
-        <!-- -moz-border-radius: 50%;-->
-        <!--border-radius: 50%;-->
-        <!--font-size: 12px;-->
-        <!--color: #fff;-->
-    <!--}-->
-
-    <!--#warnlayer+.layui-layer-setwin .layui-layer-close {-->
-        <!--background: url("${ctxImg}/icon-close.png");-->
-        <!--position: relative;-->
-        <!--top: 0px;-->
-    <!--}-->
-
-    <!--.userinfo-box {-->
-        <!--margin-top: 12px;-->
-    <!--}-->
-<!--</style>-->
-
 <c:set var="loginFlag" value="1"/>
 <c:set var="serverName" value="${pageContext.request.serverName}"/>
 <c:set var="serverPort" value="${pageContext.request.serverPort}"/>

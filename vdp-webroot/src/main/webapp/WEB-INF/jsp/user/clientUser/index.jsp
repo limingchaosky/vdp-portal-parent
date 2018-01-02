@@ -4,9 +4,9 @@
 
 <head>
     <title>部门</title>
-    <link href="${ctxCss}/dataTables/dataTablesgray.css" rel="stylesheet" type="text/css" />
-    <link href="${ctxCss}/ztree/ztree.css" rel="stylesheet" type="text/css" />
-    <link href="${ctxCss}/user/clientUser/index.css" rel="stylesheet" type="text/css" />
+    <link href="${ctxCss}/dataTables/dataTablesgray.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctxCss}/ztree/ztree.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctxCss}/user/clientUser/index.css" rel="stylesheet" type="text/css"/>
 </head>
 <div class="main-right">
     <!--左侧部门树-->
@@ -27,66 +27,82 @@
                     <input id="bar_searchstr" type="text" placeholder="用户名称">
                     <i id="bar_searchstr_icon" class="icon-search"></i>
                 </div>
-                <a id="bar_add_user" class="bar-item bar-item-icon icon-add" title="添加用户"></a>
-                <a id="bar_edit_user" class="bar-item bar-item-icon icon-add" title="编辑用户"></a>
-                <a id="bar_import" class="bar-item bar-item-icon icon-add" title="导入"></a>
-                <a id="bar_export" class="bar-item bar-item-icon icon-export" title="导出"></a>
-                <a id="bar_relieve" class="bar-item bar-item-icon icon-add" title="解绑UKey"></a>
+                <a id="bar_add_user" class="bar-item bar-item-icon iconfont icon-btn-add" title="添加用户"></a>
+                <a id="bar_edit_user" class="bar-item bar-item-icon iconfont icon-btn-edit" title="编辑用户"></a>
+                <a id="bar_import" class="bar-item bar-item-icon iconfont icon-btn-import1" title="导入"></a>
+                <a id="bar_export" class="bar-item bar-item-icon iconfont icon-btn-export1" title="导出"></a>
+                <a id="bar_relieve" class="bar-item bar-item-icon iconfont icon-btn-remove" title="解绑UKey"></a>
             </div>
         </div>
         <!--右侧顶部操作结束-->
         <div class="right-content">
-            <!--部门表-->
+            <!--用户表-->
             <div class="dept-table-box">
                 <table id="user_table" cellspacing="0" cellpadding="0" border="0" width="100%">
                     <thead>
                     <tr>
-                        <th>部门名称</th>
-                        <th>上级部门</th>
-                        <th>部门负责人</th>
-                        <th>电话</th>
-                        <th>设备总数</th>
+                        <th class="text-center">
+                            <div class="beauty-checkbox">
+                                <input id="check_user_all" type="checkbox" class="j-check-user-all">
+                                <label for="check_user_all" class="checkbox-icon"></label>
+                            </div>
+                        </th>
+                        <th>用户名</th>
+                        <th>真实姓名</th>
+                        <th>终端策略</th>
+                        <th>IP地址</th>
                         <th style="text-align:center;">操作</th>
                     </tr>
                     </thead>
                 </table>
             </div>
-            <!--部门表结束-->
+            <!--用户表结束-->
         </div>
     </div>
 </div>
-<!--添加部门弹窗-->
+<!--添加用户弹窗-->
 <div id="add_dept_wind" class="none">
     <div class="wind-box">
         <form class="padding-normal j-add-dept-form">
             <div class="wind-row cf j-dept-name">
-                <label for="" class="wind-label label-required">部门名称</label>
+                <label for="" class="wind-label label-required">用户名</label>
+                <input type="text" class="form-input wind-normal-input" name="name" maxlength="20">
+            </div>
+            <div class="wind-row cf j-dept-name">
+                <label for="" class="wind-label label-required">真实姓名</label>
+                <input type="text" class="form-input wind-normal-input" name="name" maxlength="20">
+            </div>
+            <div class="wind-row cf j-dept-name">
+                <label for="" class="wind-label label-required">用户密码</label>
+                <input type="text" class="form-input wind-normal-input" name="name" maxlength="20">
+            </div>
+            <div class="wind-row cf j-dept-name">
+                <label for="" class="wind-label label-required"></label>
+                <input type="text" class="form-input wind-normal-input" name="name" maxlength="20">
+            </div>
+            <div class="wind-row cf j-dept-name">
+                <label for="" class="wind-label label-required">确认密码</label>
                 <input type="text" class="form-input wind-normal-input" name="name" maxlength="20">
             </div>
             <div class="wind-row cf j-parent-dept">
-                <label for="" class="wind-label label-required">上级部门</label>
+                <label for="" class="wind-label label-required">所属部门</label>
                 <input type="text" class="form-input wind-normal-input parent-dept" readonly name="parent-dept" placeholder="请选择上级部门">
                 <div class="parent-dept-tree-box none">
                     <ul class="ztree j-parent-dept-tree"></ul>
                 </div>
             </div>
-            <div class="wind-row cf">
-                <label for="" class="wind-label">负责人</label>
-                <input type="text" class="form-input wind-normal-input" name="owner" maxlength="20">
-            </div>
-            <div class="wind-row cf">
-                <label for="" class="wind-label">电话</label>
-                <input type="text" class="form-input wind-normal-input" name="departmentTel">
-            </div>
-            <div class="wind-row cf">
-                <label for="" class="wind-label">设备总数</label>
-                <input type="text" class="form-input wind-normal-input" name="deviceNum">
+            <div class="wind-row cf j-parent-dept">
+                <label for="" class="wind-label label-required">USBKey设备</label>
+                <input type="text" class="form-input wind-normal-input parent-dept" readonly name="parent-dept" placeholder="请选择上级部门">
+                <div class="parent-dept-tree-box none">
+                    <ul class="ztree j-parent-dept-tree"></ul>
+                </div>
             </div>
         </form>
     </div>
 </div>
-<!--添加部门弹窗结束-->
-<!--部门表操作模板-->
+<!--添加用户弹窗结束-->
+<!--用户表操作模板-->
 <script id="temp_opt_box" type="text/html">
     <div class="table-opt-box">
         <i class="icon-setting table-opt-icon"></i>

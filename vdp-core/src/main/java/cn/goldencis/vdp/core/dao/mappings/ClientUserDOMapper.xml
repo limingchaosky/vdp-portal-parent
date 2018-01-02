@@ -7,7 +7,7 @@
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="truename" jdbcType="VARCHAR" property="truename" />
-    <result column="deptguid" jdbcType="CHAR" property="deptguid" />
+    <result column="deptguid" jdbcType="INTEGER" property="deptguid" />
     <result column="computerguid" jdbcType="CHAR" property="computerguid" />
     <result column="computername" jdbcType="VARCHAR" property="computername" />
     <result column="ip" jdbcType="VARCHAR" property="ip" />
@@ -77,7 +77,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, guid, username, password, truename, deptguid, computerguid, computername, ip, 
+    id, guid, username, password, truename, deptguid, computerguid, computername, ip,
     regtime, policyid, online, online_time, offline_time, remark
   </sql>
   <select id="selectByExample" parameterType="cn.goldencis.vdp.core.entity.ClientUserDOCriteria" resultMap="BaseResultMap">
@@ -95,7 +95,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_client_user
     where id = #{id,jdbcType=INTEGER}
@@ -111,16 +111,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.goldencis.vdp.core.entity.ClientUserDO">
-    insert into t_client_user (id, guid, username, 
-      password, truename, deptguid, 
-      computerguid, computername, ip, 
-      regtime, policyid, online, 
+    insert into t_client_user (id, guid, username,
+      password, truename, deptguid,
+      computerguid, computername, ip,
+      regtime, policyid, online,
       online_time, offline_time, remark
       )
-    values (#{id,jdbcType=INTEGER}, #{guid,jdbcType=CHAR}, #{username,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{truename,jdbcType=VARCHAR}, #{deptguid,jdbcType=CHAR}, 
-      #{computerguid,jdbcType=CHAR}, #{computername,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, 
-      #{regtime,jdbcType=TIMESTAMP}, #{policyid,jdbcType=INTEGER}, #{online,jdbcType=CHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{guid,jdbcType=CHAR}, #{username,jdbcType=VARCHAR},
+      #{password,jdbcType=VARCHAR}, #{truename,jdbcType=VARCHAR}, #{deptguid,jdbcType=INTEGER},
+      #{computerguid,jdbcType=CHAR}, #{computername,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR},
+      #{regtime,jdbcType=TIMESTAMP}, #{policyid,jdbcType=INTEGER}, #{online,jdbcType=CHAR},
       #{onlineTime,jdbcType=TIMESTAMP}, #{offlineTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
       )
   </insert>
@@ -190,7 +190,7 @@
         #{truename,jdbcType=VARCHAR},
       </if>
       <if test="deptguid != null">
-        #{deptguid,jdbcType=CHAR},
+        #{deptguid,jdbcType=INTEGER},
       </if>
       <if test="computerguid != null">
         #{computerguid,jdbcType=CHAR},
@@ -246,7 +246,7 @@
         truename = #{record.truename,jdbcType=VARCHAR},
       </if>
       <if test="record.deptguid != null">
-        deptguid = #{record.deptguid,jdbcType=CHAR},
+        deptguid = #{record.deptguid,jdbcType=INTEGER},
       </if>
       <if test="record.computerguid != null">
         computerguid = #{record.computerguid,jdbcType=CHAR},
@@ -287,7 +287,7 @@
       username = #{record.username,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
       truename = #{record.truename,jdbcType=VARCHAR},
-      deptguid = #{record.deptguid,jdbcType=CHAR},
+      deptguid = #{record.deptguid,jdbcType=INTEGER},
       computerguid = #{record.computerguid,jdbcType=CHAR},
       computername = #{record.computername,jdbcType=VARCHAR},
       ip = #{record.ip,jdbcType=VARCHAR},
@@ -317,7 +317,7 @@
         truename = #{truename,jdbcType=VARCHAR},
       </if>
       <if test="deptguid != null">
-        deptguid = #{deptguid,jdbcType=CHAR},
+        deptguid = #{deptguid,jdbcType=INTEGER},
       </if>
       <if test="computerguid != null">
         computerguid = #{computerguid,jdbcType=CHAR},
@@ -355,7 +355,7 @@
       username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       truename = #{truename,jdbcType=VARCHAR},
-      deptguid = #{deptguid,jdbcType=CHAR},
+      deptguid = #{deptguid,jdbcType=INTEGER},
       computerguid = #{computerguid,jdbcType=CHAR},
       computername = #{computername,jdbcType=VARCHAR},
       ip = #{ip,jdbcType=VARCHAR},

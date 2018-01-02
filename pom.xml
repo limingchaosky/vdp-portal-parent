@@ -12,6 +12,7 @@
         <module>vdp-webroot</module>
         <module>vdp-common</module>
         <module>vdp-core</module>
+        <module>vdp-policy</module>
     </modules>
     <packaging>pom</packaging>
 

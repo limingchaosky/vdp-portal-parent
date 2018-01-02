@@ -16,7 +16,7 @@ public class ClientUserDO extends BaseEntity implements Serializable {
 
     private String truename;
 
-    private String deptguid;
+    private Integer deptguid;
 
     private String computerguid;
 
@@ -78,12 +78,12 @@ public class ClientUserDO extends BaseEntity implements Serializable {
         this.truename = truename == null ? null : truename.trim();
     }
 
-    public String getDeptguid() {
+    public Integer getDeptguid() {
         return deptguid;
     }
 
-    public void setDeptguid(String deptguid) {
-        this.deptguid = deptguid == null ? null : deptguid.trim();
+    public void setDeptguid(Integer deptguid) {
+        this.deptguid = deptguid;
     }
 
     public String getComputerguid() {

@@ -2,7 +2,6 @@ package cn.goldencis.vdp.core.service.impl;
 
 import java.util.*;
 
-import cn.goldencis.vdp.common.utils.StringUtil;
 import cn.goldencis.vdp.core.constants.ConstantsDto;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,17 +64,17 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
     public String getNodesByLogin() {
 
         //String zNodes = "";
-        List<DepartmentDO> roleDept = GetLoginUser.getDeptRole();
+        List<DepartmentDO> departmentList = GetLoginUser.getDepartmentListWithLoginUser();
 
-        if (roleDept != null && roleDept.size() > 0 && "1".equals(roleDept.get(0).getId())) {
-            //如果有顶级部门权限返回所有
+        if (departmentList != null && departmentList.size() > 0 && "1".equals(departmentList.get(0).getId())) {
+            //如果有顶级部门权限，则参数全部为null，返回所有部门列表
             return toTreeJson(cmapper.getDeptarMentList(null, null, null, null, null), false);
         } else {
             //如果没有顶级部门权限进行查询
             List<Integer> ids = new ArrayList<>();
             List<String> treePaths = new ArrayList<>();
-            for (DepartmentDO dept : roleDept) {
-//                ids.add(Integer.parseInt(dept.getId()));
+            for (DepartmentDO dept : departmentList) {
+                ids.add(dept.getId());
                 treePaths.add(dept.getTreePath() + dept.getId() + ",%");
             }
             return toTreeJson(cmapper.getUserRoleDepartmentByUser(ids, treePaths, true), true);
@@ -156,7 +155,7 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
             roleDept.add(mapper.selectByPrimaryKey(id.toString()));
             //查询全部
         } else {
-            roleDept = GetLoginUser.getDeptRole();
+            roleDept = GetLoginUser.getDepartmentListWithLoginUser();
         }
 
         List<Integer> ids = new ArrayList<>();
@@ -193,6 +192,16 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         departmentDOCriteria.or().andTreePathLike(treePath);
 
         List<DepartmentDO> departmentList = mapper.selectByExampleWithRowbounds(departmentDOCriteria, rowBounds);
+        return departmentList;
+    }
+
+    @Override
+    public List<DepartmentDO> getDeptarMentListByParent(Integer pId) {
+        DepartmentDO parentDept = mapper.selectByPrimaryKey(String.valueOf(pId));
+        DepartmentDOCriteria departmentDOCriteria = new DepartmentDOCriteria();
+        departmentDOCriteria.createCriteria().andParentIdEqualTo(pId);
+        departmentDOCriteria.or().andTreePathLike(parentDept.getTreePath());
+        List<DepartmentDO> departmentList = mapper.selectByExample(departmentDOCriteria);
         return departmentList;
     }
 
@@ -292,7 +301,7 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
 
     @Override
     public String getFunctionNodesByLogin() {
-        List<DepartmentDO> roleDept = GetLoginUser.getDeptRole();
+        List<DepartmentDO> roleDept = GetLoginUser.getDepartmentListWithLoginUser();
         List<DepartmentDO> ids = new ArrayList<>();
         DepartmentDO department = null;
         if (roleDept.size() > 0) {

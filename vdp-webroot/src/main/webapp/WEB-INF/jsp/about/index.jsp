@@ -5,7 +5,7 @@
 
 
 <head>
-    <title>关于1111</title>
+    <title>关于</title>
     <link href="${ctxCss}/layout/inpage.css" rel="stylesheet" type="text/css" />
 
     <style type="text/css">
@@ -202,11 +202,11 @@
                     <form action="${ctx}/about/fileupload" method="post" id="beanForm_oms" enctype="multipart/form-data">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         <div class="messagebox messagebox-oms">
-                            <h4 class="messh4">OMS授权信息1111111</h4>
+                            <h4 class="messh4">VDP授权信息</h4>
                             <div class="messagebox">
                                 <ul>
                                     <li class="width-95">产品名称</li>
-                                    <li>Operation management system&nbsp;&nbsp&nbsp;&nbsp运营管理系统</li>
+                                    <li>Operation management system&nbsp;&nbsp&nbsp;&nbsp视频数据防护系统</li>
                                 </ul>
                                 <ul>
                                     <li class="width-95">版本信息</li>

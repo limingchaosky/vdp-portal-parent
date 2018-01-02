@@ -14,7 +14,7 @@ import cn.goldencis.vdp.core.entity.DepartmentDOCriteria;
 public interface IDepartmentService extends BaseService<DepartmentDO, DepartmentDOCriteria> {
 
     /**
-     * 根据查询条件获取列表
+     * 根据查询条件获取列表，分页查询
      * @param startNum
      * @param pageSize
      * @param pId
@@ -24,6 +24,12 @@ public interface IDepartmentService extends BaseService<DepartmentDO, Department
      */
     List<DepartmentDO> getDeptarMentListByParent(Integer startNum, Integer pageSize, Integer pId, String treePath, String ordercase);
 
+    /**
+     * 根据查询条件获取全部列表
+     * @param pId
+     * @return
+     */
+    List<DepartmentDO> getDeptarMentListByParent(Integer pId);
     /**
      * 根据条件查询总数
      * @param pId
@@ -40,7 +46,6 @@ public interface IDepartmentService extends BaseService<DepartmentDO, Department
 
     /**
      * 根据登录用户权限获取部门树json
-     * @param ischeck 是否有未分组
      * @return
      */
     String getNodesByLogin();
