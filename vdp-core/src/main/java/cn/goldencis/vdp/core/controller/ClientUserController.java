@@ -57,7 +57,7 @@ public class ClientUserController implements ServletContextAware {
 
     /**
      * 请求指定部门下的用户列表
-     * @param departmentId 指定部门id
+     * @param pid 指定部门id
      * @param start
      * @param length
      * @param ordercase 查询条件
@@ -65,18 +65,18 @@ public class ClientUserController implements ServletContextAware {
      */
     @ResponseBody
     @RequestMapping(value = "/getClientUserPageByDepartmentId")
-    public ResultMsg getAllClientUsers(@RequestParam(defaultValue = "1") Integer departmentId, int start, int length,
+    public ResultMsg getAllClientUsers(@RequestParam(defaultValue = "1") Integer pid, int start, int length,
                                        @RequestParam(value = "draw", required = false) String draw,
                                        @RequestParam(value = "ordercase", required = false) String ordercase) {
 
         //根据部门参数不同查询部门集合，当部门id为顶级部门时，需要判断账户部门权限，
         List<DepartmentDO> departmentList = null;
         //重新查询账户的关联部门，查询其部门权限集合，如果包含顶级部门，则查询查询全部部门，否则查询该账户部门权限下的部门
-        if (departmentId == 1) {
+        if (pid == 1) {
             departmentList = GetLoginUser.getDepartmentListWithLoginUser();
         } else {
             //如果不是顶级部门，查询该部门下所有部门的集合
-            departmentList = departmentService.getDeptarMentListByParent(departmentId);
+            departmentList = departmentService.getDeptarMentListByParent(pid);
         }
 
         ResultMsg resultMsg = new ResultMsg();

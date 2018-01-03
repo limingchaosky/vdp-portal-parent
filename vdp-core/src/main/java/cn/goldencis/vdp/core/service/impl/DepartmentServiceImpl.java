@@ -200,8 +200,9 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         DepartmentDO parentDept = mapper.selectByPrimaryKey(String.valueOf(pId));
         DepartmentDOCriteria departmentDOCriteria = new DepartmentDOCriteria();
         departmentDOCriteria.createCriteria().andParentIdEqualTo(pId);
-        departmentDOCriteria.or().andTreePathLike(parentDept.getTreePath());
+        departmentDOCriteria.or().andTreePathLike(parentDept.getTreePath() + parentDept.getId() + "%");
         List<DepartmentDO> departmentList = mapper.selectByExample(departmentDOCriteria);
+        departmentList.add(parentDept);
         return departmentList;
     }
 
