@@ -8,7 +8,7 @@ $(function () {
 
 function initEvents() {
   $('body')
-  //删除部门
+  //删除用户
     .on('click', '.j-opt-hover-delete', function () {
       var id = $(this).attr('data-id');
       if (id == 1) {
@@ -44,7 +44,7 @@ function initEvents() {
         });
       });
     })
-    //添加部门
+    //添加用户
     .on('click', '#bar_add_dept', function () {
       var parentDeptTree = null;//部门树
       var nameValidate = null;//较验
@@ -148,15 +148,15 @@ function initEvents() {
         }
       });
     })
-    //编辑部门
+    //编辑用户
     .on('click', '.j-opt-hover-edit', function () {
       var idx = $('.j-opt-hover-edit').index(this);
-      var id = Number($(this).attr('data-id'));
+      var id = Number($(this).attr('data-id'));//这是用户的id
       var parentDeptTree = null;//部门树
       layer.open({
-        id: 'openWind',
+        id: 'openWind',//这个地方会自动给弹出框添加一个id
         type: 1,
-        title: '编辑部门',
+        title: '编辑用户',
         content: $('#add_dept_wind').html(),
         area: ['470px', '400px'],
         btn: ['确定', '取消'],
@@ -194,13 +194,6 @@ function initEvents() {
           });
         },
         success: function (layero, index) {
-          if (id == 1) {//顶级部门
-            $('#openWind .j-parent-dept').hide();
-          }
-          if (id == 2) {//未分组
-            $('#openWind .j-dept-name').hide();
-            $('#openWind .j-parent-dept').hide();
-          }
           var setting = {
             view: {
               dblClickExpand: false,
@@ -225,28 +218,31 @@ function initEvents() {
           });
           parentDeptTree = $.fn.zTree.init($("#openWind .j-parent-dept-tree"), setting, zNodesBak);
           if (zNodesBak.length > 0) {
-            var node = parentDeptTree.getNodeByParam('id', deptTree.getNodeByParam('id', id).ParentDepartmentId);
+            var node = parentDeptTree.getNodeByParam('id', deptTree.getNodeByParam('id', id));
             if (node) {
               $('#' + node.tId + '_a').click();
             }
           }
-          $('#openWind input[name=name]').val(deptTable.ajax.json().data[idx].name);
-          $('#openWind input[name=owner]').val(deptTable.ajax.json().data[idx].owner || '');
-          $('#openWind input[name=departmentTel]').val(deptTable.ajax.json().data[idx].departmentTel || '');
-          $('#openWind input[name=deviceNum]').val(deptTable.ajax.json().data[idx].deviceNum || '');
+          // $('#openWind input[name=username]').val(deptTable.ajax.json().data[idx].username);
+          // $('#openWind input[name=truename]').val(deptTable.ajax.json().data[idx].truename  );
+          // $('#openWind input[name=departmentTel]').val(deptTable.ajax.json().data[idx].departmentTel || '');
+          // $('#openWind input[name=deviceNum]').val(deptTable.ajax.json().data[idx].deviceNum || '');
           //校验
           $('#openWind .j-add-dept-form').validate({
             rules: {
-              name: {
+              username: {
                 required: true,
               },
-              owner: {},
-              departmentTel: {
-                phone: true
+              truename: {
+                required: true,
               },
-              deviceNum: {
-                digits: true
-              }
+              password: {},
+              repassword: {
+                equalTo: $('#openWind input[name=password]')
+              },
+              parentdept:{
+                required: true,
+              },
             }
           });
         }
@@ -278,21 +274,21 @@ function initEvents() {
     .on('click', '', function () {
       $('#openWind .parent-dept-tree-box').slideUp('fast');
     })
-    //部门全选或取消全选
+    //用户全选或取消全选
     .on('change', '.j-check-dept-all', function () {
       $('.j-check-dept').prop('checked', $(this).prop('checked'));
     })
-    //部门单个选择或取消选择
+    //用户单个选择或取消选择
     .on('change', '.j-check-dept', function () {
       $('.j-check-dept-all').prop('checked', $('.j-check-dept').not(':checked').length == 0);
     })
-    //部门名回车搜索
+    //用户名回车搜索
     .on('keydown', '#bar_searchstr', function (e) {
       if (e.keyCode == 13) {
         $('#bar_searchstr_icon').click();
       }
     })
-    //部门名点击搜索
+    //用户名点击搜索
     .on('click', '#bar_searchstr_icon', function () {
       deptTable.settings()[0].ajax.data.searchstr = $('#bar_searchstr').val().trim();
       deptTable.ajax.reload();
@@ -386,11 +382,12 @@ function initdeptTable(pid) {
     "ajax": {
       "beforeSend": function () {
       },
-      "url": ctx + "/department/datalist",
+      "url": ctx + "/clientUser/getClientUserPageByDepartmentId",
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
+        console.log(json);
         return json.data.map(function (obj) {
-          return [obj.name, obj.parentName || '--', obj.owner || '--', obj.departmentTel || '--', obj.deviceNum || '--', obj.id]
+          return [obj.id, obj.username , obj.truename , obj.policyid , obj.policyid || '--', obj.id]
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象
@@ -402,7 +399,14 @@ function initdeptTable(pid) {
     "columnDefs": [{
       "targets": [0],
       "orderable": false,
-      "class": "text-ellipsis",
+      "width": "35px",
+      "class": "text-center",
+      "render": function (data, type, full) {
+        return '<div class="beauty-checkbox">' +
+          '<input id="table_check_' + data + '" type="checkbox" class="j-check-user" data-id="' + data + '">' +
+          '<label for="table_check_' + data + '" class="checkbox-icon"></label>' +
+          '</div>';
+      }
     }, {
       "targets": [1],
       "orderable": false,
@@ -462,7 +466,7 @@ function initdeptTable(pid) {
   }).on('xhr.dt', function (e, settings, json, xhr) {
     //登陆超时重定向
     if (xhr.getResponseHeader('isRedirect') == 'yes') {
-      location.href = "/drs/login";
+      location.href = "/vdp/login";
     }
   });
 }

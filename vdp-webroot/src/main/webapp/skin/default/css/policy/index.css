@@ -1,3 +1,77 @@
-.leddb {
-  color: #ddd;
+.policy-content {
+  background-color: #fff;
+  padding: 0px 40px;
+  position: relative;
+  height: 100%;
+}
+.policy-content > form > div:last-child {
+  padding-bottom: 60px;
+}
+.policy-content form > div .policy-title {
+  height: 50px;
+  position: relative;
+  z-index: 100;
+  line-height: 50px;
+  border-bottom: 1px solid #F6F6F6;
+  padding-left: 30px;
+}
+.policy-content form > div .policy-title:after {
+  content: '';
+  height: 14px;
+  width: 2px;
+  background-color: #10c7be;
+  display: inline-block;
+  position: absolute;
+  top: calc(50% - 7px);
+  left: 10px;
+}
+.policy-content form > div .policy-con {
+  padding: 10px 45px 22px 45px;
+  width: 900px;
+}
+.policy-content form > div .policy-con > label {
+  display: inline-block;
+  height: 38px;
+  line-height: 38px;
+  margin-right: 45px;
+}
+.policy-content form > div .policy-con > label span {
+  vertical-align: middle;
+}
+.policy-content form > div .policy-con > label.out {
+  display: block;
+  height: 38px;
+  line-height: 38px;
+}
+.policy-content form > div .policy-con > label.out .smallinput {
+  width: 50px;
+}
+.policy-content form > div .policy-con > label.out .autoDelete {
+  display: inline-block;
+}
+.policy-content form > div .policy-con > label.export {
+  display: block;
+}
+.policy-content form > div .policy-con .waterShowContent {
+  padding-left: 40px;
+}
+.policy-content form > div .policy-con .waterShowContent > label {
+  display: inline-block;
+  height: 38px;
+  line-height: 38px;
+  margin-right: 45px;
+}
+.policy-content .save {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100px;
+  border-top: 1px solid #ededed;
+  z-index: 100000;
+  background-color: #fff;
+  overflow: hidden;
+  box-shadow: 0px -3px 5px #ededed;
+  line-height: 60px;
+  padding-left: 80px;
 }

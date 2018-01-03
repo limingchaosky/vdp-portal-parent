@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/jsp/common/meta.jsp"%>-->
 
 <head>
-    <title>部门</title>
+    <title>用户</title>
     <link href="${ctxCss}/dataTables/dataTablesgray.css" rel="stylesheet" type="text/css"/>
     <link href="${ctxCss}/ztree/ztree.css" rel="stylesheet" type="text/css"/>
     <link href="${ctxCss}/user/clientUser/index.css" rel="stylesheet" type="text/css"/>
@@ -66,33 +66,41 @@
         <form class="padding-normal j-add-dept-form">
             <div class="wind-row cf j-dept-name">
                 <label for="" class="wind-label label-required">用户名</label>
-                <input type="text" class="form-input wind-normal-input" name="name" maxlength="20">
+                <input type="text" class="form-input wind-normal-input" name="username" maxlength="20">
             </div>
             <div class="wind-row cf j-dept-name">
                 <label for="" class="wind-label label-required">真实姓名</label>
-                <input type="text" class="form-input wind-normal-input" name="name" maxlength="20">
+                <input type="text" class="form-input wind-normal-input" name="truename" maxlength="20">
             </div>
             <div class="wind-row cf j-dept-name">
                 <label for="" class="wind-label label-required">用户密码</label>
-                <input type="text" class="form-input wind-normal-input" name="name" maxlength="20">
+                <input type="text" id="pass" class="form-input wind-normal-input" name="password" maxlength="20">
             </div>
-            <div class="wind-row cf j-dept-name">
-                <label for="" class="wind-label label-required"></label>
-                <input type="text" class="form-input wind-normal-input" name="name" maxlength="20">
+            <div id="level" class="pw-strength">
+                <div class="pw-bar"></div>
+                <div class="pw-bar-on"></div>
+                <div class="pw-txt">
             </div>
             <div class="wind-row cf j-dept-name">
                 <label for="" class="wind-label label-required">确认密码</label>
-                <input type="text" class="form-input wind-normal-input" name="name" maxlength="20">
+                <input type="text" class="form-input wind-normal-input" name="repassword" maxlength="20">
             </div>
             <div class="wind-row cf j-parent-dept">
                 <label for="" class="wind-label label-required">所属部门</label>
+                <input type="text" class="form-input wind-normal-input parent-dept" readonly name="parentdept" placeholder="请选择上级部门">
+                <div class="parent-dept-tree-box none">
+                    <ul class="ztree j-parent-dept-tree"></ul>
+                </div>
+            </div>
+            <div class="wind-row cf j-parent-dept">
+                <label for="" class="wind-label label-required">采用策略</label>
                 <input type="text" class="form-input wind-normal-input parent-dept" readonly name="parent-dept" placeholder="请选择上级部门">
                 <div class="parent-dept-tree-box none">
                     <ul class="ztree j-parent-dept-tree"></ul>
                 </div>
             </div>
             <div class="wind-row cf j-parent-dept">
-                <label for="" class="wind-label label-required">USBKey设备</label>
+                <label for="" class="wind-label">USBKey设备</label>
                 <input type="text" class="form-input wind-normal-input parent-dept" readonly name="parent-dept" placeholder="请选择上级部门">
                 <div class="parent-dept-tree-box none">
                     <ul class="ztree j-parent-dept-tree"></ul>
@@ -105,7 +113,7 @@
 <!--用户表操作模板-->
 <script id="temp_opt_box" type="text/html">
     <div class="table-opt-box">
-        <i class="icon-setting table-opt-icon"></i>
+        <i class="iconfont icon-nav-system table-opt-icon"></i>
         <div class="opt-hover-box">
             <div class="opt-hover-row j-opt-hover-edit" data-id="{{id}}">
                 <i class="icon-bianji"></i>
@@ -124,7 +132,7 @@
 <script src="${ctxJs}/plugins/zTree/jquery.ztree.core-3.5.js" type="text/javascript"></script>
 <script src="${ctxJs}/plugins/zTree/jquery.ztree.excheck-3.5.js" type="text/javascript"></script>
 <script src="${ctxJs}/plugins/template/template-web.js" type="text/javascript"></script>
-<script src="${ctxJs}/user/department/index.js"></script>
+<script src="${ctxJs}/user/clientUser/index.js"></script>
 <script>
   var zNodes = JSON.parse('${zNodes}');
 </script>

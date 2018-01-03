@@ -5,7 +5,7 @@
 <%@ include file="/WEB-INF/jsp/common/meta.jsp"%>-->
 
 <head>
-    <title>金盾OMS</title>
+    <title>金盾VDP</title>
     <!--<link href="${ctxCss}/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css" />-->
     <link href="${ctxCss}/homepage/index.css" rel="stylesheet" type="text/css" />
     <!--<link href="${ctxCss}/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />-->
