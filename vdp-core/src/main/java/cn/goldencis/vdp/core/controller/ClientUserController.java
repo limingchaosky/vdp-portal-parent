@@ -41,6 +41,7 @@ public class ClientUserController implements ServletContextAware {
 
     /**
      * 用户管理主页面
+     *
      * @return
      */
     @RequestMapping(value = "/index")
@@ -57,7 +58,8 @@ public class ClientUserController implements ServletContextAware {
 
     /**
      * 请求指定部门下的用户列表
-     * @param pid 指定部门id
+     *
+     * @param pid       指定部门id
      * @param start
      * @param length
      * @param ordercase 查询条件
@@ -65,9 +67,7 @@ public class ClientUserController implements ServletContextAware {
      */
     @ResponseBody
     @RequestMapping(value = "/getClientUserPageByDepartmentId")
-    public ResultMsg getAllClientUsers(@RequestParam(defaultValue = "1") Integer pid, int start, int length,
-                                       @RequestParam(value = "draw", required = false) String draw,
-                                       @RequestParam(value = "ordercase", required = false) String ordercase) {
+    public ResultMsg getAllClientUsers(@RequestParam(defaultValue = "1") Integer pid, int start, int length, @RequestParam(value = "draw", required = false) String draw, @RequestParam(value = "ordercase", required = false) String ordercase) {
 
         //根据部门参数不同查询部门集合，当部门id为顶级部门时，需要判断账户部门权限，
         List<DepartmentDO> departmentList = null;
@@ -81,7 +81,7 @@ public class ClientUserController implements ServletContextAware {
 
         ResultMsg resultMsg = new ResultMsg();
         if (departmentList != null && departmentList.size() > 0) {
-            int conut = (int)clientUserService.conutClientUserListByDepartmentId(departmentList);
+            int conut = (int) clientUserService.conutClientUserListByDepartmentId(departmentList);
             List<ClientUserDO> clientUsers = clientUserService.getClientUserListByDepartmentId(departmentList, start, length);
             resultMsg.setData(clientUsers);
             resultMsg.setExportlength(length);
@@ -96,32 +96,32 @@ public class ClientUserController implements ServletContextAware {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/addClientUser",method = RequestMethod.POST)
+    @RequestMapping(value = "/addClientUser", method = RequestMethod.POST)
     public ResultMsg addClientUser(ClientUserDO clientUser) {
 
         ResultMsg resultMsg = new ResultMsg();
         try {
-            ClientUserDO clientUserInDB = clientUserService.getByPrimaryKey(clientUser.toString());
-            if (clientUserInDB != null){
+            //判断用户名是否重复
+            boolean flag = clientUserService.checkClientUserNameDuplicate(clientUser.getUsername());
+            if (!flag) {
                 resultMsg.setResultCode(ConstantsDto.RESULT_CODE_FALSE);
                 resultMsg.setResultMsg("用户名重复！");
                 return resultMsg;
-            } else {
-                int conut = clientUserService.addClientUser(clientUser);
-                resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
-                resultMsg.setResultMsg("插入成功！");
-                return resultMsg;
             }
+
+            //插入用户
+            clientUserService.addClientUser(clientUser);
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
+            resultMsg.setResultMsg("插入成功！");
         } catch (Exception e) {
             resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
             resultMsg.setResultMsg("插入错误");
-            return resultMsg;
         }
-
+        return resultMsg;
     }
 
     @ResponseBody
-    @RequestMapping(value = "/updateClientUser",method = RequestMethod.POST)
+    @RequestMapping(value = "/updateClientUser", method = RequestMethod.POST)
     public ResultMsg updateClientUser(ClientUserDO clientUser) {
         ResultMsg resultMsg = new ResultMsg();
         try {
@@ -130,6 +130,7 @@ public class ClientUserController implements ServletContextAware {
             if (!flag) {
                 resultMsg.setResultCode(ConstantsDto.RESULT_CODE_FALSE);
                 resultMsg.setResultMsg("用户名重复！");
+                return resultMsg;
             }
 
             clientUserService.updateClientUser(clientUser);
@@ -142,7 +143,8 @@ public class ClientUserController implements ServletContextAware {
         return resultMsg;
     }
 
-    @RequestMapping(value = "/deleteClientUser")
+    @ResponseBody
+    @RequestMapping(value = "/deleteClientUser",method = RequestMethod.POST)
     public ResultMsg deleteClientUser(Integer id) {
         ResultMsg resultMsg = new ResultMsg();
 
@@ -150,12 +152,12 @@ public class ClientUserController implements ServletContextAware {
             clientUserService.deleteClientUserById(id);
             resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
             resultMsg.setResultMsg("删除成功！");
-            return resultMsg;
         } catch (Exception e) {
             resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
             resultMsg.setResultMsg("删除错误！");
-            return resultMsg;
         }
+        resultMsg.setResultCode(1);
+        return resultMsg;
     }
 
 }

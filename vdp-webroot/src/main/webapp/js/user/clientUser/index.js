@@ -1,70 +1,98 @@
 var deptTable = null;//部门用户表
 var deptTree = null;//部门树
+var policyList = null;//策略列表
+var usbDeviceList = null;//没有用的usb设备列表
 $(function () {
   initDeptTree(1);//初始化部门树,1是选中节点的id
   initEvents();//初始化页面事件
-  passStrong();
+  getPolicyList()//获取所有的策略列表
+  //getEmUsbList()//获取空的usb设备
 });
-
+function getPolicyList() {
+  getAjax(ctx + '/policy/getAllPolicys', '', function (msg) {
+    if (msg.resultCode == 1) {
+      policyList = msg.data;
+      // console.log(policyList);
+      // var html = '';
+      // $.each(msg.data, function (index, obj) {
+      //   html += '<option value=' + obj.id + '>' + obj.roleName + '</option>';
+      // });
+      // $('#bar_select_role').append(html);
+    }
+    else {
+      layer.msg('获取权限列表失败！', {icon: 2});
+    }
+  });
+}
+function getEmUsbList() {
+  getAjax(ctx + '/role/getRoleList', '', function (msg) {
+    if (msg.resultCode == 1) {
+      usbDeviceList = msg.data;
+      var html = '';
+      $.each(msg.data, function (index, obj) {
+        html += '<option value=' + obj.id + '>' + obj.roleName + '</option>';
+      });
+      $('#bar_select_role').append(html);
+    }
+    else {
+      layer.msg('获取权限列表失败！', {icon: 2});
+    }
+  });
+}
 function initEvents() {
   $('body')
   //删除用户
     .on('click', '.j-opt-hover-delete', function () {
       var id = $(this).attr('data-id');
-      if (id == 1) {
-        layer.msg('顶级部门不能删除！', { icon: 0 });
-        return;
-      }
-      if (id == 2) {
-        layer.msg('未分组不能删除！', { icon: 0 });
-        return;
-      }
-      layer.confirm('确定要删除该部门吗？', {
+      layer.confirm('确定要删除该用户吗？', {
         btn: ['确定', '取消']
       }, function () {
         var postData = {
           id: id
-        }
-        postAjax(ctx + '/department/delete', postData, function (msg) {
+        };
+        postAjax(ctx + '/clientUser/deleteClientUser', postData, function (msg) {
           if (msg.resultCode == 1) {
-            deptTable.ajax.reload(function () { }, true);
-            layer.msg('删除成功！', { icon: 1 });
+            deptTable.ajax.reload(function () {
+            }, true);
+            layer.msg('删除成功！', {icon: 1});
             $('.j-check-dept-all').prop('checked', false);
             //更新部门树
-            getAjax(ctx + '/department/getnodes', '', function (msg) {
+            getAjax(ctx + '/department/getDepartmentNodesByLoginUser', '', function (msg) {
               zNodes = JSON.parse(msg);
               var selectID = deptTree.getSelectedNodes()[0].id;
               deptTree.destroy();
               initDeptTree(selectID);
+              initdeptTable(selectID);
             })
           }
           else {
-            layer.msg('删除失败！' + (msg.resultMsg || ''), { icon: 2 });
+            layer.msg('删除失败！' + (msg.resultMsg || ''), {icon: 2});
           }
         });
       });
     })
     //添加用户
-    .on('click', '#bar_add_dept', function () {
+    .on('click', '#bar_add_user', function () {
       var parentDeptTree = null;//部门树
       var nameValidate = null;//较验
       layer.open({
         id: 'openWind',
         type: 1,
-        title: '添加部门',
-        content: $('#add_dept_wind').html(),
+        title: '添加用户',
+        content: $('#add_user_wind').html(),
         area: ['470px', '400px'],
         btn: ['确定', '取消'],
         yes: function (index, layero) {
-          if (!$("#openWind .j-add-dept-form").valid()) {
+          if (!$("#openWind .j-add-user-form").valid()) {
             return;
           }
+          var temp = $("#openWind form").serializeJSON();
           var postData = {
-            name: $('#openWind input[name=name]').val().trim(),
-            parentId: $('#openWind input[name=parent-dept]').attr('data-id'),
-            owner: $('#openWind input[name=owner]').val().trim(),
-            departmentTel: $('#openWind input[name=departmentTel]').val().trim(),
-            deviceNum: $('#openWind input[name=deviceNum]').val().trim()
+            username: $('#openWind input[name=username]').val().trim(),
+            truename: $('#openWind input[name=truename]').val().trim(),
+            password: encrypt(temp.password).toUpperCase(),
+            policyid: temp.selectPolicy,
+            deptguid: $('#openWind input[name=parentdept]').attr('data-id'),
           }
           if ($(layero).find('.layui-layer-btn0').hasClass('btn-disabled')) {
             return;
@@ -72,35 +100,40 @@ function initEvents() {
           $(layero).find('.layui-layer-btn0').addClass('btn-disabled');
           $.ajax({
             type: 'post',
-            url: ctx + '/department/add',
+            url: ctx + '/clientUser/addClientUser',
             data: postData,
             success: function (msg) {
+              console.log(msg.resultCode);
               if (msg.resultCode == 1) {
                 layer.close(index);
-                layer.msg('添加成功！', { icon: 1 });
+                layer.msg('添加成功！', {icon: 1});
                 //更新部门树
-                $.ajax({
-                  type: 'get',
-                  url: ctx + '/department/getnodes',
-                  success: function (msg) {
-                    zNodes = JSON.parse(msg);
-                    var selectID = deptTree.getSelectedNodes()[0].id;
-                    deptTree.destroy();
-                    initDeptTree(selectID);
-                  },
-                })
+                //更新部门树
+                getAjax(ctx + '/department/getDepartmentNodesByLoginUser', '', function (msg) {
+                  zNodes = JSON.parse(msg);
+                  var selectID = deptTree.getSelectedNodes()[0].id;
+                  deptTree.destroy();
+                  initDeptTree(selectID);
+                  initdeptTable(selectID);
+                });
               } else {
                 $(layero).find('.layui-layer-btn0').removeClass('btn-disabled');
-                layer.msg('添加失败！' + (msg.resultMsg || ''), { icon: 2 });
+                layer.msg('添加失败！' + (msg.resultMsg || ''), {icon: 2});
               }
             },
             error: function () {
               $(layero).find('.layui-layer-btn0').removeClass('btn-disabled');
-              layer.msg('添加失败！' + (msg.resultMsg || ''), { icon: 2 });
+              layer.msg('添加失败！' + (msg.resultMsg || ''), {icon: 2});
             }
           })
         },
         success: function (layero, index) {
+          var htmlpolicy = '';
+          for (var i = 0; i < policyList.length; i++) {
+            htmlpolicy += '<option value=' + policyList[i].id + '>' + policyList[i].name + '</option>';
+          }
+          $('#openWind select[name=selectPolicy]').html(htmlpolicy);
+          $('#openWind select[name=usbKeyList]').html(htmlpolicy);
           var setting = {
             view: {
               dblClickExpand: false,
@@ -116,9 +149,9 @@ function initEvents() {
               onClick: function (event, treeId, treeNode, clickFlag) {
                 $('#openWind .parent-dept').val(treeNode.name).attr('data-id', treeNode.id);
                 $('#openWind .parent-dept-tree-box').slideUp('fast');
-                if (nameValidate) {
-                  nameValidate.settings.rules.name.remote.data.pid = treeNode.id;
-                }
+                // if (nameValidate) {
+                //   nameValidate.settings.rules.name.remote.data.pid = treeNode.id;
+                // }
               }
             }
           };
@@ -130,19 +163,24 @@ function initEvents() {
             $('#' + node.tId + '_a').click();
           }
           //校验
-          nameValidate = $('#openWind .j-add-dept-form').validate({
+          nameValidate = $('#openWind .j-add-user-form').validate({
             rules: {
-              name: {
+              username: {
                 required: true,
               },
-              owner: {
+              truename: {
+                required: true,
               },
-              departmentTel: {
-                phone: true
+              password: {
+                required: true,
+                minlength: 6
               },
-              deviceNum: {
-                digits: true
-              }
+              repassword: {
+                equalTo: $('#openWind input[name=password]')
+              },
+              parentdept: {
+                required: true,
+              },
             }
           });
         }
@@ -157,43 +195,53 @@ function initEvents() {
         id: 'openWind',//这个地方会自动给弹出框添加一个id
         type: 1,
         title: '编辑用户',
-        content: $('#add_dept_wind').html(),
+        content: $('#add_user_wind').html(),
         area: ['470px', '400px'],
         btn: ['确定', '取消'],
         yes: function (index, layero) {
-          if (!$("#openWind .j-add-dept-form").valid()) {
+          if (!$("#openWind .j-add-user-form").valid()) {
             return;
           }
+          var temp = $("#openWind form").serializeJSON();
+          console.log(temp);
           var postData = {
             id: id,
-            name: $('#openWind input[name=name]').val().trim(),
-            parentId: id == 1 ? -1 : $('#openWind input[name=parent-dept]').attr('data-id'),
-            owner: $('#openWind input[name=owner]').val().trim(),
-            departmentTel: $('#openWind input[name=departmentTel]').val().trim(),
-            deviceNum: $('#openWind input[name=deviceNum]').val().trim()
-          }
+            username: temp.username,
+            truename: temp.truename,
+            password: encrypt(temp.password).toUpperCase(),
+            deptguid: $('#openWind input[name=parentdept]').attr('data-id'),
+            policyid: temp.selectPolicy,
+            usbkey: temp.usbKeyList
+          };
           if ($(layero).find('.layui-layer-btn0').hasClass('btn-disabled')) {
             return;
           }
           $(layero).find('.layui-layer-btn0').addClass('btn-disabled');
-          postAjax(ctx + '/department/updateDept', postData, function (msg) {
+          postAjax(ctx + '/clientUser/updateClientUser', postData, function (msg) {
             if (msg.resultCode == 1) {
               layer.close(index);
-              layer.msg('编辑成功！', { icon: 1 });
+              layer.msg('编辑成功！', {icon: 1});
               //更新部门树
-              getAjax(ctx + '/department/getnodes', '', function (msg) {
+              getAjax(ctx + '/department/getDepartmentNodesByLoginUser', '', function (msg) {
                 zNodes = JSON.parse(msg);
                 var selectID = deptTree.getSelectedNodes()[0].id;
                 deptTree.destroy();
                 initDeptTree(selectID);
+                initdeptTable(selectID);
               });
             } else {
               $(layero).find('.layui-layer-btn0').removeClass('btn-disabled');
-              layer.msg('编辑失败！' + (msg.resultMsg || ''), { icon: 2 });
+              layer.msg('编辑失败！' + (msg.resultMsg || ''), {icon: 2});
             }
           });
         },
         success: function (layero, index) {
+          var htmlpolicy = '';
+          for (var i = 0; i < policyList.length; i++) {
+            htmlpolicy += '<option value=' + policyList[i].id + '>' + policyList[i].name + '</option>';
+          }
+          $('#openWind select[name=selectPolicy]').html(htmlpolicy);
+          $('#openWind select[name=usbKeyList]').html(htmlpolicy);
           var setting = {
             view: {
               dblClickExpand: false,
@@ -206,7 +254,7 @@ function initEvents() {
               }
             },
             callback: {
-              onClick: function (event, treeId, treeNode, clickFlag) {
+              onClick: function (event, treeId, treeNode) {
                 $('#openWind .parent-dept').val(treeNode.name).attr('data-id', treeNode.id);
                 $('#openWind .parent-dept-tree-box').slideUp('fast');
               }
@@ -223,12 +271,10 @@ function initEvents() {
               $('#' + node.tId + '_a').click();
             }
           }
-          // $('#openWind input[name=username]').val(deptTable.ajax.json().data[idx].username);
-          // $('#openWind input[name=truename]').val(deptTable.ajax.json().data[idx].truename  );
-          // $('#openWind input[name=departmentTel]').val(deptTable.ajax.json().data[idx].departmentTel || '');
-          // $('#openWind input[name=deviceNum]').val(deptTable.ajax.json().data[idx].deviceNum || '');
+          $('#openWind input[name=username]').val(deptTable.ajax.json().data[idx].username);
+          $('#openWind input[name=truename]').val(deptTable.ajax.json().data[idx].truename);
           //校验
-          $('#openWind .j-add-dept-form').validate({
+          $('#openWind .j-add-user-form').validate({
             rules: {
               username: {
                 required: true,
@@ -236,17 +282,140 @@ function initEvents() {
               truename: {
                 required: true,
               },
-              password: {},
+              password: {
+                required: true,
+                minlength: 6
+              },
               repassword: {
                 equalTo: $('#openWind input[name=password]')
               },
-              parentdept:{
+              parentdept: {
                 required: true,
               },
             }
           });
         }
       });
+    })
+    //批量修改策略
+    .on('click', '#bar_policy_user', function () {
+      var ids = [];
+      if ($('.j-check-user:checked').length == 0) {
+        layer.msg('请先选中用户！', {icon: 0});
+        return;
+      } else {
+        ids = $('.j-check-user:checked').map(function (index, obj) {
+          return $(obj).attr('data-id');
+        }).toArray();
+      }
+      layer.open({
+        id: 'openWind',
+        type: 1,
+        title: '编辑用户',
+        content: $('#temp_policy').html(),
+        area: ['300px', '200px'],
+        btn: ['确定', '取消'],
+        yes: function (index, layero) {
+          var postData = {};
+          postData.ids = ids.join(',');
+          postData.policyid = $('#openWind select[name=userSelectPolicy] option:selected').val();
+          console.log(postData);
+          $.ajax({
+            type: 'post',
+            url: ctx + '/user/deleteUser',//批量修改策略接口
+            data: postData,
+            success: function (msg) {
+              if (msg.resultCode == '1') {
+                userTable.ajax.reload(function () {
+                }, true);
+                $('.j-check-user-all').prop('checked', false);
+                layer.msg('修改成功！', {icon: 1});
+              } else {
+                layer.msg('修改失败！', {icon: 2});
+              }
+            },
+            error: function () {
+              layer.msg('删除失败！', {icon: 2});
+            }
+          })
+
+        },
+        success: function (index, layero) {
+          var htmlpolicy = '';
+          for (var i = 0; i < policyList.length; i++) {
+            htmlpolicy += '<option value=' + policyList[i].id + '>' + policyList[i].name + '</option>';
+          }
+          $('#openWind select[name=userSelectPolicy]').html(htmlpolicy);
+        }
+      });
+
+
+      // layer.confirm('确定要修改选中的用户的策略吗？', {
+      //   btn: ['确定', '取消']
+      // }, function () {
+      //   var postData = {}
+      //   postData.ids = ids.join(',');
+      //   console.log(postData);
+      //   $.ajax({
+      //     type: 'post',
+      //     url: ctx + '/user/deleteUser',
+      //     data: postData,
+      //     success: function (msg) {
+      //       if (msg === 'success') {
+      //         userTable.ajax.reload(function () { }, true);
+      //         $('.j-check-user-all').prop('checked', false);
+      //         layer.msg('删除成功！', { icon: 1 });
+      //       } else {
+      //         layer.msg('删除失败！', { icon: 2 });
+      //       }
+      //     },
+      //     error: function () {
+      //       layer.msg('删除失败！', { icon: 2 });
+      //     }
+      //   })
+      // });
+    })
+    //解绑usbkey
+    .on('click', '.j-opt-hover-remove,#bar_relieve', function () {
+      var ids = [];
+      if ($(this).is('#bar_relieve')) {
+        if ($('.j-check-user:checked').length == 0) {
+          layer.msg('请先选中用户！', { icon: 0 });
+          return;
+        }
+        else {
+          ids = $('.j-check-user:checked').map(function (index, obj) {
+            return $(obj).attr('data-id');
+          }).toArray();
+        }
+      }
+      else {
+        ids.push($(this).attr('data-id'));
+      }
+      layer.confirm(ids.length > 1 ? '确定要解绑选中的用户吗？' : '确定要解绑该用户吗？', {
+        btn: ['确定', '取消']
+      }, function () {
+        var postData = {};
+        postData.ids = ids.join(',');
+        $.ajax({
+          type: 'post',
+          url: ctx + '11111111',
+          data: postData,
+          success: function (msg) {
+            if (msg === 'success') {
+              deptTable.ajax.reload(function () { }, true);
+              $('.j-check-user-all').prop('checked', false);
+              layer.msg('解绑成功！', { icon: 1 });
+            } else {
+              layer.msg('解绑失败！', { icon: 2 });
+            }
+          },
+          error: function () {
+            layer.msg('解绑失败！', { icon: 2 });
+          }
+        })
+      });
+
     })
     //导出
     .on('click', '#bar_export', function () {
@@ -275,12 +444,12 @@ function initEvents() {
       $('#openWind .parent-dept-tree-box').slideUp('fast');
     })
     //用户全选或取消全选
-    .on('change', '.j-check-dept-all', function () {
-      $('.j-check-dept').prop('checked', $(this).prop('checked'));
+    .on('change', '.j-check-user-all', function () {
+      $('.j-check-user').prop('checked', $(this).prop('checked'));
     })
     //用户单个选择或取消选择
-    .on('change', '.j-check-dept', function () {
-      $('.j-check-dept-all').prop('checked', $('.j-check-dept').not(':checked').length == 0);
+    .on('change', '.j-check-user', function () {
+      $('.j-check-user-all').prop('checked', $('.j-check-user').not(':checked').length == 0);
     })
     //用户名回车搜索
     .on('keydown', '#bar_searchstr', function (e) {
@@ -304,6 +473,42 @@ function initEvents() {
     //隐藏操作悬浮框
     .on('mouseleave', '.table-opt-box', function () {
       $(this).find('.opt-hover-box').removeClass('opt-hover-up opt-hover-down');
+    })
+    //密码强度验证
+    .on('keyup', '#pass', function () {
+      var strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
+      var mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+      var enoughRegex = new RegExp("(?=.{6,}).*", "g");
+
+      if (false == enoughRegex.test($(this).val())) {
+        $('body #level').removeClass('pw-weak');
+        $('body #level').removeClass('pw-medium');
+        $('body #level').removeClass('pw-strong');
+        $('body #level').addClass(' pw-defule');
+        //密码小于六位的时候，密码强度图片都为灰色
+      }
+      else if (strongRegex.test($(this).val())) {
+        $('body #level').removeClass('pw-weak');
+        $('body #level').removeClass('pw-medium');
+        $('body #level').removeClass('pw-strong');
+        $('body #level').addClass(' pw-strong');
+        //密码为八位及以上并且字母数字特殊字符三项都包括,强度最强
+      }
+      else if (mediumRegex.test($(this).val())) {
+        $('body #level').removeClass('pw-weak');
+        $('body #level').removeClass('pw-medium');
+        $('body #level').removeClass('pw-strong');
+        $('body #level').addClass(' pw-medium');
+        //密码为七位及以上并且字母、数字、特殊字符三项中有两项，强度是中等
+      }
+      else {
+        $('body #level').removeClass('pw-weak');
+        $('body #level').removeClass('pw-medium');
+        $('body #level').removeClass('pw-strong');
+        $('body #level').addClass('pw-weak');
+        //如果密码为6为及以下，就算字母、数字、特殊字符三项都包括，强度也是弱的
+      }
+      return true;
     })
 }
 
@@ -342,7 +547,7 @@ function initDeptTree(selectID) {
   }
   else {
     $('.j-edit-dept').css('display', 'none');
-    $('#dept_table').DataTable();
+    $('#user_table').DataTable();
   }
 }
 
@@ -385,9 +590,9 @@ function initdeptTable(pid) {
       "url": ctx + "/clientUser/getClientUserPageByDepartmentId",
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
-        console.log(json);
+        // console.log(json);
         return json.data.map(function (obj) {
-          return [obj.id, obj.username , obj.truename , obj.policyid , obj.policyid || '--', obj.id]
+          return [obj.id, obj.username, obj.truename, obj.policyid, obj.policyid || '--', obj.id]
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象
@@ -429,12 +634,12 @@ function initdeptTable(pid) {
       "class": "center-text",
       "width": "80px",
       "render": function (data, type, full) {
-        return template('temp_opt_box', { id: data });
+        return template('temp_opt_box', {id: data});
       }
     }],
     //当每次表格重绘的时候触发一个操作，比如更新数据后或者创建新的元素
     "drawCallback": function (oTable) {
-      var oTable = $("#dept_table").dataTable();
+      var oTable = $("#user_table").dataTable();
       //设置每一列的title
       $("table").find("tr td:not(:last-child)").each(function (index, obj) {
         $(obj).attr("title", $(obj).text());
@@ -471,40 +676,4 @@ function initdeptTable(pid) {
   });
 }
 //密码验证
-function passStrong(){
-  $('#pass').keyup(function () {
-    var strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
-    var mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
-    var enoughRegex = new RegExp("(?=.{6,}).*", "g");
 
-    if (false == enoughRegex.test($(this).val())) {
-      $('#level').removeClass('pw-weak');
-      $('#level').removeClass('pw-medium');
-      $('#level').removeClass('pw-strong');
-      $('#level').addClass(' pw-defule');
-      //密码小于六位的时候，密码强度图片都为灰色
-    }
-    else if (strongRegex.test($(this).val())) {
-      $('#level').removeClass('pw-weak');
-      $('#level').removeClass('pw-medium');
-      $('#level').removeClass('pw-strong');
-      $('#level').addClass(' pw-strong');
-      //密码为八位及以上并且字母数字特殊字符三项都包括,强度最强
-    }
-    else if (mediumRegex.test($(this).val())) {
-      $('#level').removeClass('pw-weak');
-      $('#level').removeClass('pw-medium');
-      $('#level').removeClass('pw-strong');
-      $('#level').addClass(' pw-medium');
-      //密码为七位及以上并且字母、数字、特殊字符三项中有两项，强度是中等
-    }
-    else {
-      $('#level').removeClass('pw-weak');
-      $('#level').removeClass('pw-medium');
-      $('#level').removeClass('pw-strong');
-      $('#level').addClass('pw-weak');
-      //如果密码为6为及以下，就算字母、数字、特殊字符三项都包括，强度也是弱的
-    }
-    return true;
-  });
-}

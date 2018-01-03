@@ -75,7 +75,7 @@ $(document).on("mouseover", '.table-caozuo-box', function () {
 $.ajaxSetup({
     complete: function (xhr, textStatus) {
         if (xhr.getResponseHeader('isRedirect') == 'yes') {
-            location.href = "/drs/login";
+            location.href = "/vdp/login";
         }
     }
 });

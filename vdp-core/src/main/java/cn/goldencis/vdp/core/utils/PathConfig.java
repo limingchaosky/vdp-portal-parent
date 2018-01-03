@@ -21,6 +21,8 @@ public class PathConfig {
     public final static String TSA_URL; //TSA统一登录页面
     public final static String TSA_LOGIN_URL;//TSA单一登录页面
     public final static String READ_AUTH_PATH;//解密授权信息文件
+    public final static String POLICY_BASECATALOG;//策略json文件的存放根目录
+    public final static String POLICY_JSONFILENAME;//策略json文件的保存的文件名
 
     static {
         bundle = ResourceBundle.getBundle("vdp-common");
@@ -34,6 +36,8 @@ public class PathConfig {
         TSA_URL = bundle.getString("tsa_url");
         TSA_LOGIN_URL = bundle.getString("tsa_login_url");
         READ_AUTH_PATH = bundle.getString("readauthpath");
+        POLICY_BASECATALOG = bundle.getString("policy.BaseCatalog");
+        POLICY_JSONFILENAME = bundle.getString("policy.JsonFileName");
     }
 
 }

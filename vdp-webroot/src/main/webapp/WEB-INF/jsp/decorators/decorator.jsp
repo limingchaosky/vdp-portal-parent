@@ -36,8 +36,8 @@
     <script src="${ctxJs}/window.js" type="text/javascript"></script>
 
     <!--<script src="${ctxJs}/gold.js"></script>-->
-    <!--<script type="text/javascript" src="${ctxJs}/plugins/sha/sha256.js"></script>-->
-    <!--<script type="text/javascript" src="${ctxJs}/plugins/sha/encrypt.js"></script>-->
+    <script type="text/javascript" src="${ctxJs}/plugins/sha/sha256.js"></script>
+    <script type="text/javascript" src="${ctxJs}/plugins/sha/encrypt.js"></script>
     <!--左侧菜单JS-->
     <script src="${ctxJs}/menu.js"></script>
     <script src="${ctxJs}/wtop.js"></script>

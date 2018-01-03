@@ -24,11 +24,11 @@
         <div class="right-content-top">
             <div class="bar-item-box">
                 <div class="bar-item bar-item-search">
-                    <input id="bar_searchstr" type="text" placeholder="用户名称">
-                    <i id="bar_searchstr_icon" class="icon-search"></i>
+                    <input id="bar_searchstr" type="text" placeholder="用户名/IP地址">
+                    <i id="bar_searchstr_icon" class="iconfont icon-btn-serch"></i>
                 </div>
                 <a id="bar_add_user" class="bar-item bar-item-icon iconfont icon-btn-add" title="添加用户"></a>
-                <a id="bar_edit_user" class="bar-item bar-item-icon iconfont icon-btn-edit" title="编辑用户"></a>
+                <a id="bar_policy_user" class="bar-item bar-item-icon iconfont icon-btn-edit" title="批量修改策略"></a>
                 <a id="bar_import" class="bar-item bar-item-icon iconfont icon-btn-import1" title="导入"></a>
                 <a id="bar_export" class="bar-item bar-item-icon iconfont icon-btn-export1" title="导出"></a>
                 <a id="bar_relieve" class="bar-item bar-item-icon iconfont icon-btn-remove" title="解绑UKey"></a>
@@ -61,50 +61,47 @@
     </div>
 </div>
 <!--添加用户弹窗-->
-<div id="add_dept_wind" class="none">
+<div id="add_user_wind" class="none">
     <div class="wind-box">
-        <form class="padding-normal j-add-dept-form">
-            <div class="wind-row cf j-dept-name">
+        <form class="padding-normal j-add-user-form">
+            <div class="wind-row cf">
                 <label for="" class="wind-label label-required">用户名</label>
                 <input type="text" class="form-input wind-normal-input" name="username" maxlength="20">
             </div>
-            <div class="wind-row cf j-dept-name">
+            <div class="wind-row cf">
                 <label for="" class="wind-label label-required">真实姓名</label>
                 <input type="text" class="form-input wind-normal-input" name="truename" maxlength="20">
             </div>
-            <div class="wind-row cf j-dept-name">
+            <div class="wind-row cf">
                 <label for="" class="wind-label label-required">用户密码</label>
-                <input type="text" id="pass" class="form-input wind-normal-input" name="password" maxlength="20">
+                <input type="password" id="pass" class="form-input wind-normal-input" name="password" maxlength="20">
             </div>
             <div id="level" class="pw-strength">
                 <div class="pw-bar"></div>
                 <div class="pw-bar-on"></div>
-                <div class="pw-txt">
+                <div class="pw-txt"></div>
             </div>
-            <div class="wind-row cf j-dept-name">
+            <div class="wind-row cf">
                 <label for="" class="wind-label label-required">确认密码</label>
-                <input type="text" class="form-input wind-normal-input" name="repassword" maxlength="20">
+                <input type="password" class="form-input wind-normal-input" name="repassword" maxlength="20">
             </div>
-            <div class="wind-row cf j-parent-dept">
+            <div class="wind-row cf">
                 <label for="" class="wind-label label-required">所属部门</label>
-                <input type="text" class="form-input wind-normal-input parent-dept" readonly name="parentdept" placeholder="请选择上级部门">
+                <input type="text" class="form-input wind-normal-input parent-dept" readonly name="parentdept" placeholder="请选择所属部门">
                 <div class="parent-dept-tree-box none">
                     <ul class="ztree j-parent-dept-tree"></ul>
                 </div>
             </div>
-            <div class="wind-row cf j-parent-dept">
+            <div class="wind-row cf">
                 <label for="" class="wind-label label-required">采用策略</label>
-                <input type="text" class="form-input wind-normal-input parent-dept" readonly name="parent-dept" placeholder="请选择上级部门">
-                <div class="parent-dept-tree-box none">
-                    <ul class="ztree j-parent-dept-tree"></ul>
-                </div>
+                <select class="wind-input" name="selectPolicy"></select>
             </div>
-            <div class="wind-row cf j-parent-dept">
-                <label for="" class="wind-label">USBKey设备</label>
-                <input type="text" class="form-input wind-normal-input parent-dept" readonly name="parent-dept" placeholder="请选择上级部门">
-                <div class="parent-dept-tree-box none">
-                    <ul class="ztree j-parent-dept-tree"></ul>
-                </div>
+            <div class="wind-row cf">
+                <label for="" class="wind-label">USBKey</label>
+                <select class="wind-input" name="usbKeyList"></select>
+                <!--<div class="parent-dept-tree-box none">-->
+                <!--<ul class="ztree j-parent-dept-tree2"></ul>-->
+                <!--</div>-->
             </div>
         </form>
     </div>
@@ -116,15 +113,28 @@
         <i class="iconfont icon-nav-system table-opt-icon"></i>
         <div class="opt-hover-box">
             <div class="opt-hover-row j-opt-hover-edit" data-id="{{id}}">
-                <i class="icon-bianji"></i>
+                <i class="iconfont icon-btn-edit text-sm"></i>
                 <span class="text-sm margin-left-xs">编辑</span>
             </div>
             <div class="opt-hover-row j-opt-hover-delete" data-id="{{id}}">
-                <i class="icon-shanchu"></i>
+                <i class="iconfont icon-btn-delete text-sm"></i>
                 <span class="text-sm margin-left-xs">删除</span>
+            </div>
+            <div class="opt-hover-row j-opt-hover-diypolicy" data-id="{{id}}">
+                <i class="iconfont icon-menu-user text-sm"></i>
+                <span class="text-sm margin-left-xs">个性化策略</span>
+            </div>
+            <div class="opt-hover-row j-opt-hover-remove" data-id="{{id}}">
+                <i class="iconfont icon-btn-remove text-sm"></i>
+                <span class="text-sm margin-left-xs">解绑UKey</span>
             </div>
         </div>
     </div>
+</script>
+<script id="temp_policy" type="text/html">
+    <select class="wind-input valid temp_policy" name="userSelectPolicy" aria-invalid="false">
+
+    </select>
 </script>
 <!--部门表操作模板结束-->
 <script src="${ctxJs}/plugins/dataTables/jquery.dataTables.min.js"></script>
