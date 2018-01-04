@@ -161,4 +161,19 @@ public class ClientUserServiceImpl extends AbstractBaseServiceImpl<ClientUserDO 
 
         mapper.updateByPrimaryKeySelective(clientUser);
     }
+
+    /**
+     * 批量更新策略。批量更新id包含集合中的用户，将策略更新为新的策略id
+     * @param idList 需要更新策略的用户id集合
+     * @param policyid 需要更新的策略id
+     */
+    @Override
+    @Transactional
+    public void batchUpdateClientUsersPolicy(List<Integer> idList, Integer policyid) {
+        ClientUserDOCriteria example = new ClientUserDOCriteria();
+        example.createCriteria().andIdIn(idList);
+        ClientUserDO clientUser = new ClientUserDO();
+        clientUser.setPolicyid(policyid);
+        mapper.updateByExampleSelective(clientUser, example);
+    }
 }

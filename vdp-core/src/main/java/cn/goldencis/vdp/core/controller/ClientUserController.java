@@ -17,6 +17,7 @@ import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletContext;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -95,6 +96,11 @@ public class ClientUserController implements ServletContextAware {
         return resultMsg;
     }
 
+    /**
+     * 添加用户接口
+     * @param clientUser
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/addClientUser", method = RequestMethod.POST)
     public ResultMsg addClientUser(ClientUserDO clientUser) {
@@ -120,6 +126,11 @@ public class ClientUserController implements ServletContextAware {
         return resultMsg;
     }
 
+    /**
+     * 更新用户接口
+     * @param clientUser
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/updateClientUser", method = RequestMethod.POST)
     public ResultMsg updateClientUser(ClientUserDO clientUser) {
@@ -143,6 +154,11 @@ public class ClientUserController implements ServletContextAware {
         return resultMsg;
     }
 
+    /**
+     * 删除用户接口
+     * @param id
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/deleteClientUser",method = RequestMethod.POST)
     public ResultMsg deleteClientUser(Integer id) {
@@ -157,6 +173,37 @@ public class ClientUserController implements ServletContextAware {
             resultMsg.setResultMsg("删除错误！");
         }
         resultMsg.setResultCode(1);
+        return resultMsg;
+    }
+
+    /**
+     * 批量修改用户策略
+     * @param ids 多个用户id的字符串，以"，"隔开。
+     * @param policyid
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/batchUpdateClientUsersPolicy",method = RequestMethod.POST)
+    public ResultMsg batchUpdateClientUsersPolicy(String ids, Integer policyid) {
+        ResultMsg resultMsg = new ResultMsg();
+
+        try {
+            //将接口参数参数中的多个用户id的字符串，转化为用户id集合
+            String[] idArr = ids.split(",");
+            List<Integer> idList = new ArrayList<>();
+            for (String id : idArr) {
+                idList.add(Integer.parseInt(id));
+            }
+
+            //批量更新id包含集合中的用户，将策略更新为新的策略id
+            clientUserService.batchUpdateClientUsersPolicy(idList, policyid);
+            resultMsg.setResultMsg("用户更新策略成功！");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
+        } catch (Exception e) {
+            resultMsg.setResultMsg("用户更新策略失败！");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
+        }
+
         return resultMsg;
     }
 

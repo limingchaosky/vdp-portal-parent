@@ -36,6 +36,8 @@ public class ClientUserDO extends BaseEntity implements Serializable {
 
     private String remark;
 
+    private Integer isbindedUsbKey;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
