@@ -52,12 +52,23 @@ public class DepartmentController {
         return model;
     }
 
+    /**
+     * 根据部门名称查询部门
+     *
+     * @param id
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/getDepartmentById", produces = "application/json", method = RequestMethod.GET)
     public DepartmentDO getDepartmentById(Integer id) {
         return departmentService.getDepartmentById(id);
     }
 
+    /**
+     * 管理员无权限限制，获取全部部门树json
+     *
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/getDepartmentTreelist")
     public String getDepartmentTreelist() {
@@ -65,6 +76,11 @@ public class DepartmentController {
         return zNodes;
     }
 
+    /*
+     * 根据登录用户权限获取部门树json
+     * @param ischeck 是否有未分组
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/getDepartmentNodesByLoginUser")
     public String getDepartmentNodesByLoginUser() {
@@ -204,7 +220,6 @@ public class DepartmentController {
     }
 
 
-
     @ResponseBody
     @RequestMapping(value = "/deleteUserByDepartmentId", produces = "application/json", method = RequestMethod.POST)
     public String deleteUserByDepartmentId(String departmentId, String userId) {
@@ -214,6 +229,7 @@ public class DepartmentController {
 
     /**
      * 删除接口
+     *
      * @param id
      * @return
      */

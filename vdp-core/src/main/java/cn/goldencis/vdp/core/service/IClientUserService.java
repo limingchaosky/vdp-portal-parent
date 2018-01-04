@@ -52,7 +52,7 @@ public interface IClientUserService extends BaseService<ClientUserDO, ClientUser
      * 检查用户名是否重复
      * @return
      */
-    boolean checkClientUserNameDuplicate(String clientUserName);
+    boolean checkClientUserNameDuplicate(ClientUserDO clientUser);
 
     /**
      * 根据用户id，更新用户信息

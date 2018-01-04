@@ -14,6 +14,22 @@
                             <a href="${ctx}${nav.url}" class="ma0"><span class="mname ${nav.iconUrl} namehide">${nav.title}</span></a>
                         </li>
                     </c:when>
+                    <c:when test="${nav.nLevel==1 && nav.title == '策略'}">
+                        <li class="mli0">
+                            <a href="javascript:void(0)" class="ma0"><span class="mname ${nav.iconUrl} namehide">${nav.title}</span></a>
+                            <ul class="mul1">
+                                <div class="listhover"></div>
+                                <li class="mli1">
+                                    <a class="ma1" href="#">新建</a>
+                                </li>
+                                <c:forEach items="${policyList}" var="policy">
+                                    <li class="mli1">
+                                        <a class="ma1" href="#">${policy.name}</a>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                        </li>
+                    </c:when>
                     <c:when test="${nav.nLevel==1}">
                         <li class="mli0">
                             <a href="javascript:void(0)" class="ma0"><span class="mname ${nav.iconUrl} namehide">${nav.title}</span></a>
@@ -44,7 +60,7 @@
                                 </c:if>
                                 </c:forEach>
                             </ul>
-                    </li>
+                        </li>
                     </c:when>
                     <c:otherwise>
                     </c:otherwise>

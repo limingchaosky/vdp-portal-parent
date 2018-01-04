@@ -39,7 +39,7 @@ public interface IDepartmentService extends BaseService<DepartmentDO, Department
     long getDeptarMentCountByParent(Integer pId, String treePath);
 
     /**
-     * 管理员获取无权限控制
+     * 管理员无权限限制，获取全部部门树json
      * @return
      */
     String getManagerNodes();

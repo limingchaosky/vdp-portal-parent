@@ -47,9 +47,9 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         return mapper;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see cn.goldencis.tsa.system.service.IDepartmentService#getManagerNodes()
+    /**
+     * 管理员无权限限制，获取全部部门树json
+     * @return
      */
     public String getManagerNodes() {
         String zNodes = toTreeJson(cmapper.getDeptarMentList(null, null, null, null, null), false);
@@ -82,6 +82,11 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
 
     }
 
+    /**
+     * 修改部门
+     * @param bean
+     * @return
+     */
     @Transactional
     public boolean updatedept(DepartmentDO bean) {
 
@@ -90,9 +95,9 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         } else {
             DepartmentDO pdept = mapper.selectByPrimaryKey(String.valueOf(bean.getParentId()));
 
-            //获取修改之前，部门的部门树+id，用来查询子部门
+            //获取修改之前，部门的部门树+id，用来查询子部门。,1,44,45,
             String oldtreepath = bean.getTreePath() + bean.getId() + ",";
-            //通过父类部门，获取修改后的部门树
+            //通过父类部门，获取修改后的部门树.,1,
             String newtreepath = pdept.getTreePath() + pdept.getId() + ",";
 
             //获取修改部门之前，该部门下的子类部门列表
@@ -109,7 +114,9 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
                 //添加到修改部门id列表
                 dids.add(cdept.getId());
                 //替换子类部门的部门树
-                cdept.setTreePath(cdept.getTreePath().replace(bean.getTreePath(), newtreepath));
+                String treePath = cdept.getTreePath();
+                treePath = treePath.replace(bean.getTreePath(), newtreepath);
+                cdept.setTreePath(treePath);
                 //跟新子类部门
                 mapper.updateByPrimaryKeySelective(cdept);
             }
@@ -141,6 +148,11 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         return true;
     }
 
+    /**
+     * 未用
+     * @param id
+     * @return
+     */
     @Override
     public List<String> getAllRoleDept(Integer id) {
         List<DepartmentDO> roleDept = new ArrayList<>();
@@ -183,18 +195,35 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         return rlist;
     }
 
+    /**
+     * 通过父类id和父类treePath查询子类集合，返回列表中包含父类本身。分页查询。
+     * @param startNum
+     * @param pageSize
+     * @param pId 父类id
+     * @param treePath 父类treePath
+     * @param ordercase 查询条件，暂未实现
+     * @return
+     */
     @Override
     public List<DepartmentDO> getDeptarMentListByParent(Integer startNum, Integer pageSize, Integer pId, String treePath, String ordercase) {
 
         RowBounds rowBounds = new RowBounds(startNum, pageSize);
+
+        //通过父类id和父类treePath、和父类本身 查询子类集合
         DepartmentDOCriteria departmentDOCriteria = new DepartmentDOCriteria();
         departmentDOCriteria.createCriteria().andParentIdEqualTo(pId);
         departmentDOCriteria.or().andTreePathLike(treePath);
+        departmentDOCriteria.or().andIdEqualTo(pId);
 
         List<DepartmentDO> departmentList = mapper.selectByExampleWithRowbounds(departmentDOCriteria, rowBounds);
         return departmentList;
     }
 
+    /**
+     *
+     * @param pId
+     * @return
+     */
     @Override
     public List<DepartmentDO> getDeptarMentListByParent(Integer pId) {
         DepartmentDO parentDept = mapper.selectByPrimaryKey(String.valueOf(pId));
@@ -206,11 +235,19 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         return departmentList;
     }
 
+    /**
+     * 通过父类id和父类treePath、和父类本身 查询子类集合的总数量
+     * @param pId
+     * @param treePath
+     * @return
+     */
     @Override
     public long getDeptarMentCountByParent(Integer pId, String treePath) {
+        //通过父类id和父类treePath、和父类本身 查询子类集合的总数量
         DepartmentDOCriteria departmentDOCriteria = new DepartmentDOCriteria();
         departmentDOCriteria.createCriteria().andParentIdEqualTo(pId);
         departmentDOCriteria.or().andTreePathLike(treePath);
+        departmentDOCriteria.or().andIdEqualTo(pId);
 
         return mapper.countByExample(departmentDOCriteria);
     }

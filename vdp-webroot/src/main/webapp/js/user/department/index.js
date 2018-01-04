@@ -2,7 +2,6 @@ var deptTable = null;//部门用户表
 var deptTree = null;//部门树
 
 
-
 $(function () {
   initDeptTree(1);//初始化部门树,1是选中节点的id
   initEvents();//初始化页面事件
@@ -155,6 +154,8 @@ function initEvents() {
     .on('click', '.j-opt-hover-edit', function () {
       var idx = $('.j-opt-hover-edit').index(this);
       var id = Number($(this).attr('data-id'));
+      var treePath = $(this).attr('data-treePath');
+
       var parentDeptTree = null;//部门树
       layer.open({
         id: 'openWind',
@@ -168,12 +169,14 @@ function initEvents() {
             return;
           }
           var postData = {
+            treePath:treePath,
             id: id,
             name: $('#openWind input[name=name]').val().trim(),
             parentId: id == 1 ? -1 : $('#openWind input[name=parent-dept]').attr('data-id'),
             owner: $('#openWind input[name=owner]').val().trim(),
             departmentTel: $('#openWind input[name=departmentTel]').val().trim(),
-          }
+          };
+          console.log(postData);
           if ($(layero).find('.layui-layer-btn0').hasClass('btn-disabled')) {
             return;
           }
@@ -216,6 +219,7 @@ function initEvents() {
             },
             callback: {
               onClick: function (event, treeId, treeNode, clickFlag) {
+
                 $('#openWind .parent-dept').val(treeNode.name).attr('data-id', treeNode.id);
                 $('#openWind .parent-dept-tree-box').slideUp('fast');
               }
@@ -353,7 +357,7 @@ function initDeptTree(selectID) {
 function initdeptTable(pid) {
   if (deptTable) {
     deptTable.settings()[0].ajax.data.pid = pid;
-    deptTable.settings()[0].ajax.data.searchstr = $('#bar_searchstr').val().trim();
+    // deptTable.settings()[0].ajax.data.searchstr = $('#bar_searchstr').val().trim();
     deptTable.ajax.reload();
     return;
   }
@@ -386,13 +390,13 @@ function initdeptTable(pid) {
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
         return json.data.map(function (obj) {
-          return [obj.name, obj.parentName || '--', obj.owner || '--', obj.departmentTel || '--', obj.id]
+          return [obj.name, obj.parentName || '--', obj.owner || '--', obj.departmentTel || '--', {id:obj.id,treePath:obj.treePath}]
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象
       "data": {
         "pid": pid,
-        "searchstr": $('#bar_searchstr').val().trim()
+        // "searchstr": $('#bar_searchstr').val().trim()
       },
     },
     "columnDefs": [{
@@ -417,7 +421,7 @@ function initdeptTable(pid) {
       "class": "center-text",
       "width": "80px",
       "render": function (data, type, full) {
-        return template('temp_opt_box', { id: data });
+        return template('temp_opt_box', { id: data.id,treePath:data.treePath});
       }
     }],
     //当每次表格重绘的时候触发一个操作，比如更新数据后或者创建新的元素

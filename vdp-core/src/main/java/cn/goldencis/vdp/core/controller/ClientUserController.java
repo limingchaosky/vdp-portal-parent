@@ -102,7 +102,7 @@ public class ClientUserController implements ServletContextAware {
         ResultMsg resultMsg = new ResultMsg();
         try {
             //判断用户名是否重复
-            boolean flag = clientUserService.checkClientUserNameDuplicate(clientUser.getUsername());
+            boolean flag = clientUserService.checkClientUserNameDuplicate(clientUser);
             if (!flag) {
                 resultMsg.setResultCode(ConstantsDto.RESULT_CODE_FALSE);
                 resultMsg.setResultMsg("用户名重复！");
@@ -126,7 +126,7 @@ public class ClientUserController implements ServletContextAware {
         ResultMsg resultMsg = new ResultMsg();
         try {
             //判断用户名是否重复
-            boolean flag = clientUserService.checkClientUserNameDuplicate(clientUser.getUsername());
+            boolean flag = clientUserService.checkClientUserNameDuplicate(clientUser);
             if (!flag) {
                 resultMsg.setResultCode(ConstantsDto.RESULT_CODE_FALSE);
                 resultMsg.setResultMsg("用户名重复！");

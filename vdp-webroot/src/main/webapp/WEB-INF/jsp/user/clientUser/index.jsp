@@ -120,10 +120,10 @@
                 <i class="iconfont icon-btn-delete text-sm"></i>
                 <span class="text-sm margin-left-xs">删除</span>
             </div>
-            <div class="opt-hover-row j-opt-hover-diypolicy" data-id="{{id}}">
-                <i class="iconfont icon-menu-user text-sm"></i>
-                <span class="text-sm margin-left-xs">个性化策略</span>
-            </div>
+            <!--<div class="opt-hover-row j-opt-hover-diypolicy" data-id="{{id}}">-->
+                <!--<i class="iconfont icon-menu-user text-sm"></i>-->
+                <!--<span class="text-sm margin-left-xs">个性化策略</span>-->
+            <!--</div>-->
             <div class="opt-hover-row j-opt-hover-remove" data-id="{{id}}">
                 <i class="iconfont icon-btn-remove text-sm"></i>
                 <span class="text-sm margin-left-xs">解绑UKey</span>

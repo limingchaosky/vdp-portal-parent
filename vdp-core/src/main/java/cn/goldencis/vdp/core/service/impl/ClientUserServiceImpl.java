@@ -124,11 +124,23 @@ public class ClientUserServiceImpl extends AbstractBaseServiceImpl<ClientUserDO 
         return null;
     }
 
+    /**
+     * 检查用户名是否重复
+     * @return 可用返回true
+     */
     @Override
-    public boolean checkClientUserNameDuplicate(String clientUserName) {
-        ClientUserDO clientUser = this.getClientUserByName(clientUserName);
-        if (clientUser != null) {
-            return false;
+    public boolean checkClientUserNameDuplicate(ClientUserDO clientUser) {
+
+        //通过用户名获取数据库中用户记录
+        ClientUserDO preClientUser = this.getClientUserByName(clientUser.getUsername());
+
+        //判断数据库是否有该记录，不存在即可用，返回true，如果有继续判断
+        if (preClientUser != null) {
+            //比较两个对象的id，若一致，是同一个对象没有改变名称的情况，返回可用true。
+            if (preClientUser.getId() != clientUser.getId()) {
+                //若果不同，说明为两个用户，名称重复，不可用，返回false
+                return false;
+            }
         }
         return true;
     }
