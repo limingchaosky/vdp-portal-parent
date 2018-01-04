@@ -13,6 +13,7 @@
     <result column="ip" jdbcType="VARCHAR" property="ip" />
     <result column="regtime" jdbcType="TIMESTAMP" property="regtime" />
     <result column="policyid" jdbcType="INTEGER" property="policyid" />
+    <result column="isbinded_usbkey" jdbcType="INTEGER" property="isbindedUsbkey" />
     <result column="online" jdbcType="CHAR" property="online" />
     <result column="online_time" jdbcType="TIMESTAMP" property="onlineTime" />
     <result column="offline_time" jdbcType="TIMESTAMP" property="offlineTime" />
@@ -78,7 +79,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, guid, username, password, truename, deptguid, computerguid, computername, ip,
-    regtime, policyid, online, online_time, offline_time, remark
+    regtime, policyid, isbinded_usbkey, online, online_time, offline_time, remark
   </sql>
   <select id="selectByExample" parameterType="cn.goldencis.vdp.core.entity.ClientUserDOCriteria" resultMap="BaseResultMap">
     select
@@ -114,15 +115,15 @@
     insert into t_client_user (id, guid, username,
       password, truename, deptguid,
       computerguid, computername, ip,
-      regtime, policyid, online,
-      online_time, offline_time, remark
-      )
+      regtime, policyid, isbinded_usbkey,
+      online, online_time, offline_time,
+      remark)
     values (#{id,jdbcType=INTEGER}, #{guid,jdbcType=CHAR}, #{username,jdbcType=VARCHAR},
       #{password,jdbcType=VARCHAR}, #{truename,jdbcType=VARCHAR}, #{deptguid,jdbcType=INTEGER},
       #{computerguid,jdbcType=CHAR}, #{computername,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR},
-      #{regtime,jdbcType=TIMESTAMP}, #{policyid,jdbcType=INTEGER}, #{online,jdbcType=CHAR},
-      #{onlineTime,jdbcType=TIMESTAMP}, #{offlineTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
-      )
+      #{regtime,jdbcType=TIMESTAMP}, #{policyid,jdbcType=INTEGER}, #{isbindedUsbkey,jdbcType=INTEGER},
+      #{online,jdbcType=CHAR}, #{onlineTime,jdbcType=TIMESTAMP}, #{offlineTime,jdbcType=TIMESTAMP},
+      #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.goldencis.vdp.core.entity.ClientUserDO">
     insert into t_client_user
@@ -159,6 +160,9 @@
       </if>
       <if test="policyid != null">
         policyid,
+      </if>
+      <if test="isbindedUsbkey != null">
+        isbinded_usbkey,
       </if>
       <if test="online != null">
         online,
@@ -206,6 +210,9 @@
       </if>
       <if test="policyid != null">
         #{policyid,jdbcType=INTEGER},
+      </if>
+      <if test="isbindedUsbkey != null">
+        #{isbindedUsbkey,jdbcType=INTEGER},
       </if>
       <if test="online != null">
         #{online,jdbcType=CHAR},
@@ -263,6 +270,9 @@
       <if test="record.policyid != null">
         policyid = #{record.policyid,jdbcType=INTEGER},
       </if>
+      <if test="record.isbindedUsbkey != null">
+        isbinded_usbkey = #{record.isbindedUsbkey,jdbcType=INTEGER},
+      </if>
       <if test="record.online != null">
         online = #{record.online,jdbcType=CHAR},
       </if>
@@ -293,6 +303,7 @@
       ip = #{record.ip,jdbcType=VARCHAR},
       regtime = #{record.regtime,jdbcType=TIMESTAMP},
       policyid = #{record.policyid,jdbcType=INTEGER},
+      isbinded_usbkey = #{record.isbindedUsbkey,jdbcType=INTEGER},
       online = #{record.online,jdbcType=CHAR},
       online_time = #{record.onlineTime,jdbcType=TIMESTAMP},
       offline_time = #{record.offlineTime,jdbcType=TIMESTAMP},
@@ -334,6 +345,9 @@
       <if test="policyid != null">
         policyid = #{policyid,jdbcType=INTEGER},
       </if>
+      <if test="isbindedUsbkey != null">
+        isbinded_usbkey = #{isbindedUsbkey,jdbcType=INTEGER},
+      </if>
       <if test="online != null">
         online = #{online,jdbcType=CHAR},
       </if>
@@ -361,6 +375,7 @@
       ip = #{ip,jdbcType=VARCHAR},
       regtime = #{regtime,jdbcType=TIMESTAMP},
       policyid = #{policyid,jdbcType=INTEGER},
+      isbinded_usbkey = #{isbindedUsbkey,jdbcType=INTEGER},
       online = #{online,jdbcType=CHAR},
       online_time = #{onlineTime,jdbcType=TIMESTAMP},
       offline_time = #{offlineTime,jdbcType=TIMESTAMP},

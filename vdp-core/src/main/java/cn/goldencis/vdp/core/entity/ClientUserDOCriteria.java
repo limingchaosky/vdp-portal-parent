@@ -835,6 +835,66 @@ public class ClientUserDOCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andIsbindedUsbkeyIsNull() {
+            addCriterion("isbinded_usbkey is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsbindedUsbkeyIsNotNull() {
+            addCriterion("isbinded_usbkey is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsbindedUsbkeyEqualTo(Integer value) {
+            addCriterion("isbinded_usbkey =", value, "isbindedUsbkey");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsbindedUsbkeyNotEqualTo(Integer value) {
+            addCriterion("isbinded_usbkey <>", value, "isbindedUsbkey");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsbindedUsbkeyGreaterThan(Integer value) {
+            addCriterion("isbinded_usbkey >", value, "isbindedUsbkey");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsbindedUsbkeyGreaterThanOrEqualTo(Integer value) {
+            addCriterion("isbinded_usbkey >=", value, "isbindedUsbkey");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsbindedUsbkeyLessThan(Integer value) {
+            addCriterion("isbinded_usbkey <", value, "isbindedUsbkey");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsbindedUsbkeyLessThanOrEqualTo(Integer value) {
+            addCriterion("isbinded_usbkey <=", value, "isbindedUsbkey");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsbindedUsbkeyIn(List<Integer> values) {
+            addCriterion("isbinded_usbkey in", values, "isbindedUsbkey");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsbindedUsbkeyNotIn(List<Integer> values) {
+            addCriterion("isbinded_usbkey not in", values, "isbindedUsbkey");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsbindedUsbkeyBetween(Integer value1, Integer value2) {
+            addCriterion("isbinded_usbkey between", value1, value2, "isbindedUsbkey");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsbindedUsbkeyNotBetween(Integer value1, Integer value2) {
+            addCriterion("isbinded_usbkey not between", value1, value2, "isbindedUsbkey");
+            return (Criteria) this;
+        }
+
         public Criteria andOnlineIsNull() {
             addCriterion("online is null");
             return (Criteria) this;

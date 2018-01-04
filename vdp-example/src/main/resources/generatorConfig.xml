@@ -35,7 +35,7 @@
 		<javaModelGenerator targetPackage="cn.goldencis.vdp.core.entity" targetProject="../vdp-core/src/main/java">
 			<property name="enableSubPackages" value="true" />
 			<property name="trimStrings" value="true" />
-			<property name="rootClass" value="cn.goldencis.vdp.core.entity.BaseEntity" />
+			<property name="rootClass" value="cn.goldencis.vdp.common.entity.BaseEntity" />
 		</javaModelGenerator>
 
 		<!-- XMLs -->
@@ -48,7 +48,7 @@
 		<javaClientGenerator targetPackage="cn.goldencis.vdp.core.dao" targetProject="../vdp-core/src/main/java"
 			type="XMLMAPPER">
 			<property name="enableSubPackages" value="true" />
-			<property name="rootInterface" value="cn.goldencis.vdp.core.dao.BaseDao" />
+			<property name="rootInterface" value="cn.goldencis.vdp.common.dao.BaseDao" />
 		</javaClientGenerator>
 
 

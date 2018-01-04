@@ -1,7 +1,6 @@
 package cn.goldencis.vdp.core.entity;
 
 import cn.goldencis.vdp.common.entity.BaseEntity;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -28,6 +27,8 @@ public class ClientUserDO extends BaseEntity implements Serializable {
 
     private Integer policyid;
 
+    private Integer isbindedUsbkey;
+
     private String online;
 
     private Date onlineTime;
@@ -35,8 +36,6 @@ public class ClientUserDO extends BaseEntity implements Serializable {
     private Date offlineTime;
 
     private String remark;
-
-    private Integer isbindedUsbKey;
 
     private static final long serialVersionUID = 1L;
 
@@ -126,6 +125,14 @@ public class ClientUserDO extends BaseEntity implements Serializable {
 
     public void setPolicyid(Integer policyid) {
         this.policyid = policyid;
+    }
+
+    public Integer getIsbindedUsbkey() {
+        return isbindedUsbkey;
+    }
+
+    public void setIsbindedUsbkey(Integer isbindedUsbkey) {
+        this.isbindedUsbkey = isbindedUsbkey;
     }
 
     public String getOnline() {
