@@ -1,85 +1,28 @@
 <!-- userlist.jsp -->
 
-<!--<%@ page language="java" pageEncoding="UTF-8"%>-->
+<!--<%@ page language="java" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jsp/common/taglibs.jsp"%>
-<%@ include file="/WEB-INF/jsp/common/meta.jsp"%>
+<%@ include file="/WEB-INF/jsp/common/meta.jsp"%>-->
 
 <head>
     <title>金盾VDP</title>
     <!--<link href="${ctxCss}/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css" />-->
-    <link href="${ctxCss}/access/index.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctxCss}/access/index.css" rel="stylesheet" type="text/css" />
     <!--<link href="${ctxCss}/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />-->
     <!--<link href="${ctxCss}/workorder/pending/index.css" rel="stylesheet" type="text/css" />-->
 </head>
 
 <div class="main_right">
-    <div class="top-bar">
-        <div class="top-title">准入</div>
-    </div>
-    <div class="content-box">
-        <div class="add-server-box">
-            <form>
-                <div class="scroll-box">
-                    <div class="row">
-                        <label class="add-param-name label-required">防护状态</label>
-                        <div class="beauty-switch">
-                            <input id="screenSwitch" name="screenSwitch" type="checkbox" checked value="1">
-                            <label for="screenSwitch" class="switch-icon"></label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label class="add-param-name label-required">Mac地址</label>
-                        <input class="add-param-val medium-input input-box mac macaddress" type="text" name="nacMac" placeholder="例如：FF:FF:FF:FF:FF:FF">
-                        <span class="error-text"></span>
-                    </div>
-                    <div class="row">
-                        <label class="add-param-name label-required">跳转地址</label>
-                        <input class="add-param-val medium-input input-box" type="text" name="nacUrl" placeholder="例如：http://www.neiwang.cn">
-                        <span class="error-text"></span>
-                    </div>
-                    <div class="row">
-                        <label class="add-param-name mustinput label-required">准入控制网段</label>
-                        <input class="add-param-val medium-input input-box" type="text" name="ctrlAreas-x" placeholder="例如：1.1.1.1或1.1.1.1-1.1.1.9">
-                        <i class="iconfont icon-btn-add add-ctrl-area"></i>
-                        <span class="error-text"></span>
-                        <div class="append-box ctrl-area"></div>
-                    </div>
-                    <div class="row">
-                        <label class="add-param-name">白名单IP</label>
-                        <input class="add-param-val medium-input input-box" type="text" name="legalIps-x" placeholder="例如：1.1.1.1或1.1.1.1-1.1.1.9">
-                        <i class="iconfont icon-add add-legal-ip"></i>
-                        <span class="error-text"></span>
-                        <div class="append-box legal-ip"></div>
-                    </div>
-                    <div class="row">
-                        <label class="add-param-name">白名单端口</label>
-                        <input class="add-param-val medium-input input-box" type="text" name="legalPorts-x" placeholder="0~65535之间的整数">
-                        <i class="iconfont icon-add add-legal-port"></i>
-                        <span class="error-text"></span>
-                        <div class="append-box legal-port"></div>
-                    </div>
-                    <div class="row">
-                        <label class="add-param-name label-required">WEB重定向端口</label>
-                        <input class="add-param-val medium-input input-box" type="text" name="httpPorts-x" placeholder="0~65535之间的整数">
-                        <i class="iconfont icon-add add-http-port"></i>
-                        <span class="error-text"></span>
-                        <div class="append-box http-port"></div>
-                    </div>
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <input type="hidden" name="nacServer" value=""/>
-                </div>
-            </form>
-        </div>
-    </div>
+    sdfsdfsdf
 </div>
 
 <!--<script src="${ctxJs}/plugins/echarts/echarts.common.min.js"></script>-->
-<script src="${ctxJs}/plugins/template/template-web.js"></script>
+<!--<script src="${ctxJs}/plugins/template/template-web.js"></script>-->
 <!--<script src="${ctxJs}/plugins/ueditor/ueditor.config.js"></script>-->
 <!--<script src="${ctxJs}/plugins/ueditor/ueditor.all.js"></script>-->
 <!--<script src="${ctxJs}/plugins/jquery.PrintArea/jquery.PrintArea.js"></script>-->
-<script src="${ctxJs}/plugins/validate/jquery.validate.js"></script>
-<script src="${ctxJs}/validateExtent.js"></script>
+<!--<script src="${ctxJs}/plugins/validate/jquery.validate.js"></script>-->
+<!--<script src="${ctxJs}/validateExtent.js"></script>-->
 <script src="${ctxJs}/plugins/bootstrap/bootstrap.min.js" type="text/javascript"></script>
 <!--<script src="${ctxJs}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>-->
 <!--<script src="${ctxJs}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>-->

@@ -1,0 +1,15 @@
+.content-box {
+  top: 90px;
+}
+.content-box .cell-top {
+  width: 100%;
+  height: calc(100% - 460px);
+  min-height: 300px;
+}
+.content-box .cell-top #exportReport {
+  height: 100%;
+}
+.content-box .cell-bottom {
+  height: 460px;
+  width: 100%;
+}

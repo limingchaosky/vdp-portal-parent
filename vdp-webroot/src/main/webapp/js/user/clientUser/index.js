@@ -319,16 +319,15 @@ function initEvents() {
           var postData = {};
           postData.ids = ids.join(',');
           postData.policyid = $('#openWind select[name=userSelectPolicy] option:selected').val();
-          console.log(postData);
           $.ajax({
             type: 'post',
-            url: ctx + '/user/deleteUser',//批量修改策略接口
+            url: ctx + '/policy/batchUpdateClientUsersPolicy',//批量修改策略接口
             data: postData,
             success: function (msg) {
               if (msg.resultCode == '1') {
-                userTable.ajax.reload(function () {
-                }, true);
+                deptTable.ajax.reload(function () {}, true);
                 $('.j-check-user-all').prop('checked', false);
+                layer.close(index);
                 layer.msg('修改成功！', {icon: 1});
               } else {
                 layer.msg('修改失败！', {icon: 2});
@@ -349,31 +348,6 @@ function initEvents() {
         }
       });
 
-
-      // layer.confirm('确定要修改选中的用户的策略吗？', {
-      //   btn: ['确定', '取消']
-      // }, function () {
-      //   var postData = {}
-      //   postData.ids = ids.join(',');
-      //   console.log(postData);
-      //   $.ajax({
-      //     type: 'post',
-      //     url: ctx + '/user/deleteUser',
-      //     data: postData,
-      //     success: function (msg) {
-      //       if (msg === 'success') {
-      //         userTable.ajax.reload(function () { }, true);
-      //         $('.j-check-user-all').prop('checked', false);
-      //         layer.msg('删除成功！', { icon: 1 });
-      //       } else {
-      //         layer.msg('删除失败！', { icon: 2 });
-      //       }
-      //     },
-      //     error: function () {
-      //       layer.msg('删除失败！', { icon: 2 });
-      //     }
-      //   })
-      // });
     })
     //解绑usbkey
     .on('click', '.j-opt-hover-remove,#bar_relieve', function () {
@@ -590,9 +564,9 @@ function initdeptTable(pid) {
       "url": ctx + "/clientUser/getClientUserPageByDepartmentId",
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
-        // console.log(json);
+        console.log(json);
         return json.data.map(function (obj) {
-          return [obj.id, obj.username, obj.truename, obj.policyid, obj.policyid || '--', obj.id]
+          return [obj.id, {username:obj.username,isusb:obj.isbindedUsbkey}, obj.truename, obj.policyid, obj.policyid || '--', obj.id]
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象
@@ -615,7 +589,15 @@ function initdeptTable(pid) {
     }, {
       "targets": [1],
       "orderable": false,
-      "class": "text-ellipsis"
+      "class": "text-ellipsis",
+      "render": function (data, type, full) {
+        if(data.isusb == 1 ){
+          return '<i class="iconfont icon-list-USB" style="position: absolute;left: 40px;"></i><span>'+data.username+'</span>';
+        }else {
+          return '<span>'+data.username+'</span>';
+        }
+
+      }
     }, {
       "targets": [2],
       "orderable": false,

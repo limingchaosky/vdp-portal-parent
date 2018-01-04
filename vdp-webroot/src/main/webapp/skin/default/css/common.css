@@ -1301,3 +1301,27 @@ body .provinceCity .tabs li a:visited {
 body label {
   font-weight: normal;
 }
+/*
+  策略botton按钮样式
+*/
+.policyBtn {
+  display: inline-block;
+  width: 90px;
+  height: 30px;
+  background-color: #38CFC0;
+  text-align: center;
+  line-height: 30px;
+  color: #fff;
+  cursor: pointer;
+}
+.approveButton {
+  display: inline-block;
+  width: 90px;
+  height: 30px;
+  border-radius: 2px;
+  text-align: center;
+  background: #ededed;
+  line-height: 30px;
+  margin-left: 10px;
+  cursor: pointer;
+}

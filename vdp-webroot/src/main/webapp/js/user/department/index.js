@@ -2,6 +2,7 @@ var deptTable = null;//部门用户表
 var deptTree = null;//部门树
 
 
+
 $(function () {
   initDeptTree(1);//初始化部门树,1是选中节点的id
   initEvents();//初始化页面事件
@@ -154,8 +155,7 @@ function initEvents() {
     .on('click', '.j-opt-hover-edit', function () {
       var idx = $('.j-opt-hover-edit').index(this);
       var id = Number($(this).attr('data-id'));
-      var treePath = $(this).attr('data-treePath');
-
+      var treepath = null;
       var parentDeptTree = null;//部门树
       layer.open({
         id: 'openWind',
@@ -169,14 +169,13 @@ function initEvents() {
             return;
           }
           var postData = {
-            treePath:treePath,
+            treepath:treepath,
             id: id,
             name: $('#openWind input[name=name]').val().trim(),
             parentId: id == 1 ? -1 : $('#openWind input[name=parent-dept]').attr('data-id'),
             owner: $('#openWind input[name=owner]').val().trim(),
             departmentTel: $('#openWind input[name=departmentTel]').val().trim(),
-          };
-          console.log(postData);
+          }
           if ($(layero).find('.layui-layer-btn0').hasClass('btn-disabled')) {
             return;
           }
@@ -219,7 +218,6 @@ function initEvents() {
             },
             callback: {
               onClick: function (event, treeId, treeNode, clickFlag) {
-
                 $('#openWind .parent-dept').val(treeNode.name).attr('data-id', treeNode.id);
                 $('#openWind .parent-dept-tree-box').slideUp('fast');
               }
@@ -232,6 +230,7 @@ function initEvents() {
           });
           parentDeptTree = $.fn.zTree.init($("#openWind .j-parent-dept-tree"), setting, zNodesBak);
           if (zNodesBak.length > 0) {
+            treepath=zNodesBak[0].treepath;
             var node = parentDeptTree.getNodeByParam('id', deptTree.getNodeByParam('id', id).ParentDepartmentId);
             if (node) {
               $('#' + node.tId + '_a').click();
@@ -390,7 +389,7 @@ function initdeptTable(pid) {
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
         return json.data.map(function (obj) {
-          return [obj.name, obj.parentName || '--', obj.owner || '--', obj.departmentTel || '--', {id:obj.id,treePath:obj.treePath}]
+          return [obj.name, obj.parentName || '--', obj.owner || '--', obj.departmentTel || '--', obj.id]
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象
@@ -421,7 +420,7 @@ function initdeptTable(pid) {
       "class": "center-text",
       "width": "80px",
       "render": function (data, type, full) {
-        return template('temp_opt_box', { id: data.id,treePath:data.treePath});
+        return template('temp_opt_box', { id: data });
       }
     }],
     //当每次表格重绘的时候触发一个操作，比如更新数据后或者创建新的元素

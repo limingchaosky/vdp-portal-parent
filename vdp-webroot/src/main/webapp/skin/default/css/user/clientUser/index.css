@@ -124,6 +124,9 @@
 .parent-dept {
   background: url(../../../images/downselect.png) no-repeat calc(100% - 6px) center;
 }
+.icon-list-USB {
+  color: #ccc;
+}
 /*上级部门树结束*/
 .pw-strength {
   clear: both;
