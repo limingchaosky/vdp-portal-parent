@@ -103,7 +103,7 @@ function initEvents() {
             url: ctx + '/clientUser/addClientUser',
             data: postData,
             success: function (msg) {
-              console.log(msg.resultCode);
+              // console.log(msg.resultCode);
               if (msg.resultCode == 1) {
                 layer.close(index);
                 layer.msg('添加成功！', {icon: 1});
@@ -203,7 +203,7 @@ function initEvents() {
             return;
           }
           var temp = $("#openWind form").serializeJSON();
-          console.log(temp);
+          // console.log(temp);
           var postData = {
             id: id,
             username: temp.username,
@@ -311,7 +311,7 @@ function initEvents() {
       layer.open({
         id: 'openWind',
         type: 1,
-        title: '编辑用户',
+        title: '批量修改策略',
         content: $('#temp_policy').html(),
         area: ['300px', '200px'],
         btn: ['确定', '取消'],
@@ -373,7 +373,7 @@ function initEvents() {
         postData.ids = ids.join(',');
         $.ajax({
           type: 'post',
-          url: ctx + '11111111',
+          url: ctx + 'clientUserId',
           data: postData,
           success: function (msg) {
             if (msg === 'success') {
@@ -564,7 +564,7 @@ function initdeptTable(pid) {
       "url": ctx + "/clientUser/getClientUserPageByDepartmentId",
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
-        console.log(json);
+        // console.log(json);
         return json.data.map(function (obj) {
           return [obj.id, {username:obj.username,isusb:obj.isbindedUsbkey}, obj.truename, obj.policyid, obj.policyid || '--', obj.id]
         });

@@ -13,6 +13,13 @@ import java.util.List;
 public interface IClientUserService extends BaseService<ClientUserDO, ClientUserDOCriteria> {
 
     /**
+     * 根据用户id查找用户
+     * @param id
+     * @return
+     */
+    ClientUserDO getClientUserById(Integer id);
+
+    /**
      * 根据部门集合，查询对应的用户列表
      * @param departmentList
      * @param startNum

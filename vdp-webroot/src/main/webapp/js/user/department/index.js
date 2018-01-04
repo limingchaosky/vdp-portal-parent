@@ -2,7 +2,6 @@ var deptTable = null;//部门用户表
 var deptTree = null;//部门树
 
 
-
 $(function () {
   initDeptTree(1);//初始化部门树,1是选中节点的id
   initEvents();//初始化页面事件
@@ -29,9 +28,7 @@ function initEvents() {
         };
         postAjax(ctx + '/department/delete', postData, function (msg) {
           if (msg.resultCode == 1) {
-            deptTable.ajax.reload(function () { }, true);
             layer.msg('删除成功！', { icon: 1 });
-            // $('.j-check-dept-all').prop('checked', false);
             //更新部门树
             getAjax(ctx + '/department/getDepartmentNodesByLoginUser', '', function (msg) {
               zNodes = JSON.parse(msg);
@@ -155,7 +152,8 @@ function initEvents() {
     .on('click', '.j-opt-hover-edit', function () {
       var idx = $('.j-opt-hover-edit').index(this);
       var id = Number($(this).attr('data-id'));
-      var treepath = null;
+      var treePath = $(this).attr('data-treePath');
+
       var parentDeptTree = null;//部门树
       layer.open({
         id: 'openWind',
@@ -169,13 +167,14 @@ function initEvents() {
             return;
           }
           var postData = {
-            treepath:treepath,
+            treePath:treePath,
             id: id,
             name: $('#openWind input[name=name]').val().trim(),
             parentId: id == 1 ? -1 : $('#openWind input[name=parent-dept]').attr('data-id'),
             owner: $('#openWind input[name=owner]').val().trim(),
             departmentTel: $('#openWind input[name=departmentTel]').val().trim(),
-          }
+          };
+          console.log(postData);
           if ($(layero).find('.layui-layer-btn0').hasClass('btn-disabled')) {
             return;
           }
@@ -218,6 +217,7 @@ function initEvents() {
             },
             callback: {
               onClick: function (event, treeId, treeNode, clickFlag) {
+
                 $('#openWind .parent-dept').val(treeNode.name).attr('data-id', treeNode.id);
                 $('#openWind .parent-dept-tree-box').slideUp('fast');
               }
@@ -230,7 +230,6 @@ function initEvents() {
           });
           parentDeptTree = $.fn.zTree.init($("#openWind .j-parent-dept-tree"), setting, zNodesBak);
           if (zNodesBak.length > 0) {
-            treepath=zNodesBak[0].treepath;
             var node = parentDeptTree.getNodeByParam('id', deptTree.getNodeByParam('id', id).ParentDepartmentId);
             if (node) {
               $('#' + node.tId + '_a').click();
@@ -258,7 +257,7 @@ function initEvents() {
     //导出
     .on('click', '#bar_export', function () {
       var param = {
-        searchstr: $('#bar_searchstr').val().trim(),//关键字
+        // searchstr: $('#bar_searchstr').val().trim(),//关键字
         pid: deptTree.getSelectedNodes()[0].id
       }
       window.location.href = ctx + '/department/exportxsl?' + $.param(param);
@@ -286,16 +285,16 @@ function initEvents() {
       $('.j-check-dept-all').prop('checked', $('.j-check-dept').not(':checked').length == 0);
     })
     //部门名回车搜索
-    .on('keydown', '#bar_searchstr', function (e) {
-      if (e.keyCode == 13) {
-        $('#bar_searchstr_icon').click();
-      }
-    })
+    // .on('keydown', '#bar_searchstr', function (e) {
+    //   if (e.keyCode == 13) {
+    //     $('#bar_searchstr_icon').click();
+    //   }
+    // })
     //部门名点击搜索
-    .on('click', '#bar_searchstr_icon', function () {
-      deptTable.settings()[0].ajax.data.searchstr = $('#bar_searchstr').val().trim();
-      deptTable.ajax.reload();
-    })
+    // .on('click', '#bar_searchstr_icon', function () {
+    //   deptTable.settings()[0].ajax.data.searchstr = $('#bar_searchstr').val().trim();
+    //   deptTable.ajax.reload();
+    // })
     //显示操作悬浮框
     .on('mouseover', '.table-opt-icon', function () {
       var offset = document.documentElement.clientHeight - $(this).offset().top;
@@ -329,7 +328,6 @@ function initDeptTree(selectID) {
     callback: {
       onClick: function (event, treeId, treeNode, clickFlag) {
         initdeptTable(treeNode.id);
-        // $('.j-check-dept-all').prop('checked', false);
       }
     }
   };
@@ -355,8 +353,8 @@ function initDeptTree(selectID) {
  */
 function initdeptTable(pid) {
   if (deptTable) {
+    console.log(pid)
     deptTable.settings()[0].ajax.data.pid = pid;
-    // deptTable.settings()[0].ajax.data.searchstr = $('#bar_searchstr').val().trim();
     deptTable.ajax.reload();
     return;
   }
@@ -389,13 +387,12 @@ function initdeptTable(pid) {
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
         return json.data.map(function (obj) {
-          return [obj.name, obj.parentName || '--', obj.owner || '--', obj.departmentTel || '--', obj.id]
+          return [obj.name, obj.parentName || '--', obj.owner || '--', obj.departmentTel || '--', {id:obj.id,treePath:obj.treePath}]
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象
       "data": {
         "pid": pid,
-        // "searchstr": $('#bar_searchstr').val().trim()
       },
     },
     "columnDefs": [{
@@ -420,7 +417,7 @@ function initdeptTable(pid) {
       "class": "center-text",
       "width": "80px",
       "render": function (data, type, full) {
-        return template('temp_opt_box', { id: data });
+        return template('temp_opt_box', { id: data.id,treePath:data.treePath});
       }
     }],
     //当每次表格重绘的时候触发一个操作，比如更新数据后或者创建新的元素

@@ -68,28 +68,33 @@ public class ClientUserController implements ServletContextAware {
     @ResponseBody
     @RequestMapping(value = "/getClientUserPageByDepartmentId")
     public ResultMsg getAllClientUsers(@RequestParam(defaultValue = "1") Integer pid, int start, int length, @RequestParam(value = "draw", required = false) String draw, @RequestParam(value = "ordercase", required = false) String ordercase) {
-
-        //根据部门参数不同查询部门集合，当部门id为顶级部门时，需要判断账户部门权限，
-        List<DepartmentDO> departmentList = null;
-        //重新查询账户的关联部门，查询其部门权限集合，如果包含顶级部门，则查询查询全部部门，否则查询该账户部门权限下的部门
-        if (pid == 1) {
-            departmentList = GetLoginUser.getDepartmentListWithLoginUser();
-        } else {
-            //如果不是顶级部门，查询该部门下所有部门的集合
-            departmentList = departmentService.getDeptarMentListByParent(pid);
-        }
-
         ResultMsg resultMsg = new ResultMsg();
-        if (departmentList != null && departmentList.size() > 0) {
-            int conut = (int) clientUserService.conutClientUserListByDepartmentId(departmentList);
-            List<ClientUserDO> clientUsers = clientUserService.getClientUserListByDepartmentId(departmentList, start, length);
-            resultMsg.setData(clientUsers);
-            resultMsg.setExportlength(length);
-            resultMsg.setExportstart(start);
+        int conut = 0;
+        try {
+            //根据部门参数不同查询部门集合，当部门id为顶级部门时，需要判断账户部门权限，
+            List<DepartmentDO> departmentList = null;
+            //重新查询账户的关联部门，查询其部门权限集合，如果包含顶级部门，则查询查询全部部门，否则查询该账户部门权限下的部门
+            if (pid == 1) {
+                departmentList = GetLoginUser.getDepartmentListWithLoginUser();
+            } else {
+                //如果不是顶级部门，查询该部门下所有部门的集合
+                departmentList = departmentService.getDeptarMentListByParent(pid);
+            }
+
+            if (departmentList != null && departmentList.size() > 0) {
+                conut = (int) clientUserService.conutClientUserListByDepartmentId(departmentList);
+                List<ClientUserDO> clientUsers = clientUserService.getClientUserListByDepartmentId(departmentList, start, length);
+                resultMsg.setData(clientUsers);
+            }
             resultMsg.setRecordsFiltered(conut);
             resultMsg.setRecordsTotal(conut);
+            resultMsg.setExportlength(length);
+            resultMsg.setExportstart(start);
             resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
-            return resultMsg;
+
+        } catch (Exception e) {
+            resultMsg.setResultMsg("查询用户出错！");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
         }
 
         return resultMsg;

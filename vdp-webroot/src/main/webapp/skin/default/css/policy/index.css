@@ -10,7 +10,7 @@
 .policy-content form > div .policy-title {
   height: 50px;
   position: relative;
-  z-index: 100;
+  z-index: 1000000;
   line-height: 50px;
   border-bottom: 1px solid #F6F6F6;
   padding-left: 30px;
@@ -26,7 +26,7 @@
   left: 10px;
 }
 .policy-content form > div .policy-con {
-  padding: 10px 45px 22px 45px;
+  padding: 10px 45px 18px 45px;
   width: 900px;
 }
 .policy-content form > div .policy-con > label {
@@ -66,12 +66,9 @@
   left: 0px;
   bottom: 0px;
   width: 100%;
-  height: 100px;
+  height: 70px;
   border-top: 1px solid #ededed;
   z-index: 100000;
   background-color: #fff;
   overflow: hidden;
-  box-shadow: 0px -3px 5px #ededed;
-  line-height: 60px;
-  padding-left: 80px;
 }

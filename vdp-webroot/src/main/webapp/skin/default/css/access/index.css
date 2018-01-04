@@ -1,0 +1,58 @@
+.content-box {
+  position: absolute;
+  top: 92px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+  background: white;
+  padding: 25px 0px 0px 40px;
+}
+.item-row {
+  width: 650px;
+  height: 46px;
+  line-height: 46px;
+}
+.item-row .wind-label {
+  display: inline-block;
+  width: 150px;
+}
+.item-row .label-norequire {
+  padding-left: 9px;
+}
+.item-row .wind-input {
+  width: 380px;
+}
+.item-row .icon-btn-add {
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+  text-align: center;
+  display: inline-block;
+  background-color: #EAEAEA;
+  color: #38D1BF;
+  cursor: pointer;
+}
+.add-server-box {
+  padding: 10px 0;
+}
+.add-server-box .add-param-name {
+  display: inline-block;
+  width: 120px;
+  text-align: right;
+  float: left;
+  vertical-align: middle;
+}
+.add-server-box .row-center {
+  display: inline-block;
+  padding: 5px 0;
+  margin-left: 10px;
+}
+.add-server-box .error-text {
+  color: red;
+  display: none;
+  font-size: 12px;
+}
+.add-server-box .append-box {
+  margin-left: 120px;
+}

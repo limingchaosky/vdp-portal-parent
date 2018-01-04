@@ -43,6 +43,12 @@ public class ClientUserServiceImpl extends AbstractBaseServiceImpl<ClientUserDO 
         return getDao().selectByPrimaryKey(primaryKey);
     }
 
+    @Override
+    public ClientUserDO getClientUserById(Integer id) {
+        ClientUserDO clientUser = mapper.selectByPrimaryKey(id);
+        return clientUser;
+    }
+
     /**
      * 根据部门集合，查询对应的用户
      * @param departmentList

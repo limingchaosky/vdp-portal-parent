@@ -22,8 +22,9 @@ $(function () {
         showhidemenu();
     } else {
         menushow = 0;
-        $("#wlogo").css("background-position-x", "-47px");
+        $("#wlogo").css("background-position-x", "13px");
     }
+
     // 显示隐藏按钮方法
     function showhidemenu() {
         if (menushow == 0) {
@@ -169,7 +170,7 @@ $(function () {
                 if ($('#menus').width() < 200) {
                     $(".nameshow").removeClass("nameshow").addClass("namehide");
                     mul1.parent().removeClass("havelist");
-                    $("#wlogo").css("background-position-x", "-47px");
+                    $("#wlogo").css("background-position-x", "13px");
                 }
             }, 100)
             $('#menus').removeAttr("style");
