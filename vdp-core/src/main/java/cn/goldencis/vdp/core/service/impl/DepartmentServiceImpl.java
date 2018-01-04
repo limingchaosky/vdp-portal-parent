@@ -422,7 +422,7 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
                 parentDepartmentMap.put(department.getId(),department);
             }
             for (DepartmentDO department : departmentList) {
-                if (department.getParentName() == null || "".equals(department)) {
+                if ((department.getParentName() == null || "".equals(department.getParentName())) && department.getId() != 1) {
                     department.setParentName(parentDepartmentMap.get(department.getParentId()).getName());
                 }
             }
