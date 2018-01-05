@@ -581,7 +581,8 @@ function initdeptTable(pid) {
       "dataSrc": function (json) {
         // console.log(json);
         return json.data.map(function (obj) {
-          return [obj.id, {username:obj.username,isusb:obj.isbindedUsbkey}, obj.truename, obj.policyid, obj.policyid || '--', obj.id]
+          console.log(obj)
+          return [obj.id, {username:obj.username,isusb:obj.isbindedUsbkey}, obj.truename, obj.policyname, obj.policyid || '--', obj.id]
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象

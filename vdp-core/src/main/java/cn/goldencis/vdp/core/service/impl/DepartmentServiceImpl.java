@@ -3,6 +3,7 @@ package cn.goldencis.vdp.core.service.impl;
 import java.util.*;
 
 import cn.goldencis.vdp.core.constants.ConstantsDto;
+import cn.goldencis.vdp.core.dao.CClientUserDOMapper;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,6 +41,9 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
 
     @Autowired
     private UserDepartmentDOMapper udmapper;
+
+    @Autowired
+    private CClientUserDOMapper cClientUserDOMapper;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -282,7 +286,13 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
                 udmapper.insert(record);
             }
         }
+        //删除原有该部门UserDepartmentDO的关联
         udmapper.deleteByExample(udexample);
+
+        //将用户中，属于该部门下的用户，归属到未分组
+        cClientUserDOMapper.setClientUsersUngroup(id);
+
+        //删除部门
         mapper.deleteByPrimaryKey(id.toString());
         return true;
     }

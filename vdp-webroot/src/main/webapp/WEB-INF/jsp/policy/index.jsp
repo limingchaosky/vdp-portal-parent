@@ -310,6 +310,8 @@
                     </div>
                 </div>
             </div>
+            <input type="hidden" name="out_file" value=""/>
+            <input type="hidden" name="export_file" value=""/>
         </form>
     </div>
     <div class="save">

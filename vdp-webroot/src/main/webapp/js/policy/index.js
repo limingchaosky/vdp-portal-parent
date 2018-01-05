@@ -53,6 +53,9 @@ function initEvents() {
           area: ['270px', '200px'],
           btn: ['确定', '取消'],
           yes:function(index, layero){
+            var out_file = $("#exportOpenWind input[name=exportSelect]:checked").val();
+            console.log(out_file);
+            $("#exportOpenWind input[name=export_file]").attr('value',out_file);
             layer.close(index);
           },
           success:function(index, layero){
