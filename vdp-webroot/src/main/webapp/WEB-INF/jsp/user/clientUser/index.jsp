@@ -136,6 +136,11 @@
 
     </select>
 </script>
+<script id="temp_usb" type="text/html">
+    <select class="wind-input valid temp_policy" name="userSelectPolicy" aria-invalid="false">
+
+    </select>
+</script>
 <!--部门表操作模板结束-->
 <script src="${ctxJs}/plugins/dataTables/jquery.dataTables.min.js"></script>
 <!--<script src="${ctxJs}/plugins/dataTables/ColReorderWithResize.min.js"></script>-->

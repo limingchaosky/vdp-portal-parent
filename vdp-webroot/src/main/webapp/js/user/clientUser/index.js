@@ -5,8 +5,8 @@ var usbDeviceList = null;//没有用的usb设备列表
 $(function () {
   initDeptTree(1);//初始化部门树,1是选中节点的id
   initEvents();//初始化页面事件
-  getPolicyList()//获取所有的策略列表
-  //getEmUsbList()//获取空的usb设备
+  getPolicyList();//获取所有的策略列表
+  getEmUsbList();//获取空的usb设备
 });
 function getPolicyList() {
   getAjax(ctx + '/policy/getAllPolicys', '', function (msg) {
@@ -25,17 +25,18 @@ function getPolicyList() {
   });
 }
 function getEmUsbList() {
-  getAjax(ctx + '/role/getRoleList', '', function (msg) {
+  getAjax(ctx + '/usbKey/getAllUnbindUsbKey', '', function (msg) {
     if (msg.resultCode == 1) {
+      console.log(msg.data)
       usbDeviceList = msg.data;
-      var html = '';
-      $.each(msg.data, function (index, obj) {
-        html += '<option value=' + obj.id + '>' + obj.roleName + '</option>';
-      });
-      $('#bar_select_role').append(html);
+      // var html = '';
+      // $.each(msg.data, function (index, obj) {
+      //   html += '<option value=' + obj.id + '>' + obj.roleName + '</option>';
+      // });
+      // $('#temp_usb').append(html);
     }
     else {
-      layer.msg('获取权限列表失败！', {icon: 2});
+      layer.msg('获取usbKey失败！', {icon: 2});
     }
   });
 }
@@ -87,11 +88,13 @@ function initEvents() {
             return;
           }
           var temp = $("#openWind form").serializeJSON();
+          console.log(temp)
           var postData = {
             username: $('#openWind input[name=username]').val().trim(),
             truename: $('#openWind input[name=truename]').val().trim(),
             password: encrypt(temp.password).toUpperCase(),
             policyid: temp.selectPolicy,
+            usbkeyid: temp.usbKeyList,
             deptguid: $('#openWind input[name=parentdept]').attr('data-id'),
           }
           if ($(layero).find('.layui-layer-btn0').hasClass('btn-disabled')) {
@@ -133,7 +136,12 @@ function initEvents() {
             htmlpolicy += '<option value=' + policyList[i].id + '>' + policyList[i].name + '</option>';
           }
           $('#openWind select[name=selectPolicy]').html(htmlpolicy);
-          $('#openWind select[name=usbKeyList]').html(htmlpolicy);
+          var htmlusb = '';
+          htmlusb +='<option value="-1"></option>';
+          for (var i = 0; i < usbDeviceList.length; i++) {
+            htmlusb += '<option value=' + usbDeviceList[i].id + '>' + usbDeviceList[i].name + '</option>';
+          }
+          $('#openWind select[name=usbKeyList]').html(htmlusb);
           var setting = {
             view: {
               dblClickExpand: false,
@@ -188,6 +196,7 @@ function initEvents() {
     })
     //编辑用户
     .on('click', '.j-opt-hover-edit', function () {
+      getEmUsbList();
       var idx = $('.j-opt-hover-edit').index(this);
       var id = Number($(this).attr('data-id'));//这是用户的id
       var parentDeptTree = null;//部门树
@@ -211,8 +220,9 @@ function initEvents() {
             password: encrypt(temp.password).toUpperCase(),
             deptguid: $('#openWind input[name=parentdept]').attr('data-id'),
             policyid: temp.selectPolicy,
-            usbkey: temp.usbKeyList
+            usbkeyid: temp.usbKeyList,
           };
+          console.log(postData)
           if ($(layero).find('.layui-layer-btn0').hasClass('btn-disabled')) {
             return;
           }
@@ -241,7 +251,12 @@ function initEvents() {
             htmlpolicy += '<option value=' + policyList[i].id + '>' + policyList[i].name + '</option>';
           }
           $('#openWind select[name=selectPolicy]').html(htmlpolicy);
-          $('#openWind select[name=usbKeyList]').html(htmlpolicy);
+          var htmlusb = '';
+          htmlusb +='<option value="-1"></option>';
+          for (var i = 0; i < usbDeviceList.length; i++) {
+            htmlusb += '<option value=' + usbDeviceList[i].id + '>' + usbDeviceList[i].name + '</option>';
+          }
+          $('#openWind select[name=usbKeyList]').html(htmlusb);
           var setting = {
             view: {
               dblClickExpand: false,

@@ -24,7 +24,7 @@
                                 </li>
                                 <c:forEach items="${policyList}" var="policy">
                                     <li class="mli1">
-                                        <a class="ma1" href="#">${policy.name}</a>
+                                        <a class="ma1" href="${ctx}/policy/readPolicyJsonFileById?id=${policy.id}">${policy.name}</a>
                                     </li>
                                 </c:forEach>
                             </ul>
@@ -91,7 +91,6 @@
 
         if (msg.resultCode == 1) {
           policylist = msg.data;
-          console.log(policylist);
         }
         else {
           layer.msg('获取权限列表失败！', {icon: 2});
@@ -126,16 +125,16 @@
         var postData = {};
         postData.name = $('#openWind input[name=policyname]').val();
         postData.pid = $('#openWind select[name=userSelectPolicy] option:selected').val();
-        console.log(postData);
         $.ajax({
           type: 'post',
           url:'${ctx}/policy/addPolicy',//新建策略接口
           data: postData,
           success: function (msg) {
-            console.log(msg)
+            console.log(msg);
             if (msg.resultCode == '1') {
               layer.close(index);
               layer.msg('新建成功！', {icon: 1});
+              window.location='${ctx}'+msg.data;
             } else {
               layer.msg('新建失败！', {icon: 2});
             }
