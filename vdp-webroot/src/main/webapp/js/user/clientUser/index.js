@@ -370,13 +370,13 @@ function initEvents() {
         btn: ['确定', '取消']
       }, function () {
         var postData = {};
-        postData.ids = ids.join(',');
+        postData.clientUserId = ids.join(',');
         $.ajax({
           type: 'post',
-          url: ctx + 'clientUserId',
+          url: ctx + '/usbKey/unbindUsbKeyByClientUserId',
           data: postData,
           success: function (msg) {
-            if (msg === 'success') {
+            if (msg.resultCode == '1') {
               deptTable.ajax.reload(function () { }, true);
               $('.j-check-user-all').prop('checked', false);
               layer.msg('解绑成功！', { icon: 1 });

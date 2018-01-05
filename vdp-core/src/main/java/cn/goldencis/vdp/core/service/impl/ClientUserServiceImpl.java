@@ -27,6 +27,9 @@ public class ClientUserServiceImpl extends AbstractBaseServiceImpl<ClientUserDO 
     @Autowired
     private ClientUserDOMapper mapper;
 
+//    @Autowired
+//    private Usbk
+
     @Override
     protected BaseDao<ClientUserDO, ClientUserDOCriteria> getDao() {
         return mapper;
@@ -91,17 +94,25 @@ public class ClientUserServiceImpl extends AbstractBaseServiceImpl<ClientUserDO 
     /**
      * 新建用户
      * @param clientUser
+     * @param usbkeyid
      * @return
      */
     @Transactional
     @Override
-    public int addClientUser(ClientUserDO clientUser) {
+    public int addClientUser(ClientUserDO clientUser, Integer usbkeyid) {
         UUID uuid = UUID.randomUUID();
 
         clientUser.setGuid(uuid.toString());
         if (clientUser.getPolicyid() == null || clientUser.getPolicyid() == 0) {
             clientUser.setPolicyid(ConstantsDto.DEFAULT_POLICY_ID);
         }
+
+        if (usbkeyid != null) {
+
+        } else {
+            clientUser.setIsbindedUsbkey(0);
+        }
+
         clientUser.setOnline("0");
         clientUser.setRegtime(new Date());
 

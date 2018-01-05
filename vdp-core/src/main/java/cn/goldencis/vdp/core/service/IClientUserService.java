@@ -38,9 +38,10 @@ public interface IClientUserService extends BaseService<ClientUserDO, ClientUser
     /**
      * 新建用户
      * @param clientUser
+     * @param usbkeyid
      * @return
      */
-    int addClientUser(ClientUserDO clientUser);
+    int addClientUser(ClientUserDO clientUser, Integer usbkeyid);
 
     /**
      * 通过用户id删除用户

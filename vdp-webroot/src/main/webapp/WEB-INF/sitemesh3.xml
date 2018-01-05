@@ -28,6 +28,7 @@
     <mapping path="/apkManager/index" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
     <mapping path="/clientUser/index" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
     <mapping path="/policy/index" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
+    <mapping path="/policy/readPolicyJsonFileById" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
     <mapping path="/access/index" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
     <mapping path="/report/index" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
 

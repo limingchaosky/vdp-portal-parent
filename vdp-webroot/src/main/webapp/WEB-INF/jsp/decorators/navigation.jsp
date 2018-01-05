@@ -85,9 +85,19 @@
 <script type="text/javascript">
   var policylist=null;
   $(function () {
-alert(1111);
     getPolicyList();
+    function getPolicyList() {
+      getAjax('${ctx}/policy/getAllPolicys', '', function (msg) {
 
+        if (msg.resultCode == 1) {
+          policylist = msg.data;
+          console.log(policylist);
+        }
+        else {
+          layer.msg('获取权限列表失败！', {icon: 2});
+        }
+      });
+    }
 
 
     var path = '${pageContext.request.contextPath}';
@@ -100,6 +110,8 @@ alert(1111);
       backgroundRepeat: 'no-repeat',
       backgroundPositionY: '5px'
     });
+
+
   });
 
   function newPolicy() {
@@ -145,20 +157,7 @@ alert(1111);
 
   }
 
-  function getPolicyList() {
-    alert(11111)
-    getAjax(ctx + '/policy/getAllPolicys', '', function (msg) {
-      alert(22222)
 
-      if (msg.resultCode == 1) {
-        policylist = msg.data;
-        console.log(policylist);
-      }
-      else {
-        layer.msg('获取权限列表失败！', {icon: 2});
-      }
-    });
-  }
 
 
 </script>

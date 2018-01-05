@@ -107,7 +107,7 @@ public class ClientUserController implements ServletContextAware {
      */
     @ResponseBody
     @RequestMapping(value = "/addClientUser", method = RequestMethod.POST)
-    public ResultMsg addClientUser(ClientUserDO clientUser) {
+    public ResultMsg addClientUser(ClientUserDO clientUser, Integer usbkeyid) {
 
         ResultMsg resultMsg = new ResultMsg();
         try {
@@ -120,7 +120,7 @@ public class ClientUserController implements ServletContextAware {
             }
 
             //插入用户
-            clientUserService.addClientUser(clientUser);
+            clientUserService.addClientUser(clientUser, usbkeyid);
             resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
             resultMsg.setResultMsg("插入成功！");
         } catch (Exception e) {
