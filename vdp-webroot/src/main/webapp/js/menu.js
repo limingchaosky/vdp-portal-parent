@@ -92,13 +92,23 @@ $(function () {
 
     // 没级菜单根据地址栏判断 当前栏目 并增加当前栏目在菜单上的标志
     $('.mul0 a').each(function (index, obj) {
-        if ($(obj).attr('href').indexOf(location.pathname) > -1) {
+      if($(obj).hasClass("policya1")){
+        if($(obj).attr('href') == location.pathname+location.search){
+          $(obj).addClass('listclick');
+        }
+      }else if ($(obj).attr('href').indexOf(location.pathname) > -1) {
+          // console.log($(obj))
+
             $(obj).addClass('listclick');
+
+
             if ($(obj).hasClass('ma2')) {
                 $(obj).closest('.mli1').find('.ma1').addClass('listclick').closest('.mli0').find('.ma0').addClass('listclick');
             } else if ($(obj).hasClass('ma1')) {
                 $(obj).closest('.mli0').find('.ma0').addClass('listclick');
             }
+
+
             if ($(obj).next('ul').length == 0 && !$(obj).hasClass('ma0')) {
                 $(obj).css('background-image', 'none');
             };
@@ -106,6 +116,9 @@ $(function () {
         }
 
     });
+    // $('body .policyListClick li.mli1 a.ma1').click(function(){
+    //   $('body .policyListClick li.mli1 a.ma1').addClass('listclick').parents('li.mli1').siblings().find('a.ma1').removeClass('listclick')
+    // });
     // 一级菜单悬停
     mli0s.hover(function () {
         if ($(window).height() - $(this).offset().top < $(this).find(".mul1").height()) {

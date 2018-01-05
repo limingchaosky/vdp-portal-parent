@@ -31,5 +31,6 @@
     <mapping path="/policy/readPolicyJsonFileById" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
     <mapping path="/access/index" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
     <mapping path="/report/index" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
+    <mapping path="/systemSetting/index" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
 
 </sitemesh>

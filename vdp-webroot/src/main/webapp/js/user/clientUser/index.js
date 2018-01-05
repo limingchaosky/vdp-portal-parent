@@ -579,9 +579,8 @@ function initdeptTable(pid) {
       "url": ctx + "/clientUser/getClientUserPageByDepartmentId",
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
-        // console.log(json);
+        console.log(json);
         return json.data.map(function (obj) {
-          console.log(obj)
           return [obj.id, {username:obj.username,isusb:obj.isbindedUsbkey}, obj.truename, obj.policyname, obj.policyid || '--', obj.id]
         });
       },
