@@ -14,9 +14,13 @@
 <div class="main-right">
     <div class="top-bar">
         <div class="top-title">${policyName}</div>
-        <div class="bar-item-box policy-delete">
+        <c:if test="${policyId != 1}">
+            <div class="bar-item-box policy-delete">
             <i class="iconfont icon-btn-delete"></i>
-        </div>
+        </c:if>
+    </div>
+
+
     </div>
     <div class="policy-content content-box">
 
@@ -33,7 +37,7 @@
             <div class="policy-title">
                 <span>屏幕水印</span>
                 <div class="beauty-switch">
-                    <input id="screenSwitch" name="screenSwitch" type="checkbox" {{if $data.orgprintwatermark.enable==0}} checked {{/if}} value="1">
+                    <input id="screenSwitch" name="screenSwitch" type="checkbox" {{if $data.screenSwitch==1}} checked {{/if}} value="1">
                     <label for="screenSwitch" class="switch-icon"></label>
                 </div>
 
@@ -41,7 +45,7 @@
             <div class="policy-con">
                 <label for="">
                     <div class="beauty-checkbox">
-                        <input id="deptWater" name="deptWater" type="checkbox" {{if $data.orgprintwatermark.enable==0}} checked {{/if}} class="j-check-device-all" value="1">
+                        <input id="deptWater" name="deptWater" type="checkbox" {{if $data.fileOutSwitch==1}} checked {{/if}} class="j-check-device-all" value="1">
                         <label for="deptWater" class="checkbox-icon"></label>
                     </div>
                     <label for="deptWater">部门名称</label>
@@ -102,7 +106,7 @@
             <div class="policy-con">
                 <label for="" class="out">
                     <div class="beauty-checkbox">
-                        <input id="approveOut" name="approveOut" type="checkbox" class="j-check-device-all" value="1">
+                        <input id="approveOut" name="approveOut" type="checkbox" class="j-check-device-all" value="2">
                         <label for="approveOut" class="checkbox-icon"></label>
                     </div>
                     <label for="approveOut">审批外发</label>
@@ -114,13 +118,6 @@
                         <label for="forbidScreen" class="checkbox-icon"></label>
                     </div>
                     <label for="forbidScreen">禁止截屏</label>
-                </label>
-                <label for="" class="out">
-                    <div class="beauty-checkbox">
-                        <input id="fileScreenWater" name="fileScreenWater" type="checkbox" class="j-check-device-all" value="1">
-                        <label for="fileScreenWater" class="checkbox-icon"></label>
-                    </div>
-                    <label for="fileScreenWater">屏幕水印</label>
                 </label>
                 <label for="" class="out">
                     <div class="beauty-checkbox">
@@ -335,8 +332,8 @@
       var msg = ${resultMsg.data}
         console.log(msg);
       msg.content="我是一个兵";
-      msg.out_file=2;
-      msg.export_file=1;
+      msg.out_file='1';
+      msg.export_file='2';
       var policyContent = template('policyContent',msg);
       $(".policy-content").html(policyContent);
       var policyId = ${policyId}

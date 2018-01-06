@@ -273,12 +273,12 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         udexample.createCriteria().andDepartmentIdEqualTo(id);
         List<UserDepartmentDO> userList = udmapper.selectByExample(udexample);
 
-        //遍历与当前部门关联的用户列表
+        //遍历与当前部门关联的账户列表
         for (UserDepartmentDO temp : userList) {
-            //查询当前用户关联的部门列表
+            //查询当前账户关联的部门列表
             UserDepartmentDOCriteria tmpCriteria = new UserDepartmentDOCriteria();
             tmpCriteria.createCriteria().andUserIdEqualTo(temp.getUserId()).andDepartmentIdNotEqualTo(id);
-            //如果当前用户没有其他关联部门，则创建一条与未分组关联的记录，插入数据库，用户分组调整为未分组。
+            //如果当前账户没有其他关联部门，则创建一条与未分组关联的记录，插入数据库，用户分组调整为未分组。
             if (udmapper.selectByExample(tmpCriteria).size() == 0) {
                 UserDepartmentDO record = new UserDepartmentDO();
                 record.setDepartmentId(new Integer(ConstantsDto.DEPARTMENT_UNKOWN_GROUP));
@@ -382,7 +382,7 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         //插入当前传入的部门，注意：要在mybatis的配置文件中使用keyProperty将主键id传回。
         mapper.insertSelective(bean);
 
-        //查询与父类部门相关联的用户集合
+        //查询与父类部门相关联的账户集合
         UserDepartmentDOCriteria example = new UserDepartmentDOCriteria();
         example.createCriteria().andDepartmentIdEqualTo(bean.getParentId());
         List<UserDepartmentDO> list = udmapper.selectByExample(example);
@@ -391,7 +391,7 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         List<Integer> dids = new ArrayList<>();
         dids.add(bean.getId());
 
-        //将新增部门和父类部门下的关联用户进行关联。
+        //将新增部门和父类部门下的关联账户进行关联。
         cmapper.addUserDeparts(addRole(list, dids));
         return true;
     }

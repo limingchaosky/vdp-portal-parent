@@ -8,10 +8,10 @@ import org.springframework.web.servlet.ModelAndView;
  * Created by limingchao on 2018/1/5.
  */
 @Controller
-@RequestMapping(value = "/systemSetting")
+@RequestMapping(value = "/systemSetting/index")
 public class SystemController {
 
-    @RequestMapping(value = "/index")
+    @RequestMapping(value = "")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("system/setting/index");

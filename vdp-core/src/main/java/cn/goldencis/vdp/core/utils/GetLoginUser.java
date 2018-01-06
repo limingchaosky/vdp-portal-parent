@@ -42,12 +42,12 @@ public class GetLoginUser {
      * @return
      */
     public static UserDO getLoginUser() {
-        String user_name = "";
+        String userName = "";
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof User) {
-            user_name = ((User) principal).getUsername();
+            userName = ((User) principal).getUsername();
         }
-        UserDO user = getLoginUser.userService.getLoginUser(user_name);
+        UserDO user = getLoginUser.userService.getLoginUser(userName);
         return user;
     }
 
@@ -58,12 +58,12 @@ public class GetLoginUser {
      */
     public static List<DepartmentDO> getDepartmentListWithLoginUser() {
 
-        String user_name = "";
+        String userName = "";
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof User) {
-            user_name = ((User) principal).getUsername();
+            userName = ((User) principal).getUsername();
         }
-        List<DepartmentDO> roleDept = getLoginUser.userService.getLoginDepartMent(user_name);
+        List<DepartmentDO> roleDept = getLoginUser.userService.getLoginDepartMent(userName);
         return roleDept;
 
     }

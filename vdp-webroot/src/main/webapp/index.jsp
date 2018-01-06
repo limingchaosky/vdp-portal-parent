@@ -6,12 +6,12 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>金盾OMS</title>
+    <title>金盾VDP</title>
     <c:set var="ctx" value="${pageContext.request.contextPath}" />
     <c:set var="ctxJs" value="${pageContext.request.contextPath}/js" />
     <c:set var="ctxCss" value="${pageContext.request.contextPath}/skin/default/css" />
     <c:set var="ctxImg" value="${pageContext.request.contextPath}/skin/default/images" />
-
+    <link rel="stylesheet" href="${ctxCss}/animate/animate.css">
     <link href="${ctxCss}/login/login.css" rel="stylesheet">
     <link rel="icon" href="${ctxImg}/logo.ico" type="image/x-ico" />
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -26,7 +26,7 @@
 
 <body>
     <div id="page-container">
-        <div class="main">
+        <div class="main animated fadeIn">
             <div class="login_logo">
                 <img src="${ctxImg}/Logo.png">
             </div>

@@ -19,13 +19,13 @@ var potentRiskOpt = ''//潜在风险图表配置
 var dataExportChart = ''//数据导出统计
 var dataExportOpt = ''//数据导出配置
 var activeImg = new Image();
-activeImg.src = '../skin/default/images/pattern3.png';
+activeImg.src = '../skin/default/images/pattern4.png';
 
 var negativeImg = new Image();
-negativeImg.src = '../skin/default/images/pattern2.png';
+negativeImg.src = '../skin/default/images/pattern3.png';
 
 var grayImg = new Image();
-grayImg.src = '../skin/default/images/pattern1.png';
+grayImg.src = '../skin/default/images/pattern2.png';
 
   $(function () {
     getCurrentVisitNumber();//当前访问人数信息

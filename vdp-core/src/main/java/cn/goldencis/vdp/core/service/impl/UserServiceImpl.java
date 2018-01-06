@@ -66,8 +66,8 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
         return mapper;
     }
 
-    @Transactional
     @Override
+    @Transactional
     public boolean addOrUpdateUser(UserDO user, String departmentListStr, String navigationListStr) {
         user.setStatus(11);
         if(StringUtil.isEmpty(user.getId())){
@@ -186,7 +186,7 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
     }
 
     @Override
-    public List<UserDO> getUserListByType(UserDO user) {
+    public List<UserDO> getUserListByLoginUserRoleTypeInPage(UserDO user) {
         return cmapper.getUserListByType(user);
     }
 

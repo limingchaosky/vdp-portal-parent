@@ -17,6 +17,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.goldencis.vdp.core.entity.ResultMsg;
 import cn.goldencis.vdp.core.entity.UserDO;
 import cn.goldencis.vdp.core.service.*;
 
@@ -49,7 +50,7 @@ import com.alibaba.fastjson.JSONArray;
  * @author Administrator
  */
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/systemSetting/user")
 public class UserController implements ServletContextAware {
 
     @Autowired
@@ -80,30 +81,35 @@ public class UserController implements ServletContextAware {
     }
 
     /**
-     * 管理员主页
-     *
+     * 根据
      * @return
      */
-    @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public ModelAndView index() {
-        ModelAndView model = new ModelAndView();
-        model.setViewName("/user/user/index");
-//        String zNodes = departmentService.getNodesByLogin();
-//        model.addObject("zNodes", zNodes);
-        return model;
+    @ResponseBody
+    @RequestMapping(value = "/getUserPages")
+    public ResultMsg getUserPages() {
+        ResultMsg resultMsg = new ResultMsg();
+        try {
+            UserDO user = GetLoginUser.getLoginUser();
+
+            userService.getUserListByLoginUserRoleTypeInPage(user);
+//            userService.getUserListByLoginUserRoleType(user);
+
+//            resultMsg.setData();
+            resultMsg.setResultMsg("用户列表获取成功！");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
+        } catch (Exception e) {
+            resultMsg.setResultMsg("用户列表获取错误！");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
+            resultMsg.setData(e);
+        }
+
+        return resultMsg;
     }
 
     @ResponseBody
     @RequestMapping(value = "/addOrUpdateUser", method = RequestMethod.POST)
     public String addOrUpdateUser(UserDO user, String departmentListStr, String navigationListStr) {
-        //判断新增用户是否超过最大用户数
-        /*if (ADD_FLAG == user.getFlag()) {
-            Long userCount = userService.countUserList(null, null, null, null);
-            Long maxCustomerCnt = Long.valueOf(request.getSession().getAttribute("maxCustomerCnt").toString());
-            if (userCount >= maxCustomerCnt) {
-                return "exceedsLimit";
-            }
-        }*/
+
         if (!userService.addOrUpdateUser(user, departmentListStr, navigationListStr)) {
             return "failed";
         }
@@ -165,12 +171,6 @@ public class UserController implements ServletContextAware {
         return userService.getUser(id);
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/getUserList", method = RequestMethod.GET)
-    public List<UserDO> getUserList() {
-        return userService.getUserList(null);
-    }
-
     /**
      * 根据当前登录账户的角色类型，获取同角色类型的所有账户并返回。
      * @return
@@ -192,64 +192,6 @@ public class UserController implements ServletContextAware {
 
         String userListStr = JsonUtil.getObjectToString(userList);
         return userListStr;
-    }
-
-    /**
-     * 管理员列表
-     *
-     * @param request
-     * @param response
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/datalist", produces = "application/json", method = RequestMethod.GET)
-    public Map<String, Object> datalist(UserDO user, HttpServletRequest request, HttpServletResponse response) {
-        Map<String, Object> model = new HashMap<>();
-        if (!StringUtil.isEmpty(user.getSearchstr())) {
-            user.setSearchstr(SpecialCharacherUtils.toMyString(user.getSearchstr()));
-        }
-
-        long count = userService.countUserList(user);
-        List<UserDO> userList = userService.getUserList(user);
-
-        model.put("recordsTotal", count);
-        model.put("recordsFiltered", count);
-        model.put("data", toUsersJson(userList));
-        model.put("exportlength", user.getLength());
-        model.put("exportstart", user.getStart());
-        return model;
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/datalist1", produces = "application/json", method = RequestMethod.GET)
-    public Map<String, Object> datalist1(UserDO user, HttpServletRequest request, HttpServletResponse response) {
-        Map<String, Object> model = new HashMap<>();
-        user.setStatus(11);
-        long count = userService.countUserList(user);
-        List<UserDO> userList = userService.getUserListByType(user);
-
-        model.put("recordsTotal", count);
-        model.put("recordsFiltered", count);
-        model.put("data", toUsersJson1(userList));
-        model.put("exportlength", user.getLength());
-        model.put("exportstart", user.getStart());
-        return model;
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/datalistByName", produces = "application/json", method = RequestMethod.GET)
-    public Map<String, Object> datalistByName(UserDO user, HttpServletRequest request, HttpServletResponse response) {
-        Map<String, Object> model = new HashMap<>();
-        if (!StringUtil.isEmpty(user.getSearchstr())) {
-            user.setSearchstr(SpecialCharacherUtils.toMyString(user.getSearchstr()));
-        }
-        user.setStatus(11);
-        List<UserDO> userList = userService.getUserListByName(user);
-
-        model.put("data", toUsersJson(userList));
-        model.put("exportlength", user.getLength());
-        model.put("exportstart", user.getStart());
-        return model;
     }
 
     @ResponseBody
@@ -281,36 +223,6 @@ public class UserController implements ServletContextAware {
         filedownload.download(response, request, path);
     }
 
-    private JSONArray toUsersJson1(List<UserDO> userlist) {
-        JSONArray array = new JSONArray();
-        for (UserDO user : userlist) {
-            JSONArray array1 = new JSONArray();
-            array1.add(user.getId());
-            array1.add("<span class='user'>" + user.getUserName() + "</span>");
-            array1.add("<span class='user'>" + user.getName() + "</span>");
-
-/*            if (StringUtil.isEmpty(user.getDepartmentList())) {
-                array1.add("<span class='user'>--</span>");
-            } else {
-                array1.add("<span class='user'>" + user.getDepartmentList() + "</span>");
-            }*/
-
-            if (StringUtil.isEmpty(user.getRoleTypeName())) {
-                array1.add("<span class='user'>--</span>");
-            } else {
-                array1.add("<span class='user'>" + user.getRoleTypeName() + "</span>");
-            }
-            if (StringUtil.isEmpty(user.getPhone())) {
-                array1.add("<span class='user'>--</span>");
-            } else {
-                array1.add("<span class='user'>" + user.getPhone() + "</span>");
-            }
-            array1.add(user.getId());
-            array.add(array1);
-        }
-        return array;
-    }
-
     private JSONArray toUsersJson(List<UserDO> userlist) {
         JSONArray array = new JSONArray();
         if (userlist != null) {
@@ -318,12 +230,6 @@ public class UserController implements ServletContextAware {
                 JSONArray array1 = new JSONArray();
                 array1.add(user.getId());
                 array1.add("<span class='user'>" + user.getUserName() + "</span>");
-
-/*                if (StringUtil.isEmpty(user.getDepartmentNames())) {
-                    array1.add("<span class='user'>--</span>");
-                } else {
-                    array1.add("<span class='user'>" + user.getDepartmentNames() + "</span>");
-                }*/
 
                 if (StringUtil.isEmpty(user.getRoleTypeName())) {
                     array1.add("<span class='user'>--</span>");

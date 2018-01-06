@@ -94,21 +94,16 @@ $(function () {
     $('.mul0 a').each(function (index, obj) {
       if($(obj).hasClass("policya1")){
         if($(obj).attr('href') == location.pathname+location.search){
-          $(obj).addClass('listclick');
+          $(obj).parents('ul.policyul1').siblings('a').addClass('listclick')
+          $(obj).addClass('listclick').css("background-image",'none');
         }
       }else if ($(obj).attr('href').indexOf(location.pathname) > -1) {
-          // console.log($(obj))
-
             $(obj).addClass('listclick');
-
-
             if ($(obj).hasClass('ma2')) {
                 $(obj).closest('.mli1').find('.ma1').addClass('listclick').closest('.mli0').find('.ma0').addClass('listclick');
             } else if ($(obj).hasClass('ma1')) {
                 $(obj).closest('.mli0').find('.ma0').addClass('listclick');
             }
-
-
             if ($(obj).next('ul').length == 0 && !$(obj).hasClass('ma0')) {
                 $(obj).css('background-image', 'none');
             };

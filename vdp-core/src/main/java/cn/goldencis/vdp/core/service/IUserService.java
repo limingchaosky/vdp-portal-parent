@@ -48,7 +48,7 @@ public interface IUserService extends BaseService<UserDO, UserDOCriteria> {
 
     UserDO getUser(String id);
 
-    List<UserDO> getUserListByType(UserDO user);
+    List<UserDO> getUserListByLoginUserRoleTypeInPage(UserDO user);
 
     void deleteUserByDepartmentId(String departmentId, String userId);
 
