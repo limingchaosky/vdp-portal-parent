@@ -56,7 +56,7 @@
 			<property name="primariKey" value="id" />
 		</table>-->
 
-		<table schema="" tableName="t_client_user" domainObjectName="ClientUserDO">
+		<table schema="" tableName="t_user" domainObjectName="UserDO">
 			<property name="primariKey" value="id" />
 		</table>
 	</context>

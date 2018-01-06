@@ -46,10 +46,6 @@ public interface IUserService extends BaseService<UserDO, UserDOCriteria> {
 
     void deleteUser(List<String> list);
 
-    UserDO getUser(String id);
-
-    List<UserDO> getUserListByLoginUserRoleTypeInPage(UserDO user);
-
     void deleteUserByDepartmentId(String departmentId, String userId);
 
     List<DepartmentDO> getUserListByDepartment(String userId);
@@ -59,8 +55,6 @@ public interface IUserService extends BaseService<UserDO, UserDOCriteria> {
     List<UserDO> getUserListByName(UserDO user);
 
     void updateUser(UserDO user);
-
-    List<UserDO> queryUserExclude(String id);
 
     /**
      * 查询用户是否不想显示提示
@@ -85,4 +79,20 @@ public interface IUserService extends BaseService<UserDO, UserDOCriteria> {
 	UserDO getLoginUserNoCacheByUserName(String userName);
 
 	List<UserDO> getUserListByLoginUserRoleType(Integer roleType);
+
+    /**
+     * 根据登录用户的角色类型，获取相应类型的账户分页列表。
+     * @param user 当前登录用户
+     * @param start
+     * @param length
+     * @return
+     */
+    List<UserDO> getUserListByLoginUserRoleTypeInPages(UserDO user, int start, int length);
+
+    /**
+     * 根据登录用户的角色类型，获取相应类型的账户列表的总数
+     * @param user 当前登录用户
+     * @return
+     */
+    int countUserListByLoginUserRoleTypeInPages(UserDO user);
 }

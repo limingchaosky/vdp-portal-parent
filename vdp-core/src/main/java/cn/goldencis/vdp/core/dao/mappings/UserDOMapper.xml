@@ -14,6 +14,7 @@
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="role_type" jdbcType="INTEGER" property="roleType" />
+    <result column="readonly" jdbcType="INTEGER" property="readonly" />
     <result column="skin" jdbcType="VARCHAR" property="skin" />
     <result column="error_login_count" jdbcType="INTEGER" property="errorLoginCount" />
     <result column="error_login_last_time" jdbcType="TIMESTAMP" property="errorLoginLastTime" />
@@ -79,7 +80,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, user_name, password, department, name, sex, visible, email, phone, address, status,
-    role_type, skin, error_login_count, error_login_last_time, create_time
+    role_type, readonly, skin, error_login_count, error_login_last_time, create_time
   </sql>
   <select id="selectByExample" parameterType="cn.goldencis.vdp.core.entity.UserDOCriteria" resultMap="BaseResultMap">
     select
@@ -116,12 +117,14 @@
       department, name, sex,
       visible, email, phone,
       address, status, role_type,
-      skin)
+      readonly, skin, error_login_count,
+      error_login_last_time, create_time)
     values (#{id,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
       #{department,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER},
       #{visible,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
       #{address,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{roleType,jdbcType=INTEGER},
-      #{skin,jdbcType=VARCHAR})
+      #{readonly,jdbcType=INTEGER}, #{skin,jdbcType=VARCHAR}, #{errorLoginCount,jdbcType=INTEGER},
+      #{errorLoginLastTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="cn.goldencis.vdp.core.entity.UserDO">
     insert into t_user
@@ -162,8 +165,20 @@
       <if test="roleType != null">
         role_type,
       </if>
+      <if test="readonly != null">
+        readonly,
+      </if>
       <if test="skin != null">
         skin,
+      </if>
+      <if test="errorLoginCount != null">
+        error_login_count,
+      </if>
+      <if test="errorLoginLastTime != null">
+        error_login_last_time,
+      </if>
+      <if test="createTime != null">
+        create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -203,8 +218,20 @@
       <if test="roleType != null">
         #{roleType,jdbcType=INTEGER},
       </if>
+      <if test="readonly != null">
+        #{readonly,jdbcType=INTEGER},
+      </if>
       <if test="skin != null">
         #{skin,jdbcType=VARCHAR},
+      </if>
+      <if test="errorLoginCount != null">
+        #{errorLoginCount,jdbcType=INTEGER},
+      </if>
+      <if test="errorLoginLastTime != null">
+        #{errorLoginLastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -253,8 +280,20 @@
       <if test="record.roleType != null">
         role_type = #{record.roleType,jdbcType=INTEGER},
       </if>
+      <if test="record.readonly != null">
+        readonly = #{record.readonly,jdbcType=INTEGER},
+      </if>
       <if test="record.skin != null">
         skin = #{record.skin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.errorLoginCount != null">
+        error_login_count = #{record.errorLoginCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.errorLoginLastTime != null">
+        error_login_last_time = #{record.errorLoginLastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -275,7 +314,11 @@
       address = #{record.address,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
       role_type = #{record.roleType,jdbcType=INTEGER},
-      skin = #{record.skin,jdbcType=VARCHAR}
+      readonly = #{record.readonly,jdbcType=INTEGER},
+      skin = #{record.skin,jdbcType=VARCHAR},
+      error_login_count = #{record.errorLoginCount,jdbcType=INTEGER},
+      error_login_last_time = #{record.errorLoginLastTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -316,8 +359,20 @@
       <if test="roleType != null">
         role_type = #{roleType,jdbcType=INTEGER},
       </if>
+      <if test="readonly != null">
+        readonly = #{readonly,jdbcType=INTEGER},
+      </if>
       <if test="skin != null">
         skin = #{skin,jdbcType=VARCHAR},
+      </if>
+      <if test="errorLoginCount != null">
+        error_login_count = #{errorLoginCount,jdbcType=INTEGER},
+      </if>
+      <if test="errorLoginLastTime != null">
+        error_login_last_time = #{errorLoginLastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -335,7 +390,11 @@
       address = #{address,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       role_type = #{roleType,jdbcType=INTEGER},
-      skin = #{skin,jdbcType=VARCHAR}
+      readonly = #{readonly,jdbcType=INTEGER},
+      skin = #{skin,jdbcType=VARCHAR},
+      error_login_count = #{errorLoginCount,jdbcType=INTEGER},
+      error_login_last_time = #{errorLoginLastTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="cn.goldencis.vdp.core.entity.UserDOCriteria" resultMap="BaseResultMap">
@@ -351,33 +410,6 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
-  </select>
-
-
-  <select id="queryUserExclude" resultType="cn.goldencis.vdp.core.entity.UserDO">
-    SELECT
-    DISTINCT (d.id) id, name, email, password, d.department,
-      (SELECT
-      GROUP_CONCAT(rp.`name`)
-      FROM
-      t_user_department ud
-      LEFT JOIN
-      t_department rp
-      ON ud.department_id = rp.id
-      WHERE ud.user_id = d.ID_) AS departmentNames,
-    role_type roleType,
-    p.name roleTypeName,
-    phone,
-    status
-    FROM
-    t_user d
-    LEFT JOIN
-    t_permission p
-    ON d.role_type = p.id
-    WHERE d.id_ &lt;&gt; '-1'
-    and
-    d.status &lt;&gt; 0
-    and d.id_ &lt;&gt; #{id,jdbcType=VARCHAR}
   </select>
   <select id="queryRefusePromptUser" resultType="int">
     SELECT COUNT(1) FROM `t_prompt_refuse` t WHERE t.`user_id`=#{userId,jdbcType=VARCHAR} AND t.`status`=1

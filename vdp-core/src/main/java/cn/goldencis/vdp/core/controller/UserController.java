@@ -25,9 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.ServletContextAware;
-import org.springframework.web.servlet.ModelAndView;
 
 import cn.goldencis.vdp.common.cache.manager.GuavaCacheManager;
 import cn.goldencis.vdp.common.utils.CommonPoiXsl;
@@ -40,7 +40,6 @@ import cn.goldencis.vdp.core.utils.AuthUtils;
 import cn.goldencis.vdp.core.utils.GetLoginUser;
 import cn.goldencis.vdp.core.utils.JsonUtil;
 import cn.goldencis.vdp.core.utils.PathConfig;
-import cn.goldencis.vdp.core.utils.SpecialCharacherUtils;
 
 import com.alibaba.fastjson.JSONArray;
 
@@ -66,9 +65,6 @@ public class UserController implements ServletContextAware {
     private IPermissionNavigationService permissionNavigationService;
 
     @Autowired
-    private IGroupService groupService;
-
-    @Autowired
     private GuavaCacheManager cacheManager;
 
     private static final String FILE_NAME = "用户信息";
@@ -81,20 +77,53 @@ public class UserController implements ServletContextAware {
     }
 
     /**
-     * 根据
+     * 根据登录用户的角色类型，获取相应类型的账户列表。分页查询
+     *
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/getUserPages")
-    public ResultMsg getUserPages() {
+    @RequestMapping(value = "/getUserPages", method = RequestMethod.POST)
+    public ResultMsg getUserPages(@RequestParam("start") int start, @RequestParam("length") int length) {
         ResultMsg resultMsg = new ResultMsg();
+        int count = 0;
         try {
+            //获取当前登录用户
             UserDO user = GetLoginUser.getLoginUser();
 
-            userService.getUserListByLoginUserRoleTypeInPage(user);
-//            userService.getUserListByLoginUserRoleType(user);
+            //根据登录用户的角色类型，获取相应类型的账户列表。分页查询
+            List<UserDO> userList = userService.getUserListByLoginUserRoleTypeInPages(user, start, length);
+            count = userService.countUserListByLoginUserRoleTypeInPages(user);
 
-//            resultMsg.setData();
+            resultMsg.setData(userList);
+            resultMsg.setResultMsg("用户列表获取成功！");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
+        } catch (Exception e) {
+            resultMsg.setResultMsg("用户列表获取错误！");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
+            resultMsg.setData(e);
+        }
+        resultMsg.setExportstart(start);
+        resultMsg.setExportlength(length);
+        resultMsg.setRecordsFiltered(count);
+        resultMsg.setRecordsTotal(count);
+
+        return resultMsg;
+    }
+
+    /**
+     * 新建和更新接口
+     * @param user
+     * @param departmentListStr
+     * @param navigationListStr
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/addOrUpdateUser", method = RequestMethod.POST)
+    public ResultMsg addOrUpdateUser(UserDO user, String departmentListStr, String navigationListStr) {
+        ResultMsg resultMsg = new ResultMsg();
+        try {
+            userService.addOrUpdateUser(user, departmentListStr, navigationListStr);
+
             resultMsg.setResultMsg("用户列表获取成功！");
             resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
         } catch (Exception e) {
@@ -104,16 +133,6 @@ public class UserController implements ServletContextAware {
         }
 
         return resultMsg;
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/addOrUpdateUser", method = RequestMethod.POST)
-    public String addOrUpdateUser(UserDO user, String departmentListStr, String navigationListStr) {
-
-        if (!userService.addOrUpdateUser(user, departmentListStr, navigationListStr)) {
-            return "failed";
-        }
-        return "success";
     }
 
     @ResponseBody
@@ -131,20 +150,11 @@ public class UserController implements ServletContextAware {
             }
         }
 
-        //这里校验是否可以删除该用户
-        List<String> canDeleteUser1 = null;
-        for (String userId : list) {
-            if (groupService.selectEqOnePerGroupByUserId(userId).size() == 0) {
-                canDeleteUser1 = new ArrayList<>();
-                canDeleteUser1.add(userId);
-                userService.deleteUser(canDeleteUser1);
-            }
-        }
         cacheManager.getCache("loginUser").clear();
         return "success";
     }
 
-    @ResponseBody
+   /* @ResponseBody
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
     public String updateUser(UserDO user) {
         if (StringUtil.isEmpty(user.getId())) {
@@ -164,15 +174,11 @@ public class UserController implements ServletContextAware {
         }
         return "success";
     }
-
-    @ResponseBody
-    @RequestMapping(value = "/getUser", method = RequestMethod.GET)
-    public UserDO getUser(String id) {
-        return userService.getUser(id);
-    }
+*/
 
     /**
      * 根据当前登录账户的角色类型，获取同角色类型的所有账户并返回。
+     *
      * @return
      */
     @ResponseBody
@@ -231,11 +237,12 @@ public class UserController implements ServletContextAware {
                 array1.add(user.getId());
                 array1.add("<span class='user'>" + user.getUserName() + "</span>");
 
-                if (StringUtil.isEmpty(user.getRoleTypeName())) {
+                /*if (StringUtil.isEmpty(user.getRoleTypeName())) {
                     array1.add("<span class='user'>--</span>");
                 } else {
                     array1.add("<span class='user'>" + user.getRoleTypeName() + "</span>");
-                }
+                }*/
+
                 if (StringUtil.isEmpty(user.getName())) {
                     array1.add("<span class='user'>--</span>");
                 } else {
@@ -274,7 +281,7 @@ public class UserController implements ServletContextAware {
         Map<String, Object> authInfo = AuthUtils.getAuthInfo(servletContext);
         if ("".equals(authInfo.get("authmsg")) || ConstantsDto.ADMIN_NAME.equals(userName)) {
             if (!StringUtil.isEmpty(userName) && !StringUtil.isEmpty(password)) {
-            	UserDO userDO = userService.getLoginUserNoCacheByUserName(userName);
+                UserDO userDO = userService.getLoginUserNoCacheByUserName(userName);
                 if (userDO != null && password.equals(userDO.getPassword())) {
                     flag = ConstantsDto.CONST_TRUE;
                 }
@@ -299,18 +306,8 @@ public class UserController implements ServletContextAware {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/queryUserExclude", produces = "application/json", method = RequestMethod.GET)
-    public Map<String, Object> queryUserExclude(HttpServletRequest request, HttpServletResponse response) {
-        Map<String, Object> model = new HashMap<>();
-        List<UserDO> userList = userService.queryUserExclude(GetLoginUser.getLoginUser().getId());
-        model.put("data", toUsersJson(userList));
-        return model;
-    }
-
-    @ResponseBody
     @RequestMapping(value = "/insertRefusePromptUser", produces = "application/json", method = RequestMethod.POST)
-    public Map<String, Object> insertRefusePromptUser(HttpServletRequest request,
-                                               HttpServletResponse response) {
+    public Map<String, Object> insertRefusePromptUser(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("resultCode", ConstantsDto.CONST_FALSE);
         try {

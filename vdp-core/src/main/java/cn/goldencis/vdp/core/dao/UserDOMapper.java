@@ -3,13 +3,12 @@ package cn.goldencis.vdp.core.dao;
 import cn.goldencis.vdp.common.dao.BaseDao;
 import cn.goldencis.vdp.core.entity.UserDO;
 import cn.goldencis.vdp.core.entity.UserDOCriteria;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.session.RowBounds;
-
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("rawtypes")
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
+
 public interface UserDOMapper extends BaseDao {
     long countByExample(UserDOCriteria example);
 
@@ -35,8 +34,7 @@ public interface UserDOMapper extends BaseDao {
 
     int updateByPrimaryKey(UserDO record);
 
-    List<UserDO> queryUserExclude(@Param("id") String id);
-
+    //后添加的方法
     int queryRefusePromptUser(@Param("userId") String userId);
 
     int insertRefusePromptUser(@Param("userId") String userId);

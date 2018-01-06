@@ -895,6 +895,66 @@ public class UserDOCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andReadonlyIsNull() {
+            addCriterion("readonly is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReadonlyIsNotNull() {
+            addCriterion("readonly is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReadonlyEqualTo(Integer value) {
+            addCriterion("readonly =", value, "readonly");
+            return (Criteria) this;
+        }
+
+        public Criteria andReadonlyNotEqualTo(Integer value) {
+            addCriterion("readonly <>", value, "readonly");
+            return (Criteria) this;
+        }
+
+        public Criteria andReadonlyGreaterThan(Integer value) {
+            addCriterion("readonly >", value, "readonly");
+            return (Criteria) this;
+        }
+
+        public Criteria andReadonlyGreaterThanOrEqualTo(Integer value) {
+            addCriterion("readonly >=", value, "readonly");
+            return (Criteria) this;
+        }
+
+        public Criteria andReadonlyLessThan(Integer value) {
+            addCriterion("readonly <", value, "readonly");
+            return (Criteria) this;
+        }
+
+        public Criteria andReadonlyLessThanOrEqualTo(Integer value) {
+            addCriterion("readonly <=", value, "readonly");
+            return (Criteria) this;
+        }
+
+        public Criteria andReadonlyIn(List<Integer> values) {
+            addCriterion("readonly in", values, "readonly");
+            return (Criteria) this;
+        }
+
+        public Criteria andReadonlyNotIn(List<Integer> values) {
+            addCriterion("readonly not in", values, "readonly");
+            return (Criteria) this;
+        }
+
+        public Criteria andReadonlyBetween(Integer value1, Integer value2) {
+            addCriterion("readonly between", value1, value2, "readonly");
+            return (Criteria) this;
+        }
+
+        public Criteria andReadonlyNotBetween(Integer value1, Integer value2) {
+            addCriterion("readonly not between", value1, value2, "readonly");
+            return (Criteria) this;
+        }
+
         public Criteria andSkinIsNull() {
             addCriterion("skin is null");
             return (Criteria) this;

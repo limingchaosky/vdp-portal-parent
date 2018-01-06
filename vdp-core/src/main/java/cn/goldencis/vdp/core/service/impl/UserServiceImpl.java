@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import cn.goldencis.vdp.core.dao.*;
 import cn.goldencis.vdp.core.entity.*;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -21,8 +22,6 @@ import cn.goldencis.vdp.common.utils.StringUtil;
 import cn.goldencis.vdp.core.constants.ConstantsDto;
 import cn.goldencis.vdp.core.service.IUserService;
 import cn.goldencis.vdp.core.utils.GetLoginUser;
-
-import com.alibaba.fastjson.JSONObject;
 
 /**
  * 管理员service实现类
@@ -47,9 +46,6 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
 
     @Autowired
     private UserDepartmentDOMapper userDepartmentDOMapper;
-
-    @Autowired
-    private CUserGroupDOMapper cuserGroupDOMapper;
 
     @Autowired
     private CUserDepartmentDOMapper cuserDepartmentDOMapper;
@@ -185,9 +181,41 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
         return mapper.selectByExample(userDOCriteria);
     }
 
+    /**
+     * 根据登录用户的角色类型，获取相应类型的账户分页列表。
+     * @param user 当前登录用户
+     * @param start
+     * @param length
+     * @return
+     */
     @Override
-    public List<UserDO> getUserListByLoginUserRoleTypeInPage(UserDO user) {
-        return cmapper.getUserListByType(user);
+    public List<UserDO> getUserListByLoginUserRoleTypeInPages(UserDO user, int start, int length) {
+        RowBounds rowBounds = new RowBounds(start, length);
+
+        UserDOCriteria example = new UserDOCriteria();
+        //如果是超级管理员，返回查询所有用户,如果是其他用户，根据角色类型，查询相同类型的用户
+        if (!"1".equals(user.getId())) {
+            example.createCriteria().andRoleTypeEqualTo(user.getRoleType());
+        }
+        List<UserDO> userList = mapper.selectByExampleWithRowbounds(example, rowBounds);
+
+        return userList;
+    }
+
+    /**
+     * 根据登录用户的角色类型，获取相应类型的账户列表的总数
+     * @param user 当前登录用户
+     * @return
+     */
+    @Override
+    public int countUserListByLoginUserRoleTypeInPages(UserDO user) {
+        UserDOCriteria example = new UserDOCriteria();
+        //如果是超级管理员，返回查询所有用户,如果是其他用户，根据角色类型，查询相同类型的用户
+        if (!"1".equals(user.getId())) {
+            example.createCriteria().andRoleTypeEqualTo(user.getRoleType());
+        }
+
+        return (int)mapper.countByExample(example);
     }
 
     @Transactional
@@ -200,7 +228,7 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
         //cmapper.deleteByBatchUser(id);
     }
 
-    @Override
+  /*  @Override
     public UserDO getUser(String id) {
         UserDO temp = mapper.selectByPrimaryKey(id);
         String str = JSONObject.toJSONString(temp);
@@ -212,7 +240,7 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
             record.setDepartmentList(list);
         }
         return record;
-    }
+    }*/
 
     @Override
     public void deleteUserByDepartmentId(String departmentId, String userId) {
@@ -306,10 +334,10 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
         mapper.updateByPrimaryKeySelective(user);
     }
 
-    @Override
+   /* @Override
     public List<UserDO> queryUserExclude(String id) {
         return mapper.queryUserExclude(id);
-    }
+    }*/
 
     @Override
     public int queryRefusePromptUser(String userId) {
