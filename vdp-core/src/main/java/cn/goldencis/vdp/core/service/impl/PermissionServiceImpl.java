@@ -65,47 +65,6 @@ public class PermissionServiceImpl implements IPermissionService {
         return cpermissionDOMapper.getPermissionList(start, length, searchstr);
     }
 
-    @Override
-    public PermissionDO getPermission(String sid) {
-        PermissionDO permissionDO = cpermissionDOMapper.selectByPrimaryKey(sid);
-
-        List<PermissionNavigationDO> list = permissionNavigationDOMapper.selectByCondition(sid);
-        if (permissionDO == null) {
-            permissionDO = new PermissionDO();
-        } else {
-            for (PermissionNavigationDO pn : list) {
-                if ("y".equals(pn.getIsParent())) {
-                    checkPermissionSelectType(pn, list);
-                }
-            }
-        }
-        permissionDO.setList(list);
-        return permissionDO;
-    }
-
-    @SuppressWarnings("null")
-    public void checkPermissionSelectType(PermissionNavigationDO pn, List<PermissionNavigationDO> list) {
-        //查询出父节点下所有子节点
-        NavigationDOCriteria nexample = new NavigationDOCriteria();
-        NavigationDOCriteria.Criteria ncriteria = nexample.createCriteria();
-        ncriteria.andParentIdEqualTo(pn.getNavigationId());
-        List<NavigationDO> rList = navigationDOMapper.selectByExample(nexample);
-        pn.setSelectType("all");
-        if (rList == null || rList.size() == 0) {
-            return;
-        }
-        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
-        for (PermissionNavigationDO pd : list) {
-            map.put(pd.getNavigationId(), pd.getNavigationId());
-        }
-
-        for (NavigationDO nd : rList) {
-            if (!map.containsKey(nd.getId())) {
-                pn.setSelectType("half");
-                return;
-            }
-        }
-    }
 
     private void batchInsert(String nav, PermissionDO record) {
         if (!StringUtil.isEmpty(nav)) {

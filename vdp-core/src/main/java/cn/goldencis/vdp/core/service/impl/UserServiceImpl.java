@@ -56,6 +56,9 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
     @Autowired
     private PermissionNavigationDOMapper permissionNavigationDOMapper;
 
+    @Autowired
+    private CUserNavigationDOMapper cUserNavigationDOMapper;
+
     @SuppressWarnings("unchecked")
     @Override
     protected BaseDao<UserDO, UserDOCriteria> getDao() {
@@ -65,25 +68,49 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
     @Override
     @Transactional
     public boolean addOrUpdateUser(UserDO user, String departmentListStr, String navigationListStr) {
+        //设置账户状态，暂时无用
         user.setStatus(11);
-        if(StringUtil.isEmpty(user.getId())){
-            user.setId(UUID.randomUUID().toString());
+
+        //没有部门则设置未分组，账户部门归属暂时无用，不代表部门权限
+        if (user.getDepartment() == null) {
+            user.setDepartment(0);
         }
-        if (user.getDepartment() == null || user.getDepartment() ==0) {
-            user.setDepartment(1);
-        }
+
+        //解析部门权限，转化为集合。插入账户部门关联表。
         String[] departmentArr = departmentListStr.split(",");
-        if (user.getId() == null || "".equals(user.getId())) {
-            if (cmapper.selectCountByUserName(user.getUserName()) != 0) {
-                return false;
-            }
+        List<Integer> departmentIdList = new ArrayList<>();
+        for (String departmentId : departmentArr) {
+            departmentIdList.add(Integer.parseInt(departmentId));
+        }
+
+        //解析页面权限，转化为集合，插入账户权限表。
+        String[] navigationArr = navigationListStr.split(",");
+        List<Integer> navigationIdList = new ArrayList<>();
+        for (String navigationId : navigationArr) {
+            navigationIdList.add(Integer.parseInt(navigationId));
+        }
+
+        //判断是新建还是更新，没有即新建账户，补全对象属性。
+        if (StringUtil.isEmpty(user.getId())) {
+
             user.setId(UUID.randomUUID().toString());
             user.setCreateTime(new Date());
+            //创建账户,同时获取新建账户的id
             mapper.insertSelective(user);
-            cmapper.insertDeptRole(user.getId(), Arrays.asList(departmentArr));
+//            mapper.insert(user);
+
+            //为账户批量添加部门权限
+            if (departmentIdList != null) {
+                cuserDepartmentDOMapper.batchInsertByOneUserAndDepartmentList(user.getId(), departmentIdList);
+            }
+
+            //为账户添加页面权限
+            if (navigationIdList != null) {
+                cUserNavigationDOMapper.batchInsertByOneUserAndNavigationList(user.getId(),navigationIdList);
+            }
         } else if (user.getId() != null && !"".equals(user.getId())) {
             //用户id存在，执行用户的选择性更新。
-            mapper.updateByPrimaryKeySelective(user);
+//            mapper.updateByPrimaryKeySelective(user);
 
             //根据用户id获取数据库中的部门权限
 //            UserDepartmentDOCriteria userDepartmentDOCriteria = new UserDepartmentDOCriteria();
@@ -101,22 +128,22 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
 //                }
 //            }
 
-            List<String> list = new ArrayList<String>();
-            list.add(user.getId());
-            cuserDepartmentDOMapper.deleteBatch(list, null);
-            //cuserGroupDOMapper.deleteBatch(list, null);
-            cmapper.insertDeptRole(user.getId(), Arrays.asList(departmentArr));
+//            List<String> list = new ArrayList<String>();
+//            list.add(user.getId());
+//            cuserDepartmentDOMapper.deleteBatch(list, null);
+//            //cuserGroupDOMapper.deleteBatch(list, null);
+//            cmapper.insertDeptRole(user.getId(), Arrays.asList(departmentArr));
 
 //            Integer roleType = mapper.selectByPrimaryKey(user.getId()).getRoleType();
 //            if ( roleType != null && roleType != user.getRoleType() ) {
 //                mapper.updateByPrimaryKeySelective(user);
 //            }
 
-            PermissionNavigationDOCriteria permissionNavigationDOCriteria = new PermissionNavigationDOCriteria();
-            permissionNavigationDOCriteria.createCriteria().andPermissionIdEqualTo(user.getRoleType().toString());
-            List<PermissionNavigationDO> permissionNavigationList = permissionNavigationDOMapper.selectByExample(permissionNavigationDOCriteria);
-            List<Integer> navigationList = new ArrayList<>();
-            String[] navigationArr = navigationListStr.split(",");
+//            PermissionNavigationDOCriteria permissionNavigationDOCriteria = new PermissionNavigationDOCriteria();
+//            permissionNavigationDOCriteria.createCriteria().andPermissionIdEqualTo(user.getRoleType().toString());
+//            List<PermissionNavigationDO> permissionNavigationList = permissionNavigationDOMapper.selectByExample(permissionNavigationDOCriteria);
+//            List<Integer> navigationList = new ArrayList<>();
+
 //            for (String navigation : navigationArr) {
 //                if (permissionNavigationList.contains()) {
 //
@@ -218,14 +245,42 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
         return (int)mapper.countByExample(example);
     }
 
-    @Transactional
+    /**
+     * 检查账户名是否重复
+     * @param user
+     * @return 可用返回true
+     */
     @Override
-    public void deleteUser(List<String> id) {
-        cmapper.deleteBatchUserGroup(id);
-        cuserDepartmentDOMapper.deleteBatch(id, null);
-        cmapper.updateByBatchUser(id);
-        //改为真实删除
-        //cmapper.deleteByBatchUser(id);
+    public boolean checkUserNameDuplicate(UserDO user) {
+        UserDO preUser = this.getUserByUserName(user.getUserName());
+
+        //判断数据库是否有该记录，不存在即可用，返回true，如果有继续判断
+        if (preUser != null) {
+            //比较两个对象的id，若一致，是同一个对象没有改变名称的情况，返回可用true。
+            if (preUser.getId() == user.getId()) {
+                return true;
+            }
+            //若果不同，说明为两个用户，名称重复，不可用，返回false
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 删除用户，真实删除
+     * @param user
+     */
+    @Override
+    @Transactional
+    public void deleteUser(UserDO user) {
+        //删除账户部门关联表中关联该账户的记录
+        cuserDepartmentDOMapper.batchDeleteUserDepartmentByUserId(user.getId());
+
+        //删除账户页面权限关联表中关联该账户的记录
+        cUserNavigationDOMapper.batchDeleteUserNavigationByUserId(user.getId());
+
+        //删除账户
+        mapper.deleteByPrimaryKey(user.getId());
     }
 
   /*  @Override
@@ -307,9 +362,21 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
         return mapper.countByExample(example);
     }
 
+    /**
+     * 通过账户名称获取账户对象
+     * @param userName
+     * @return
+     */
     @Override
-    public List<UserDO> getUserListByName(UserDO user) {
-        return cmapper.getUserListByName(user);
+    public UserDO getUserByUserName(String userName) {
+        UserDOCriteria example = new UserDOCriteria();
+        example.createCriteria().andUserNameEqualTo(userName);
+
+        List<UserDO> users = mapper.selectByExample(example);
+        if (users != null && users.size() > 0) {
+            return users.get(0);
+        }
+        return null;
     }
 
     @Override

@@ -31,7 +31,7 @@
                 <a id="bar_policy_user" class="bar-item bar-item-icon iconfont icon-btn-edit" title="批量修改策略"></a>
                 <a id="bar_import" class="bar-item bar-item-icon iconfont icon-btn-import1" title="导入"></a>
                 <a id="bar_export" class="bar-item bar-item-icon iconfont icon-btn-export1" title="导出"></a>
-                <!--<a id="bar_relieve" class="bar-item bar-item-icon iconfont icon-btn-remove" title="解绑UKey"></a>-->
+                <a id="bar_relieve" class="bar-item bar-item-icon iconfont icon-btn-remove" title="解绑UKey"></a>
             </div>
         </div>
         <!--右侧顶部操作结束-->
@@ -124,10 +124,10 @@
                 <!--<i class="iconfont icon-menu-user text-sm"></i>-->
                 <!--<span class="text-sm margin-left-xs">个性化策略</span>-->
             <!--</div>-->
-            <!--<div class="opt-hover-row j-opt-hover-remove" data-id="{{id}}">-->
-                <!--<i class="iconfont icon-btn-remove text-sm"></i>-->
-                <!--<span class="text-sm margin-left-xs">解绑UKey</span>-->
-            <!--</div>-->
+            <div class="opt-hover-row j-opt-hover-remove" data-id="{{id}}">
+                <i class="iconfont icon-btn-remove text-sm"></i>
+                <span class="text-sm margin-left-xs">解绑UKey</span>
+            </div>
         </div>
     </div>
 </script>

@@ -92,3 +92,15 @@
   margin-left: 10px;
   cursor: pointer;
 }
+#settingTimes-error {
+  position: absolute;
+  margin-left: 20px;
+}
+#passwordVerifications-error {
+  position: absolute;
+  margin-left: 20px;
+}
+#allowOpens-error {
+  position: absolute;
+  margin-left: 145px;
+}

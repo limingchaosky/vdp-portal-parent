@@ -95,9 +95,35 @@ function initEvents() {
   $('body')
     //保存策略
     .on('click', '.policy-save', function () {
+      $('.policy-content form').validate({
+        rules: {
+          screendiyWaterContent: {
+            maxlength:30,
 
+          },
+          settingTimes:{
+            digits:true
+          },
+          passwordVerifications:{
+            digits:true
+          },
+          allowOpens:{
+            digits:true
+          },
+          outdiyWaterContent:{
+            maxlength:30,
+          },
+          exportdiyWaterContent:{
+            maxlength:30,
+          },
+
+        }
+      });
+      if (!$(".policy-content form").valid()) {
+        return;
+      }
       var temp = $(".policy-content form").serializeJSON();
-      console.log(temp)
+      console.log(temp);
       //下面是关于审批的
       if(out_file == 0){//说明进来没有点审批
         if(msg.out_file!=0){
@@ -131,6 +157,7 @@ function initEvents() {
       // 文件外发
       obj.sbfileoutcfg.enable = temp.fileOutSwitch?Number(temp.fileOutSwitch):0;
       obj.sbfileoutcfg.content.mode = temp.approveOut?Number(temp.approveOut):1;
+      obj.sbfileoutcfg.content.disablesc = temp.forbidScreen?Number(temp.forbidScreen):0;
       obj.sbfileoutcfg.content.validtimecheck = temp.settingTime?Number(temp.settingTime):0;
       obj.sbfileoutcfg.content.validtime = temp.settingTimes!=''?Number(temp.settingTimes):0;
       obj.sbfileoutcfg.content.pwdcheck = temp.passwordVerification?Number(temp.passwordVerification):0;
@@ -152,7 +179,7 @@ function initEvents() {
       obj.sbfileopt.enable = temp.fileOutSwitch?Number(temp.fileExportSwitch):0;
       obj.sbfileopt.content.mode = temp.approveExport?Number(temp.approveExport):1;//1是明文3是审批
       obj.sbfileopt.content.sbfileoptwatermark.enable = temp.isScreen?Number(temp.isScreen):0;
-      obj.sbfileopt.content.sbfileoptwatermark.isshow = Number(temp.isScreen);
+      obj.sbfileopt.content.sbfileoptwatermark.isshow = Number(temp.exportWater);
       obj.sbfileopt.content.sbfileoptwatermark.content.depname = temp.fileExportDept?Number(temp.fileExportDept):0;
 
       obj.sbfileopt.content.sbfileoptwatermark.content.username = temp.fileExportName?Number(temp.fileExportName):0;
@@ -165,21 +192,20 @@ function initEvents() {
       obj.sbfileopt.content.sbfileoptwatermark.content.time = temp.fileExportTimeWater?Number(temp.fileExportTimeWater):0;
       obj.sbfileopt.content.sbfileoptwatermark.content.manual = temp.fileExportDiyWater?Number(temp.fileExportDiyWater):0;
       obj.sbfileopt.content.sbfileoptwatermark.content.manualtext = temp.exportdiyWaterContent;
+      // console.log(temp.videoApprove);
       //图片审计
       obj.videoappro=temp.videoApprove?Number(temp.videoApprove):0;
 
 
       objAll = {"content":obj,"policyid":policyId};
-      console.log(objAll);
 
       $.ajax({
         type:'post',
         url:ctx + '/policy/updatePolicyJsonFile',
         contentType:'application/json;charset=utf-8',//指定为json类型
-        //数据格式是json串，商品信息
+        //数据格式是json串
         data:JSON.stringify(objAll),
         success:function(msg){//返回json结果
-          console.log(msg);
           if (msg.resultCode == 1) {
             layer.msg('保存成功！', {icon: 1});
           }
@@ -260,8 +286,6 @@ function initEvents() {
           btn: ['确定', '取消'],
           yes:function(index, layero){
             out_file = $("#outOpenWind input[name=exportSelect]:checked").val();
-            // console.log(out_file);
-            // $("#exportOpenWind input[name=export_file]").attr('value',out_file);
             layer.close(index);
           },
           success:function(index, layero){

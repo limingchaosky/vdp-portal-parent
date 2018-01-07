@@ -65,12 +65,6 @@ public class PermissionController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/getPermission", produces = "application/json", method = RequestMethod.GET)
-    public PermissionDO getPermission(String id) {
-        return permissionService.getPermission(id);
-    }
-
-    @ResponseBody
     @RequestMapping(value = "/getPermissionList", produces = "application/json", method = RequestMethod.GET)
     public List<PermissionDO> getPermissionList() {
         return permissionService.getPermissionListNoTable();

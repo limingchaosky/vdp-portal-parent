@@ -1,11 +1,10 @@
 package cn.goldencis.vdp.core.entity;
 
 import cn.goldencis.vdp.common.entity.BaseEntity;
-
 import java.io.Serializable;
 
 public class NavigationDO extends BaseEntity implements Serializable {
-    private String id;
+    private Integer id;
 
     private Integer compositor;
 
@@ -21,11 +20,11 @@ public class NavigationDO extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -78,6 +77,6 @@ public class NavigationDO extends BaseEntity implements Serializable {
     }
 
     public String getPrimaryKey() {
-        return this.id;
+        return getId().toString();
     }
 }

@@ -115,7 +115,7 @@ public class LoginController implements ServletContextAware {
                 navigationDO.setCompositor(7);
                 navigationDO.setUrl("/about/index");
                 navigationDO.setnLevel(1);
-                navigationDO.setId("7");
+                navigationDO.setId(7);
                 list = new ArrayList<NavigationDO>();
                 list.add(navigationDO);
             }
@@ -142,7 +142,7 @@ public class LoginController implements ServletContextAware {
                     url = nd.getUrl();
                 } else if (nd.getnLevel() == 1) {
                     for (NavigationDO nd1 : list) {
-                        if (!StringUtil.isEmpty(nd.getId()) && Integer.valueOf(nd.getId()) == nd1.getParentId()) {
+                        if (!StringUtil.isEmpty(nd.getId().toString()) && Integer.valueOf(nd.getId()) == nd1.getParentId()) {
                             url = nd1.getUrl();
                             break;
                         }

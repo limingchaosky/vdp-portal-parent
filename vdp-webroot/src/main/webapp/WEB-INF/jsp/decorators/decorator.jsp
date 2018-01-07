@@ -12,6 +12,7 @@
     <link href="${ctxCss}/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!--初始化样式-->
     <link href="${ctxCss}/init.css" rel="stylesheet" type="text/css" />
+    <link href="${ctxCss}/ztree/ztree.css" rel="stylesheet" type="text/css"/>
     <!--<link href="${ctxCss}/layout/inpage.css" rel="stylesheet" type="text/css" />-->
     <!--整体结构-->
     <link href="${ctxCss}/world.css" rel="stylesheet" type="text/css" />

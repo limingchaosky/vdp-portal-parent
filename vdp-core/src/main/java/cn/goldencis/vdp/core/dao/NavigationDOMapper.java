@@ -1,15 +1,12 @@
 package cn.goldencis.vdp.core.dao;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.session.RowBounds;
-
 import cn.goldencis.vdp.common.dao.BaseDao;
 import cn.goldencis.vdp.core.entity.NavigationDO;
 import cn.goldencis.vdp.core.entity.NavigationDOCriteria;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
-@SuppressWarnings("rawtypes")
 public interface NavigationDOMapper extends BaseDao {
     long countByExample(NavigationDOCriteria example);
 

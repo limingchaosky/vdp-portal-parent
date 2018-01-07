@@ -3,13 +3,10 @@ package cn.goldencis.vdp.core.dao;
 import cn.goldencis.vdp.common.dao.BaseDao;
 import cn.goldencis.vdp.core.entity.PermissionNavigationDO;
 import cn.goldencis.vdp.core.entity.PermissionNavigationDOCriteria;
-
 import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
-@SuppressWarnings("rawtypes")
 public interface PermissionNavigationDOMapper extends BaseDao {
     long countByExample(PermissionNavigationDOCriteria example);
 
@@ -26,6 +23,4 @@ public interface PermissionNavigationDOMapper extends BaseDao {
     int updateByExampleSelective(@Param("record") PermissionNavigationDO record, @Param("example") PermissionNavigationDOCriteria example);
 
     int updateByExample(@Param("record") PermissionNavigationDO record, @Param("example") PermissionNavigationDOCriteria example);
-
-    List<PermissionNavigationDO> selectByCondition(@Param("sid") String sid);
 }

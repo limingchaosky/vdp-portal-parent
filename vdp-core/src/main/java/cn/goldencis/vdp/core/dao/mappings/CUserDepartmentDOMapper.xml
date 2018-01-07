@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.goldencis.vdp.core.dao.CUserDepartmentDOMapper">
-  <insert id="insertBatch">
-    insert into t_user_department (department_id,user_id)
+  <insert id="batchInsertByOneUserAndDepartmentList">
+    insert into t_user_department (user_id, department_id)
     values
-    <foreach collection="list" item="item" index="index"
-      separator=",">
-      (#{departmentId},#{item})
+    <foreach collection="departmentIdList" item="departmentId" separator=",">
+      (#{userId},#{departmentId})
     </foreach>
   </insert>
   <delete id="deleteBatch" parameterType="java.util.List">
@@ -31,4 +30,8 @@
     tud.user_id &lt;&gt;
     #{userId}
   </select>
+  <delete id="batchDeleteUserDepartmentByUserId" parameterType="java.lang.String">
+    DELETE FROM t_user_department
+    WHERE user_id = #{userId,jdbcType=VARCHAR}
+  </delete>
 </mapper>

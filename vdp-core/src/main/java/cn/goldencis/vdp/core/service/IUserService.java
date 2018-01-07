@@ -44,7 +44,11 @@ public interface IUserService extends BaseService<UserDO, UserDOCriteria> {
 
     boolean addOrUpdateUser(UserDO user, String departmentListStr, String navigationListStr);
 
-    void deleteUser(List<String> list);
+    /**
+     * 删除用户，真实删除
+     * @param user
+     */
+    void deleteUser(UserDO user);
 
     void deleteUserByDepartmentId(String departmentId, String userId);
 
@@ -52,7 +56,12 @@ public interface IUserService extends BaseService<UserDO, UserDOCriteria> {
 
     Long selectUserCountByPermission(String permissionId);
 
-    List<UserDO> getUserListByName(UserDO user);
+    /**
+     * 通过账户名称获取账户对象
+     * @param userName
+     * @return
+     */
+    UserDO getUserByUserName(String userName);
 
     void updateUser(UserDO user);
 
@@ -95,4 +104,11 @@ public interface IUserService extends BaseService<UserDO, UserDOCriteria> {
      * @return
      */
     int countUserListByLoginUserRoleTypeInPages(UserDO user);
+
+    /**
+     * 检查账户名是否重复
+     * @param user
+     * @return 可用返回true
+     */
+    boolean checkUserNameDuplicate(UserDO user);
 }

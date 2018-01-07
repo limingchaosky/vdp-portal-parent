@@ -10,8 +10,6 @@ public interface IPermissionService {
 
     List<PermissionDO> getPermissionList(int start, int length, String searchstr);
 
-    PermissionDO getPermission(String id);
-
     Integer countPermission(String searchstr);
 
     void deletePermission(String id);

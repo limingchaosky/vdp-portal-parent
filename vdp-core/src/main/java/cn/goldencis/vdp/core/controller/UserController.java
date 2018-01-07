@@ -41,8 +41,6 @@ import cn.goldencis.vdp.core.utils.GetLoginUser;
 import cn.goldencis.vdp.core.utils.JsonUtil;
 import cn.goldencis.vdp.core.utils.PathConfig;
 
-import com.alibaba.fastjson.JSONArray;
-
 /**
  * 管理员管理controller
  *
@@ -82,7 +80,7 @@ public class UserController implements ServletContextAware {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/getUserPages", method = RequestMethod.POST)
+    @RequestMapping(value = "/getUserPages")
     public ResultMsg getUserPages(@RequestParam("start") int start, @RequestParam("length") int length) {
         ResultMsg resultMsg = new ResultMsg();
         int count = 0;
@@ -122,12 +120,21 @@ public class UserController implements ServletContextAware {
     public ResultMsg addOrUpdateUser(UserDO user, String departmentListStr, String navigationListStr) {
         ResultMsg resultMsg = new ResultMsg();
         try {
+            //检查账户名是否重复
+            boolean flag = userService.checkUserNameDuplicate(user);
+
+            if (!flag) {
+                resultMsg.setResultCode(ConstantsDto.RESULT_CODE_FALSE);
+                resultMsg.setResultMsg("账户名重复！");
+                return resultMsg;
+            }
+
             userService.addOrUpdateUser(user, departmentListStr, navigationListStr);
 
-            resultMsg.setResultMsg("用户列表获取成功！");
+            resultMsg.setResultMsg("账户列表获取成功！");
             resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
         } catch (Exception e) {
-            resultMsg.setResultMsg("用户列表获取错误！");
+            resultMsg.setResultMsg("账户列表获取错误！");
             resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
             resultMsg.setData(e);
         }
@@ -136,22 +143,26 @@ public class UserController implements ServletContextAware {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-    public String deleteUser(String id) {
-        UserDO user = GetLoginUser.getLoginUser();
-        List<String> list = new ArrayList<String>();
-        if (!StringUtil.isEmpty(id)) {
-            String strArr[] = id.split(",");
-            for (String tmp : strArr) {
-                if (user.getId().equals(tmp)) {
-                    return "failed";
-                }
-                list.add(tmp);
+    @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
+    public ResultMsg deleteUser(String userId) {
+        ResultMsg resultMsg = new ResultMsg();
+        try {
+            UserDO user = userService.getByPrimaryKey(userId);
+            if (user == null) {
+                resultMsg.setResultMsg("不存在此账户！");
+                resultMsg.setResultCode(ConstantsDto.RESULT_CODE_FALSE);
+            } else {
+                userService.deleteUser(user);
+                resultMsg.setResultMsg("账户删除成功！");
+                resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
             }
+        } catch (Exception e) {
+            resultMsg.setResultMsg("账户删除错误！");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
+            resultMsg.setData(e);
         }
 
-        cacheManager.getCache("loginUser").clear();
-        return "success";
+        return resultMsg;
     }
 
    /* @ResponseBody
@@ -227,42 +238,6 @@ public class UserController implements ServletContextAware {
         }
         FileDownLoad filedownload = new FileDownLoad();
         filedownload.download(response, request, path);
-    }
-
-    private JSONArray toUsersJson(List<UserDO> userlist) {
-        JSONArray array = new JSONArray();
-        if (userlist != null) {
-            for (UserDO user : userlist) {
-                JSONArray array1 = new JSONArray();
-                array1.add(user.getId());
-                array1.add("<span class='user'>" + user.getUserName() + "</span>");
-
-                /*if (StringUtil.isEmpty(user.getRoleTypeName())) {
-                    array1.add("<span class='user'>--</span>");
-                } else {
-                    array1.add("<span class='user'>" + user.getRoleTypeName() + "</span>");
-                }*/
-
-                if (StringUtil.isEmpty(user.getName())) {
-                    array1.add("<span class='user'>--</span>");
-                } else {
-                    array1.add("<span class='user'>" + user.getName() + "</span>");
-                }
-                if (StringUtil.isEmpty(user.getPhone())) {
-                    array1.add("<span class='user'>--</span>");
-                } else {
-                    array1.add("<span class='user'>" + user.getPhone() + "</span>");
-                }
-                if (StringUtil.isEmpty(user.getEmail())) {
-                    array1.add("<span class='user'>--</span>");
-                } else {
-                    array1.add("<span class='user'>" + user.getEmail() + "</span>");
-                }
-                array1.add(user.getId() + "," + user.getStatus());
-                array.add(array1);
-            }
-        }
-        return array;
     }
 
     @ResponseBody

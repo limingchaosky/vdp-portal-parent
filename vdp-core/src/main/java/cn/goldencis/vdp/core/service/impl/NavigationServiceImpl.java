@@ -101,6 +101,50 @@ public class NavigationServiceImpl extends AbstractBaseServiceImpl<NavigationDO,
     }
 
     /**
+     * 通过账户的角色类型，查询对应的页面集合
+     *
+     * @param roleType
+     * @return
+     */
+    @Override
+    public JSONArray getNavigationListByRoleType(Integer roleType) {
+        //获取权限页面集合
+        PermissionNavigationDOCriteria example = new PermissionNavigationDOCriteria();
+        example.createCriteria().andPermissionIdEqualTo(roleType);
+        List<PermissionNavigationDO> permissionNavigationList = permissionNavigationDOMapper.selectByExample(example);
+
+        //转化为页面id集合
+        List<Integer> navigationIdList = new ArrayList<>();
+        for (PermissionNavigationDO permissionNavigation : permissionNavigationList) {
+            navigationIdList.add(permissionNavigation.getNavigationId());
+        }
+
+        //获取全部页面集合
+        NavigationDOCriteria navigationExample = new NavigationDOCriteria();
+        List<NavigationDO> navigationList = mapper.selectByExample(navigationExample);
+
+        //组装成需要返回的Json数组
+        return toJson(navigationList, navigationIdList);
+
+    }
+
+    private JSONArray toJson(List<NavigationDO> navigations, List<Integer> navigationIdList) {
+        JSONArray NavigationArray = new JSONArray();
+        for (NavigationDO navigation : navigations) {
+            JSONObject naviJson = new JSONObject();
+            naviJson.put("id", navigation.getId());
+            naviJson.put("pId", navigation.getParentId());
+            naviJson.put("name", navigation.getTitle());
+            naviJson.put("ParentNavigationId", navigation.getParentId());
+            if (navigationIdList.contains(navigation.getId())) {
+                naviJson.put("checked", true);
+            }
+            NavigationArray.add(naviJson);
+        }
+        return NavigationArray;
+    }
+
+    /**
      * 转化成ztree json
      *
      * @param navigations

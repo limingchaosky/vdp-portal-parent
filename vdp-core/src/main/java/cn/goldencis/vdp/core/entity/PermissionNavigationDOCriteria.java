@@ -114,32 +114,32 @@ public class PermissionNavigationDOCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andPermissionIdEqualTo(String value) {
+        public Criteria andPermissionIdEqualTo(Integer value) {
             addCriterion("permission_id =", value, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionIdNotEqualTo(String value) {
+        public Criteria andPermissionIdNotEqualTo(Integer value) {
             addCriterion("permission_id <>", value, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionIdGreaterThan(String value) {
+        public Criteria andPermissionIdGreaterThan(Integer value) {
             addCriterion("permission_id >", value, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionIdGreaterThanOrEqualTo(String value) {
+        public Criteria andPermissionIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("permission_id >=", value, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionIdLessThan(String value) {
+        public Criteria andPermissionIdLessThan(Integer value) {
             addCriterion("permission_id <", value, "permissionId");
             return (Criteria) this;
         }
 
-        public Criteria andPermissionIdLessThanOrEqualTo(String value) {
+        public Criteria andPermissionIdLessThanOrEqualTo(Integer value) {
             addCriterion("permission_id <=", value, "permissionId");
             return (Criteria) this;
         }

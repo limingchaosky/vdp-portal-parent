@@ -112,7 +112,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="cn.goldencis.vdp.core.entity.UserDO">
+  <insert id="insert" parameterType="cn.goldencis.vdp.core.entity.UserDO" useGeneratedKeys="true" keyProperty="id">
     insert into t_user (id, user_name, password,
       department, name, sex,
       visible, email, phone,
@@ -126,7 +126,7 @@
       #{readonly,jdbcType=INTEGER}, #{skin,jdbcType=VARCHAR}, #{errorLoginCount,jdbcType=INTEGER},
       #{errorLoginLastTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="cn.goldencis.vdp.core.entity.UserDO">
+  <insert id="insertSelective" parameterType="cn.goldencis.vdp.core.entity.UserDO" useGeneratedKeys="true" keyProperty="id">
     insert into t_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
