@@ -59,6 +59,9 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
     @Autowired
     private CUserNavigationDOMapper cUserNavigationDOMapper;
 
+    @Autowired
+    private UserPermissionDOMapper userPermissionDOMapper;
+
     @SuppressWarnings("unchecked")
     @Override
     protected BaseDao<UserDO, UserDOCriteria> getDao() {
@@ -97,58 +100,28 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
             user.setCreateTime(new Date());
             //创建账户,同时获取新建账户的id
             mapper.insertSelective(user);
-//            mapper.insert(user);
 
-            //为账户批量添加部门权限
-            if (departmentIdList != null) {
-                cuserDepartmentDOMapper.batchInsertByOneUserAndDepartmentList(user.getId(), departmentIdList);
-            }
-
-            //为账户添加页面权限
-            if (navigationIdList != null) {
-                cUserNavigationDOMapper.batchInsertByOneUserAndNavigationList(user.getId(),navigationIdList);
-            }
-        } else if (user.getId() != null && !"".equals(user.getId())) {
+        } else {
             //用户id存在，执行用户的选择性更新。
-//            mapper.updateByPrimaryKeySelective(user);
+            mapper.updateByPrimaryKeySelective(user);
 
-            //根据用户id获取数据库中的部门权限
-//            UserDepartmentDOCriteria userDepartmentDOCriteria = new UserDepartmentDOCriteria();
-//            userDepartmentDOCriteria.createCriteria().andUserIdEqualTo(user.getId());
-//            List<UserDepartmentDO> userDepartmentDOList = userDepartmentDOMapper.selectByExample(userDepartmentDOCriteria);
-//
-//            //遍历数据库中的部门权限
-//            for (UserDepartmentDO userDepartmentDO : userDepartmentDOList) {
-//                String departmentId = String.valueOf(userDepartmentDO.getDepartmentId());
-//
-//                //与更新的权限进行对比
-//                for (String departmentStr : departmentArr) {
-//                    //如果匹配，当前部门权限不用做修改
-//                    if (departmentId.equals(departmentStr));
-//                }
-//            }
+            //更新部门权限
+            //先删除账户部门关联表中，该用户关联的部门权限
+            cuserDepartmentDOMapper.batchDeleteUserDepartmentByUserId(user.getId());
 
-//            List<String> list = new ArrayList<String>();
-//            list.add(user.getId());
-//            cuserDepartmentDOMapper.deleteBatch(list, null);
-//            //cuserGroupDOMapper.deleteBatch(list, null);
-//            cmapper.insertDeptRole(user.getId(), Arrays.asList(departmentArr));
+            //更新页面权限
+            //先删除账户页面关联表中，该用户关联的页面权限
+            cUserNavigationDOMapper.batchDeleteUserNavigationByUserId(user.getId());
+        }
 
-//            Integer roleType = mapper.selectByPrimaryKey(user.getId()).getRoleType();
-//            if ( roleType != null && roleType != user.getRoleType() ) {
-//                mapper.updateByPrimaryKeySelective(user);
-//            }
+        //为账户批量添加部门权限
+        if (departmentIdList != null) {
+            cuserDepartmentDOMapper.batchInsertByOneUserAndDepartmentList(user.getId(), departmentIdList);
+        }
 
-//            PermissionNavigationDOCriteria permissionNavigationDOCriteria = new PermissionNavigationDOCriteria();
-//            permissionNavigationDOCriteria.createCriteria().andPermissionIdEqualTo(user.getRoleType().toString());
-//            List<PermissionNavigationDO> permissionNavigationList = permissionNavigationDOMapper.selectByExample(permissionNavigationDOCriteria);
-//            List<Integer> navigationList = new ArrayList<>();
-
-//            for (String navigation : navigationArr) {
-//                if (permissionNavigationList.contains()) {
-//
-//                }
-//            }
+        //为账户添加页面权限
+        if (navigationIdList != null) {
+            cUserNavigationDOMapper.batchInsertByOneUserAndNavigationList(user.getId(),navigationIdList);
         }
         return true;
     }

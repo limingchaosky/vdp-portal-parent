@@ -165,28 +165,6 @@ public class UserController implements ServletContextAware {
         return resultMsg;
     }
 
-   /* @ResponseBody
-    @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
-    public String updateUser(UserDO user) {
-        if (StringUtil.isEmpty(user.getId())) {
-            return "NoExistId";
-        }
-        if (!StringUtil.isEmpty(user.getNewpwd()) && !StringUtil.isEmpty(user.getPassword())) {
-            UserDO temp = userService.getLoginUserNoCache(GetLoginUser.getLoginUser().getId());
-            if (temp.getPassword().equals(user.getPassword())) {
-                user.setPassword(user.getNewpwd());
-                userService.updateUser(user);
-            } else {
-                return "OldPwdError";
-            }
-        } else {
-            user.setPassword(null); //以防万一,将pwd置为null
-            userService.updateUser(user);
-        }
-        return "success";
-    }
-*/
-
     /**
      * 根据当前登录账户的角色类型，获取同角色类型的所有账户并返回。
      *
