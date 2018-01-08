@@ -20,6 +20,7 @@ function initEvents() {
       exportReportChart.resize();
     }
   });
+  ininDateTimePicker()
 
 }
 // 获取正在访问人数的信息
@@ -66,3 +67,30 @@ exportReportOpt={
     }
   ]
 };
+
+
+
+
+/**
+ * 初始化时间控件
+ * @return {[type]} [description]
+ */
+function ininDateTimePicker() {
+  $('#timechange').val(new Date().Format('yyyy-MM-dd')).datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    autoclose: true,
+    minView: 2,
+    todayBtn: true,
+    endDate: new Date()
+  })
+    .on('changeDate', function(ev){
+      startTime = $.trim($("#timechange").val());
+      getEcharsData();
+      initReportTable();
+    }).on('hide', function () {
+    setTimeout(function () {
+      $('#timechange').blur();
+    }, 50);
+  });
+}
