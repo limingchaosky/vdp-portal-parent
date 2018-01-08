@@ -440,6 +440,54 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
     }
 
     /**
+     * 获取全部部门树，如果账户id，查询账户对应的部门权限，加上check:true
+     * @param userId
+     * @return
+     */
+    @Override
+    public JSONArray getDepartmentTreeByUserId(String userId) {
+        List<Integer> departmentIdList = null;
+
+        //如果账户id不为0，查询账户的部门权限
+        if (!"0".equals(userId)) {
+            UserDepartmentDOCriteria udExample = new UserDepartmentDOCriteria();
+            udExample.createCriteria().andUserIdEqualTo(userId);
+            List<UserDepartmentDO> userDepartmentList = udmapper.selectByExample(udExample);
+
+            departmentIdList = new ArrayList<>();
+            for (UserDepartmentDO userDepartment : userDepartmentList) {
+                departmentIdList.add(userDepartment.getDepartmentId());
+            }
+        }
+
+        //获取全部部门信息
+        DepartmentDOCriteria example = new DepartmentDOCriteria();
+        List<DepartmentDO> departmentList = mapper.selectByExample(example);
+
+        //转化为前台需要的JSON格式，如果idList不为空，将对应id的部门check:true
+        JSONArray jsonArray = new JSONArray();
+        for (DepartmentDO department : departmentList) {
+            JSONObject deptJson = new JSONObject();
+            deptJson.put("id", department.getId());
+            deptJson.put("pId", department.getParentId());
+            deptJson.put("ParentDepartmentId", department.getParentId());
+            deptJson.put("name", department.getName());
+            deptJson.put("treePath",department.getTreePath());
+            deptJson.put("status", department.getStatus());
+            deptJson.put("open", true);
+            deptJson.put("iconSkin", "tDepartment");
+            deptJson.put("remark", department.getDepartmentRemark());
+
+            if (departmentIdList != null && departmentIdList.contains(department.getId())) {
+                deptJson.put("checked",true);
+            }
+            jsonArray.add(deptJson);
+        }
+
+        return jsonArray;
+    }
+
+    /**
      * 将用户id集合跟部门id，交叉组合，返回UserDepartmentDO关联表对象集合
      * @param list
      * @param dids

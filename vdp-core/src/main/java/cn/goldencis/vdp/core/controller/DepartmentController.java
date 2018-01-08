@@ -6,6 +6,7 @@ import java.util.Map;
 
 import cn.goldencis.vdp.core.entity.ResultMsg;
 import cn.goldencis.vdp.core.entity.*;
+import com.alibaba.fastjson.JSONArray;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -105,21 +106,6 @@ public class DepartmentController {
         //如果开始小于1默认为1
         Map<String, Object> model = new HashMap<>();
 
-/*        String orderby = request.getParameter("order[0][dir]");
-        String orderType = request.getParameter("order[0][column]");
-        if (orderType != null) {
-            if ("0".equals(orderType)) {
-                orderType = "d.name";
-            } else if ("2".equals(orderType)) {
-                orderType = "d.ip_part";
-            } else {
-                orderType = "d.id";
-            }
-        } else {
-            orderType = "d.id";
-        }
-        String orderCase = orderType + " " + orderby;*/
-
         //设置查询条件
         String orderCase = null;
 
@@ -144,6 +130,29 @@ public class DepartmentController {
         model.put("exportstart", start);
         model.put("exportorder", orderCase);
         return model;
+    }
+
+    /**
+     * 获取全部部门树，如果账户id，查询账户对应的部门权限，加上check:true
+     * @param userId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getDepartmentTreeByUserId", method = RequestMethod.GET)
+    public ResultMsg getDepartmentTreeByUserId(String userId) {
+        ResultMsg resultMsg = new ResultMsg();
+        try {
+            JSONArray departmentArr = departmentService.getDepartmentTreeByUserId(userId);
+
+            resultMsg.setData(departmentArr);
+            resultMsg.setResultMsg("获取部门权限成功");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
+        } catch (Exception e) {
+            resultMsg.setData(e);
+            resultMsg.setResultMsg("获取部门权限失败");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
+        }
+        return resultMsg;
     }
 
     /**
@@ -172,8 +181,8 @@ public class DepartmentController {
                 departmentService.addDepartment(bean);
                 resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            resultMsg.setData(e);
             resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
             resultMsg.setResultMsg("部门添加失败");
         }

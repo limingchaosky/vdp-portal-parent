@@ -27,8 +27,11 @@
 	<!-- 开放客户端登录的HTTP接口 -->
 	<http pattern="/clientUser/clientUserLogin" security="none" />
 
-	<!-- 开放策略下载 -->
+	<!-- 开放resource -->
 	<http pattern="/resource/policy/*/*.json" security="none" />
+	<http pattern="/resource/*" security="none" />
+	<http pattern="/resource/*/*" security="none" />
+	<http pattern="/resource/*/*/*" security="none" />
 
 	<!-- <http pattern="/system/import/import" security="none"></http> <http
 		pattern="/system/import/importdevice" security="none"></http> -->

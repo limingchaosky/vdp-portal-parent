@@ -32,12 +32,11 @@ function initEvent() {
         btn: ['确定', '取消']
       }, function () {
         var postData = {
-          id: id
+          userId: id
         };
-        postAjax(ctx + '/clientUser/deleteClientUser', postData, function (msg) {
+        postAjax(ctx + '/systemSetting/user/deleteUser', postData, function (msg) {
           if (msg.resultCode == 1) {
-            accountTable.ajax.reload(function () {
-            }, true);
+            accountTable.ajax.reload(function () {}, true);
             layer.msg('删除成功！', {icon: 1});
           }
           else {
@@ -61,6 +60,10 @@ function initEvent() {
           }
           var deptnodes = depttreeobj.getCheckedNodes(true);
           var navnodes = navtreeobj.getCheckedNodes(true);
+          if(deptnodes.length==0||navnodes==0){
+            layer.msg('部门或者功能权限必选！', {icon: 2});
+            return;
+          }
           var pass = $("input[name=password]").val()
           $("input[name=password]").val(encrypt(pass).toUpperCase())
 
@@ -90,7 +93,7 @@ function initEvent() {
         success: function (layero, index) {
           initNavTree(1);
           // 部门权限树
-          initDeptTree();
+          initDeptTree(0);
 
           // 校验
           $('#openWind .j-add-account-form').validate({
@@ -118,105 +121,70 @@ function initEvent() {
     })
     //编辑用户
     .on('click', '.j-opt-hover-edit', function () {
-      getEmUsbList();
       var idx = $('.j-opt-hover-edit').index(this);
-      var id = Number($(this).attr('data-id'));//这是用户的id
-      var parentDeptTree = null;//部门树
+      var id = $(this).attr('data-id');//这是账户的id
+      if (id == 1 || id == 2 || id == 3) {
+        layer.msg("内置管理员不能编辑", {icon: 2});
+        return
+      }
       layer.open({
         id: 'openWind',//这个地方会自动给弹出框添加一个id
         type: 1,
-        title: '编辑用户',
+        title: '编辑账户',
         content: $('#add_user_wind').html(),
-        area: ['470px', '400px'],
+        area: ['722px', '600px'],
         btn: ['确定', '取消'],
         yes: function (index, layero) {
-          if (!$("#openWind .j-add-user-form").valid()) {
+          if (!$("#openWind .j-add-account-form").valid()) {
             return;
           }
-          var temp = $("#openWind form").serializeJSON();
-          // console.log(temp);
-          var postData = {
-            id: id,
-            username: temp.username,
-            truename: temp.truename,
-            password: encrypt(temp.password).toUpperCase(),
-            deptguid: $('#openWind input[name=parentdept]').attr('data-id'),
-            policyid: temp.selectPolicy,
-            usbkeyid: temp.usbKeyList,
-          };
-          console.log(postData)
-          if ($(layero).find('.layui-layer-btn0').hasClass('btn-disabled')) {
+          var deptnodes = depttreeobj.getCheckedNodes(true);
+          var navnodes = navtreeobj.getCheckedNodes(true);
+          if(deptnodes.length==0||navnodes==0){
+            layer.msg('部门或者功能权限必选！', {icon: 2});
             return;
           }
-          $(layero).find('.layui-layer-btn0').addClass('btn-disabled');
-          postAjax(ctx + '/clientUser/updateClientUser', postData, function (msg) {
-            if (msg.resultCode == 1) {
-              layer.close(index);
-              layer.msg('编辑成功！', {icon: 1});
-              //更新部门树
-              getAjax(ctx + '/department/getDepartmentNodesByLoginUser', '', function (msg) {
-                zNodes = JSON.parse(msg);
-                var selectID = deptTree.getSelectedNodes()[0].id;
-                deptTree.destroy();
-                initDeptTree(selectID);
-                initdeptTable(selectID);
-              });
-            } else {
-              $(layero).find('.layui-layer-btn0').removeClass('btn-disabled');
-              layer.msg('编辑失败！' + (msg.resultMsg || ''), {icon: 2});
+          var pass = $("input[name=password]").val()
+          $("input[name=password]").val(encrypt(pass).toUpperCase());
+          $("input[name=repassword]").val(encrypt(pass).toUpperCase());
+          $("input[name=departmentListStr]").val(getnodesrt(deptnodes));
+          $("input[name=navigationListStr]").val(getnodesrt(navnodes));
+          var temp = $("#openWind form").serialize();
+          // console.log(temp+'&id='+id);
+
+          $.ajax({
+            type: 'post',
+            url: ctx + '/systemSetting/user/addOrUpdateUser',
+            data: String(temp+'&id='+id),
+            success: function (msg) {
+              console.log(msg);
+              if (msg.resultCode == 1) {
+                layer.close(index);
+                accountTable.ajax.reload();
+                layer.msg('修改成功！', {icon: 1});
+              } else {
+                layer.msg('修改失败！' + (msg.resultMsg || ''), {icon: 2});
+              }
+            },
+            error: function () {
+              layer.msg('修改失败！' + (msg.resultMsg || ''), {icon: 2});
             }
-          });
+          })
         },
         success: function (layero, index) {
-          var htmlpolicy = '';
-          for (var i = 0; i < policyList.length; i++) {
-            htmlpolicy += '<option value=' + policyList[i].id + '>' + policyList[i].name + '</option>';
-          }
-          $('#openWind select[name=selectPolicy]').html(htmlpolicy);
-          var htmlusb = '';
-          htmlusb += '<option value="-1"></option>';
-          for (var i = 0; i < usbDeviceList.length; i++) {
-            htmlusb += '<option value=' + usbDeviceList[i].id + '>' + usbDeviceList[i].name + '</option>';
-          }
-          $('#openWind select[name=usbKeyList]').html(htmlusb);
-          var setting = {
-            view: {
-              dblClickExpand: false,
-              showLine: true,
-              showIcon: true
-            },
-            data: {
-              simpleData: {
-                enable: true
-              }
-            },
-            callback: {
-              onClick: function (event, treeId, treeNode) {
-                $('#openWind .parent-dept').val(treeNode.name).attr('data-id', treeNode.id);
-                $('#openWind .parent-dept-tree-box').slideUp('fast');
-              }
-            }
-          };
-          //部门树
-          var zNodesBak = $.grep(zNodes, function (obj) {
-            return obj.treePath.indexOf(',' + id + ',') < 0 && obj.id !== id;
-          });
-          parentDeptTree = $.fn.zTree.init($("#openWind .j-parent-dept-tree"), setting, zNodesBak);
-          if (zNodesBak.length > 0) {
-            var node = parentDeptTree.getNodeByParam('id', deptTree.getNodeByParam('id', id));
-            if (node) {
-              $('#' + node.tId + '_a').click();
-            }
-          }
-          $('#openWind input[name=username]').val(deptTable.ajax.json().data[idx].username);
-          $('#openWind input[name=truename]').val(deptTable.ajax.json().data[idx].truename);
-          //校验
-          $('#openWind .j-add-user-form').validate({
+          initNavTree(1);
+          // 部门权限树
+          initDeptTree(id);
+          $('#openWind input[name=userName]').val(accountTable.ajax.json().data[idx].userName);
+          $('#openWind input[name=name]').val(accountTable.ajax.json().data[idx].name);
+          $('#openWind input[name=phone]').val(accountTable.ajax.json().data[idx].phone);
+          // 校验
+          $('#openWind .j-add-account-form').validate({
             rules: {
               username: {
                 required: true,
               },
-              truename: {
+              name: {
                 required: true,
               },
               password: {
@@ -226,7 +194,7 @@ function initEvent() {
               repassword: {
                 equalTo: $('#openWind input[name=password]')
               },
-              parentdept: {
+              phone: {
                 required: true,
               },
             }
@@ -384,7 +352,7 @@ function initdeptTable() {
   });
 }
 //获取所有部门表
-function initDeptTree() {
+function initDeptTree(id) {
   var setting1 = {
     view: {
       dblClickExpand: false,
@@ -402,18 +370,24 @@ function initDeptTree() {
     },
     callback: {
       onClick: function (event, treeId, treeNode) {
-        // console.log(treeNode)
-        // //var level = treeNode.level;
-        // //console.log("leveladd----------" + level)
-        // //$('#curLevel').val(treeNode.level);
-        // $('#department2').val(treeNode.id)
-        // $("#departmentTreeDiv2").show();
       }
     }
   };
-  console.log(zNodes1);
-  deptTree = $.fn.zTree.init($("body #depttree"), setting1, zNodes1);
-  depttreeobj = $.fn.zTree.getZTreeObj("depttree");
+  getAjax(ctx + '/department/getDepartmentTreeByUserId', {userId: id}, function (msg) {
+    if (msg.resultCode == 1) {
+      console.log(msg)
+      var zNodes1 = eval(msg.data);
+      if(deptTree){
+        deptTree.destroy();
+      }
+      deptTree = $.fn.zTree.init($("body #depttree"), setting1, zNodes1);
+      depttreeobj = $.fn.zTree.getZTreeObj("depttree");
+      depttreeobj.expandAll(true);
+    }
+    else {
+      layer.msg('获取部门列表失败', {icon: 2});
+    }
+  });
 }
 //获取所有权限tree
 function initNavTree(id) {
@@ -446,7 +420,6 @@ function initNavTree(id) {
   };
   getAjax(ctx + '/system/navigation/getNavigationListByRoleType', {roleType: id}, function (msg) {
     if (msg.resultCode == 1) {
-      console.log(msg)
       var navzNodes = eval(msg.data);
       if(navTree){
         navTree.destroy();

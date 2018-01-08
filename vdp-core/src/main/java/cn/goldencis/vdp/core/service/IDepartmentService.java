@@ -5,6 +5,7 @@ import java.util.List;
 import cn.goldencis.vdp.common.service.BaseService;
 import cn.goldencis.vdp.core.entity.DepartmentDO;
 import cn.goldencis.vdp.core.entity.DepartmentDOCriteria;
+import com.alibaba.fastjson.JSONArray;
 
 /**
  * 部门管理service
@@ -103,4 +104,11 @@ public interface IDepartmentService extends BaseService<DepartmentDO, Department
      * @param departmentList 需要添加父类部门名称的列表
      */
     void setParentDepartmentNames(DepartmentDO parentDept, List<DepartmentDO> departmentList);
+
+    /**
+     * 获取全部部门树，如果账户id，查询账户对应的部门权限，加上check:true
+     * @param userId
+     * @return
+     */
+    JSONArray getDepartmentTreeByUserId(String userId);
 }

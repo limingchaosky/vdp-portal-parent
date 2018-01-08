@@ -131,10 +131,10 @@ public class UserController implements ServletContextAware {
 
             userService.addOrUpdateUser(user, departmentListStr, navigationListStr);
 
-            resultMsg.setResultMsg("账户列表获取成功！");
+            resultMsg.setResultMsg("账户更改成功！");
             resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
         } catch (Exception e) {
-            resultMsg.setResultMsg("账户列表获取错误！");
+            resultMsg.setResultMsg("账户更改错误！");
             resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
             resultMsg.setData(e);
         }
@@ -143,7 +143,7 @@ public class UserController implements ServletContextAware {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
+    @RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
     public ResultMsg deleteUser(String userId) {
         ResultMsg resultMsg = new ResultMsg();
         try {

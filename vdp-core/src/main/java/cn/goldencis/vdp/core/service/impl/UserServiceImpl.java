@@ -230,7 +230,7 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
         //判断数据库是否有该记录，不存在即可用，返回true，如果有继续判断
         if (preUser != null) {
             //比较两个对象的id，若一致，是同一个对象没有改变名称的情况，返回可用true。
-            if (preUser.getId() == user.getId()) {
+            if (preUser.getId().equals(user.getId())) {
                 return true;
             }
             //若果不同，说明为两个用户，名称重复，不可用，返回false

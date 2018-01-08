@@ -70,11 +70,12 @@
     </div>
 </div>
 <script id="new_policy" type="text/html">
-    <div class="wind-row cf">
+    <div class="wind-row">
         <label for="" class="wind-label label-required">策略名</label>
         <input type="text" class="form-input wind-normal-input" name="policyname" maxlength="20">
+        <span class="policyTip error none" id="policyTip">策略不能为空</span>
     </div>
-    <div class="wind-row cf">
+    <div class="wind-row">
         <label for="" class="wind-label label-required">继承自</label>
         <select class="wind-input valid" name="userSelectPolicy" aria-invalid="false">
 
@@ -99,7 +100,7 @@
     }
 
 
-    var path = '${pageContext.request.contextPath}';
+//    var path = '${pageContext.request.contextPath}';
     var ctxImg = '${ctxImg}';
     bgurl = "url('${ctxImg}/leftmenu/logo.png')";
     $('#wlogo').css({
@@ -119,12 +120,16 @@
       type: 1,
       title: '新建策略',
       content: $('#new_policy').html(),
-      area: ['500px', '300px'],
+      area: ['400px', '300px'],
       btn: ['确定', '取消'],
       yes: function (index, layero) {
         var postData = {};
         postData.name = $('#openWind input[name=policyname]').val();
         postData.pid = $('#openWind select[name=userSelectPolicy] option:selected').val();
+        if($('#openWind input[name=policyname]').val() == ''){
+          $("body #openWind #policyTip").css('display','inline-block');
+          return
+        }
         $.ajax({
           type: 'post',
           url:'${ctx}/policy/addPolicy',//新建策略接口

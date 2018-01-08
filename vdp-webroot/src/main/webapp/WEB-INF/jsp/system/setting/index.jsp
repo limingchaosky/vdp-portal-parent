@@ -102,7 +102,7 @@
                 <div class="infocon">
                     <div class="wind-row cf">
                         <label for="" class="wind-label label-required">账户名</label>
-                        <input type="text" class="form-input wind-normal-input" name="username" maxlength="20">
+                        <input type="text" class="form-input wind-normal-input" name="userName" maxlength="20">
                     </div>
                     <div class="wind-row cf">
                         <label for="" class="wind-label label-required">真实姓名</label>
@@ -145,9 +145,9 @@
                             <ul id="navtree" class="deptTree ztree"></ul>
                         </div>
                     </div>
-                    <div class="wind-row cf">
+                    <div class="">
                         <label for="" class="wind-label">操作权限</label>
-                        <select class="wind-input" name="readonly">
+                        <select class="" name="readonly" id="authreadonly">
                             <option value="1">只读权限</option>
                             <option value="0">读写权限</option>
                         </select>
@@ -188,6 +188,3 @@
 <!--<script src="${ctxJs}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>-->
 
 <script src="${ctxJs}/system/setting/index.js"></script>
-<script>
-  var zNodes1 = JSON.parse('${zNodes}');
-</script>
