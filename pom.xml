@@ -16,6 +16,7 @@
         <module>vdp-system</module>
         <module>vdp-report</module>
         <module>vdp-access</module>
+        <module>vdp-approve</module>
     </modules>
     <packaging>pom</packaging>
 
