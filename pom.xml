@@ -13,6 +13,7 @@
         <module>vdp-common</module>
         <module>vdp-core</module>
         <module>vdp-policy</module>
+        <module>vdp-system</module>
     </modules>
     <packaging>pom</packaging>
 

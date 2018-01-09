@@ -1,4 +1,4 @@
-package cn.neiwang.omsjni;
+package cn.neiwang.tsajni;
 
 import cn.goldencis.vdp.core.utils.PathConfig;
 
@@ -9,7 +9,7 @@ import cn.goldencis.vdp.core.utils.PathConfig;
  */
 public class IFConfig {
     static {
-        System.load(PathConfig.HOM_PATH + "/tomcat/bin/libomsjni.so");
+        System.load(PathConfig.HOM_PATH + "/tomcat/bin/libtsajni.so");
     }
 
     public static native String getIFConfig();
