@@ -1134,6 +1134,9 @@ body .btn-disabled {
 .beauty-checkbox input[type="checkbox"]:checked.half ~ .checkbox-icon {
   background-image: url(../images/checkbox-half.png);
 }
+.beauty-checkbox input[type="checkbox"]:disabled:checked ~ .checkbox-icon {
+  background-image: url(../images/checkbox-full-dis.png);
+}
 .beauty-checkbox input[type="checkbox"]:not(:checked) ~ .checkbox-icon {
   background-image: url(../images/checkbox-empty.png);
 }
@@ -1212,6 +1215,37 @@ body .btn-disabled {
   display: inline-block;
 }
 .beauty-radio input[type="radio"]:disabled + .beauty-radio-label:before {
+  cursor: default;
+}
+.beauty-radio-policy {
+  vertical-align: middle;
+}
+.beauty-radio-policy > input:checked + label {
+  background-color: #38CFC0;
+}
+.beauty-radio-policy > input:not(:checked):disabled ~ label {
+  background-color: #D9D9D9;
+}
+.beauty-radio-policy > input:checked:disabled ~ label {
+  background-color: #BFBFBF;
+}
+.beauty-radio-policy .beauty-radio-label {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  width: 90px;
+  height: 28px;
+  background: #ededed;
+  line-height: 28px;
+  text-align: center;
+}
+.beauty-radio-policy input[type="radio"] {
+  display: none;
+}
+.beauty-radio-policy input[type="radio"]:checked + .beauty-radio-label:after {
+  display: inline-block;
+}
+.beauty-radio-policy input[type="radio"]:disabled + .beauty-radio-label:before {
   cursor: default;
 }
 /*input下拉框*/

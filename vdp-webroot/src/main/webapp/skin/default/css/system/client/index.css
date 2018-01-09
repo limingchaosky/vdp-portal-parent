@@ -61,13 +61,13 @@
   padding-left: 30px;
 }
 .logoShow .logoShowList {
-  height: 30px;
-  min-width: 260px;
+  height: 31px;
+  min-width: 390px;
   max-width: 600px;
   line-height: 30px;
   margin-top: 10px;
   margin-right: 10px;
-  background: #ededed;
+  background: #fff;
   cursor: pointer;
   border: 1px solid #ededed;
   box-sizing: content-box;
@@ -76,6 +76,9 @@
   width: 130px;
   background-color: #fff;
   padding-left: 5px;
+}
+.logoShow .logoShowList .con {
+  background-color: #ededed;
 }
 .logoShow .logoShowList .con span {
   width: 200px;
@@ -87,7 +90,7 @@
 .logoShow .logoShowList .con i:last-child {
   font-size: 12px;
   margin: 0px 5px;
-  color: #fff;
+  color: #ededed;
 }
 .logoShow .logoShowList-hover {
   border: 1px solid #38D1BF;
@@ -99,4 +102,7 @@
 .logoShow .logoShowList-hover .con i:first-child,
 .logoShow .logoShowList-hover .con span {
   color: #fff;
+}
+.logoShow .logoShowList-hover .con i:last-child {
+  display: inline-block;
 }

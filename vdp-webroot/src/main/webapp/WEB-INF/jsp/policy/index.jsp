@@ -142,7 +142,7 @@
                     <label for="allowOpen">允许打开多少次</label>
                     <input type="text" disabled name="allowOpens" value="{{$data.sbfileoutcfg.content.opencount}}" class="smallinput"/>次，
                     <div class="beauty-checkbox">
-                        <input id="allowOpenDelete" name="allowOpenDelete" type="checkbox" {{if $data.sbfileoutcfg.content.autodelete==1}} checked {{/if}} class="j-check-device-all" value="1">
+                        <input id="allowOpenDelete" disabled name="allowOpenDelete" type="checkbox" {{if $data.sbfileoutcfg.content.autodelete==1}} checked {{/if}} class="j-check-device-all" value="1">
                         <label for="allowOpenDelete" class="checkbox-icon"></label>
                     </div>
                     <span class="autoDelete">超出自动删除</span>
@@ -155,52 +155,52 @@
                     <label for="isScreenWater">屏幕水印</label>
                 </label>
             </div>
-            <div class="policy-con">
-                <div class="beauty-radio margin-right-sm">
-                    <input id="outWaterShow" value="0" class="beauty-radio-input" type="radio" name="outWater" {{if $data.sbfileoutcfg.content.scwatermark.isshow==0}} checked {{/if}} >
+            <div class="policy-con policy-list">
+                <div class="beauty-radio-policy fl">
+                    <input id="outWaterShow" value="0" disabled class="beauty-radio-input" type="radio" name="outWater" {{if $data.sbfileoutcfg.content.scwatermark.isshow==0}} checked {{/if}} >
                     <label for="outWaterShow" class="beauty-radio-label">显示水印</label>
                 </div>
-                <div class="beauty-radio margin-right-sm">
-                    <input id="outWaterHidden" value="1" class="beauty-radio-input" type="radio" name="outWater" {{if $data.sbfileoutcfg.content.scwatermark.isshow==1}} checked {{/if}} >
+                <div class="beauty-radio-policy inline-block">
+                    <input id="outWaterHidden" value="1" disabled class="beauty-radio-input" type="radio" name="outWater" {{if $data.sbfileoutcfg.content.scwatermark.isshow==1}} checked {{/if}} >
                     <label for="outWaterHidden" class="beauty-radio-label">隐式水印</label>
                 </div>
                 <div class="waterShowContent">
-                    <label for="">
+                    <label class="ms" for="">
                         <div class="beauty-checkbox">
                             <input id="fileOutDept" name="fileOutDept" type="checkbox" {{if $data.sbfileoutcfg.content.scwatermark.content.depname==1}} checked {{/if}} class="j-check-device-all" value="1">
                             <label for="fileOutDept" class="checkbox-icon"></label>
                         </div>
                         <label for="fileOutDept">部门名称</label>
                     </label>
-                    <label for="">
+                    <label class="ms" for="">
                         <div class="beauty-checkbox">
                             <input id="fileOutName" name="fileOutName" type="checkbox" {{if $data.sbfileoutcfg.content.scwatermark.content.username==1}} checked {{/if}} class="j-check-device-all" value="1">
                             <label for="fileOutName" class="checkbox-icon"></label>
                         </div>
                         <label for="fileOutName">真实姓名</label>
                     </label>
-                    <label for="">
+                    <label class="ms" for="">
                         <div class="beauty-checkbox">
                             <input id="fileOutIpWater" name="fileOutIpWater" type="checkbox" {{if $data.sbfileoutcfg.content.scwatermark.content.ip==1}} checked {{/if}} class="j-check-device-all" value="1">
                             <label for="fileOutIpWater" class="checkbox-icon"></label>
                         </div>
                         <label for="fileOutIpWater">IP地址信息</label>
                     </label>
-                    <label for="">
+                    <label class="ms" for="">
                         <div class="beauty-checkbox">
                             <input id="fileOutMACWater" name="fileOutMACWater" type="checkbox" {{if $data.sbfileoutcfg.content.scwatermark.content.macaddress==1}} checked {{/if}} class="j-check-device-all" value="1">
                             <label for="fileOutMACWater" class="checkbox-icon"></label>
                         </div>
                         <label for="fileOutMACWater">MAC地址</label>
                     </label>
-                    <label for="">
+                    <label class="ms" for="">
                         <div class="beauty-checkbox">
                             <input id="fileOutComputerWater" name="fileOutComputerWater" type="checkbox" {{if $data.sbfileoutcfg.content.scwatermark.content.computername==1}} checked {{/if}} class="j-check-device-all" value="1">
                             <label for="fileOutComputerWater" class="checkbox-icon"></label>
                         </div>
                         <label for="fileOutComputerWater">计算机名称</label>
                     </label>
-                    <label for="">
+                    <label class="ms" for="">
                         <div class="beauty-checkbox">
                             <input id="fileOutTimeWater" name="fileOutTimeWater" type="checkbox" {{if $data.sbfileoutcfg.content.scwatermark.content.time==1}} checked {{/if}} class="j-check-device-all" value="1">
                             <label for="fileOutTimeWater" class="checkbox-icon"></label>
@@ -213,7 +213,7 @@
                             <label for="fileOutDiyWater" class="checkbox-icon"></label>
                         </div>
                         <label for="fileOutDiyWater">自定义水印</label>
-                        <input type="text" value="{{$data.sbfileoutcfg.content.scwatermark.content.manualtext}}" name="outdiyWaterContent" placeholder="自定义水印内容"/>
+                        <input type="text" disabled value="{{$data.sbfileoutcfg.content.scwatermark.content.manualtext}}" name="outdiyWaterContent" placeholder="自定义水印内容"/>
                     </label>
                 </div>
             </div>
@@ -242,51 +242,51 @@
                     </div>
                     <label for="isScreen">水印</label>
                 </label>
-                <div class="beauty-radio margin-right-sm">
-                    <input id="waterShow" class="beauty-radio-input" type="radio" name="exportWater" value="0" {{if $data.sbfileopt.content.sbfileoptwatermark.isshow==0}} checked {{/if}}>
+                <div class="beauty-radio-policy fl">
+                    <input id="waterShow" class="beauty-radio-input" disabled type="radio" name="exportWater" value="0" {{if $data.sbfileopt.content.sbfileoptwatermark.isshow==0}} checked {{/if}}>
                     <label for="waterShow" class="beauty-radio-label">显示水印</label>
                 </div>
-                <div class="beauty-radio margin-right-sm">
-                    <input id="waterHidden" class="beauty-radio-input" type="radio" name="exportWater" value="1" {{if $data.sbfileopt.content.sbfileoptwatermark.isshow==1}} checked {{/if}}>
+                <div class="beauty-radio-policy inline-block">
+                    <input id="waterHidden" class="beauty-radio-input" disabled type="radio" name="exportWater" value="1" {{if $data.sbfileopt.content.sbfileoptwatermark.isshow==1}} checked {{/if}}>
                     <label for="waterHidden" class="beauty-radio-label">隐式水印</label>
                 </div>
                 <div class="waterShowContent">
-                    <label for="">
+                    <label class="ms" for="">
                         <div class="beauty-checkbox">
                             <input id="fileExportDept" name="fileExportDept" type="checkbox" class="j-check-device-all" value="1" {{if $data.sbfileopt.content.sbfileoptwatermark.content.depname==1}} checked {{/if}}>
                             <label for="fileExportDept" class="checkbox-icon"></label>
                         </div>
                         <label for="fileExportDept">部门名称</label>
                     </label>
-                    <label for="">
+                    <label class="ms" for="">
                         <div class="beauty-checkbox">
                             <input id="fileExportName" name="fileExportName" type="checkbox" class="j-check-device-all" value="1" {{if $data.sbfileopt.content.sbfileoptwatermark.content.username==1}} checked {{/if}}>
                             <label for="fileExportName" class="checkbox-icon"></label>
                         </div>
                         <label for="fileExportName">真实姓名</label>
                     </label>
-                    <label for="">
+                    <label class="ms" for="">
                         <div class="beauty-checkbox">
                             <input id="fileExportIpWater" name="fileExportIpWater" type="checkbox" class="j-check-device-all" value="1" {{if $data.sbfileopt.content.sbfileoptwatermark.content.ip==1}} checked {{/if}}>
                             <label for="fileExportIpWater" class="checkbox-icon"></label>
                         </div>
                         <label for="fileExportIpWater">IP地址信息</label>
                     </label>
-                    <label for="">
+                    <label class="ms" for="">
                         <div class="beauty-checkbox">
                             <input id="fileExportMACWater" name="fileExportMACWater" type="checkbox" class="j-check-device-all" value="1" {{if $data.sbfileopt.content.sbfileoptwatermark.content.macaddress==1}} checked {{/if}}>
                             <label for="fileExportMACWater" class="checkbox-icon"></label>
                         </div>
                         <label for="fileExportMACWater">MAC地址</label>
                     </label>
-                    <label for="">
+                    <label class="ms" for="">
                         <div class="beauty-checkbox">
                             <input id="fileExportComputerWater" name="fileExportComputerWater" type="checkbox" class="j-check-device-all" value="1" {{if $data.sbfileopt.content.sbfileoptwatermark.content.computername==1}} checked {{/if}}>
                             <label for="fileExportComputerWater" class="checkbox-icon"></label>
                         </div>
                         <label for="fileExportComputerWater">计算机名称</label>
                     </label>
-                    <label for="">
+                    <label class="ms" for="">
                         <div class="beauty-checkbox">
                             <input id="fileExportTimeWater" name="fileExportTimeWater" type="checkbox" class="j-check-device-all" value="1" {{if $data.sbfileopt.content.sbfileoptwatermark.content.time==1}} checked {{/if}}>
                             <label for="fileExportTimeWater" class="checkbox-icon"></label>
@@ -299,7 +299,7 @@
                             <label for="fileExportDiyWater" class="checkbox-icon"></label>
                         </div>
                         <label for="fileExportDiyWater">自定义水印</label>
-                        <input type="text" value="{{$data.sbfileopt.content.sbfileoptwatermark.content.manualtext}}" name="exportdiyWaterContent" placeholder="自定义水印内容"/>
+                        <input type="text" disabled value="{{$data.sbfileopt.content.sbfileoptwatermark.content.manualtext}}" name="exportdiyWaterContent" placeholder="自定义水印内容"/>
                     </label>
                 </div>
             </div>

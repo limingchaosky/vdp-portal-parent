@@ -1,5 +1,5 @@
 /**
- * Created by chengl on 2018/1/2 0002.ctx + ''
+ * Created by chengl on 2018/1/2 0002.
  */
 var approveList = null;
 var export_file=0;//审批流程的选择的id
@@ -159,11 +159,11 @@ function initEvents() {
       obj.sbfileoutcfg.content.mode = temp.approveOut?Number(temp.approveOut):1;
       obj.sbfileoutcfg.content.disablesc = temp.forbidScreen?Number(temp.forbidScreen):0;
       obj.sbfileoutcfg.content.validtimecheck = temp.settingTime?Number(temp.settingTime):0;
-      obj.sbfileoutcfg.content.validtime = temp.settingTimes!=''?Number(temp.settingTimes):0;
+      obj.sbfileoutcfg.content.validtime = temp.settingTimes?Number(temp.settingTimes):0;
       obj.sbfileoutcfg.content.pwdcheck = temp.passwordVerification?Number(temp.passwordVerification):0;
-      obj.sbfileoutcfg.content.pwd = temp.passwordVerifications!=''?Number(temp.passwordVerifications):0;
+      obj.sbfileoutcfg.content.pwd = temp.passwordVerifications?Number(temp.passwordVerifications):0;
       obj.sbfileoutcfg.content.opencountcheck = temp.allowOpen?Number(temp.allowOpen):0;
-      obj.sbfileoutcfg.content.opencount = temp.allowOpens!=''?Number(temp.allowOpens):0;
+      obj.sbfileoutcfg.content.opencount = temp.allowOpens?Number(temp.allowOpens):0;
       obj.sbfileoutcfg.content.autodelete = temp.allowOpenDelete?Number(temp.allowOpenDelete):0;
       obj.sbfileoutcfg.content.scwatermark.enable = temp.isScreenWater?Number(temp.isScreenWater):0;
       obj.sbfileoutcfg.content.scwatermark.isshow = Number(temp.outWater);
@@ -214,7 +214,7 @@ function initEvents() {
           }
         },
         error:function(msg){
-          layer.msg('保存失败！' + (msg.resultMsg || ''), {icon: 2});
+          layer.msg('保存错误！' + (msg.resultMsg || ''), {icon: 2});
         }
       });
 
@@ -302,8 +302,52 @@ function initEvents() {
         })
       }
     })
-  
-
+    //点击input框解除disabled
+    .on('click','#diyWater,#settingTime,#passwordVerification,#allowOpen,#fileOutDiyWater,#fileExportDiyWater,#fileExportDiyWater',function(){
+      if($(this).is(":checked")){
+        $(this).parents(".beauty-checkbox").siblings("input[type=text]").prop("disabled",false);
+        $(this).parents(".beauty-checkbox").siblings(".beauty-checkbox").find("input").prop("disabled",false);
+      }else{
+        $(this).parents(".beauty-checkbox").siblings("input[type=text]").prop("disabled",true);
+        $(this).parents(".beauty-checkbox").siblings(".beauty-checkbox").find("input").prop("disabled",true);
+      }
+    })
+    // 文件外发水印那块点选效果
+    .on('click','input[name=outWater]',function(){
+      if($("body #outWaterHidden").is(":checked")){
+        $("body .fileOut .waterShowContent label.ms input").prop("checked","checked");
+        $("body .fileOut .waterShowContent label.ms input").prop("disabled",true);
+      }else {
+        $("body .fileOut .waterShowContent label.ms input").prop("checked",false);
+        $("body .fileOut .waterShowContent label.ms input").prop("disabled",false);
+      }
+    })
+    // 文件导出水印那块点选效果
+    .on('click','input[name=exportWater]',function(){
+      if($("body #waterHidden").is(":checked")){
+        $("body .fileExport .waterShowContent label.ms input").prop("checked","checked");
+        $("body .fileExport .waterShowContent label.ms input").prop("disabled",true);
+      }else {
+        $("body .fileExport .waterShowContent label.ms input").prop("checked",false);
+        $("body .fileExport .waterShowContent label.ms input").prop("disabled",false);
+      }
+    })
+    // 文件外发disabled效果
+    .on('click','input[name=isScreenWater]',function(){
+      if($("body #isScreenWater").is(":checked")){
+        $(this).parents(".policy-con").siblings(".policy-list").find("input[type=radio]").prop("disabled",false)
+      }else {
+        $(this).parents(".policy-con").siblings(".policy-list").find("input[type=radio]").prop("disabled",true)
+      }
+    })
+    // 文件导出disabled效果
+    .on('click','input[name=isScreen]',function(){
+      if($("body #isScreen").is(":checked")){
+        $(this).parents(".policy-con").find("input[type=radio]").prop("disabled",false)
+      }else {
+        $(this).parents(".policy-con").find("input[type=radio]").prop("disabled",true)
+      }
+    })
 }
 // 获取所有的审批流程
 function getAllApprove() {
@@ -315,6 +359,9 @@ function getAllApprove() {
 }
 // 页面中的js交互
 function allChecked(){
+  if($("body #diyWater").is(":checked")){
+    $("body input[name=screendiyWaterContent]").removeAttr("disabled");
+  }
   if($("body #settingTime").is(":checked")){
     $("body input[name=settingTimes]").removeAttr("disabled");
   }
@@ -323,9 +370,22 @@ function allChecked(){
   }
   if($("body #allowOpen").is(":checked")){
     $("body input[name=allowOpens]").removeAttr("disabled");
+    $("body input[name=allowOpenDelete]").removeAttr("disabled");
   }
-  if($("body #approveOut").is(":checked")){
-    $("body #fileOutApprove").addClass("approve-disabled");
-    $("body #fileOutApprove").unbind("click");
+  if($("body #fileOutDiyWater").is(":checked")){
+    $("body input[name=outdiyWaterContent]").removeAttr("disabled");
+  }
+  if($("body #fileExportDiyWater").is(":checked")){
+    $("body input[name=exportdiyWaterContent]").removeAttr("disabled");
+  }
+  if($("body #outWaterHidden").is(":checked")){
+    $("body .fileOut .waterShowContent label.ms input").prop("checked","checked");
+    $("body .fileOut .waterShowContent label.ms input").prop("disabled",true);
+  }
+  if($("body #isScreenWater").is(":checked")){
+    $("body input[name=outWater]").removeAttr("disabled");
+  }
+  if($("body #isScreen").is(":checked")){
+    $("body input[name=exportWater]").removeAttr("disabled");
   }
 }

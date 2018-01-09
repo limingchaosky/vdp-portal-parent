@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/jsp/common/meta.jsp"%>
 
 <head>
-    <title>用户</title>
+    <title>金盾VDP</title>
     <link href="${ctxCss}/dataTables/dataTablesgray.css" rel="stylesheet" type="text/css" />
     <link href="${ctxCss}/ztree/ztree.css" rel="stylesheet" type="text/css" />
     <link href="${ctxCss}/user/user/index.css" rel="stylesheet" type="text/css" />

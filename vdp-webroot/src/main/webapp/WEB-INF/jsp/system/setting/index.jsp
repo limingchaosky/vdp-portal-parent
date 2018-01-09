@@ -38,7 +38,7 @@
                                             <li class="col-md-12 ethsa">${mo.name}</li>
                                             <li class="col-md-12" style="height:30px;margin-top:30px;">
                                                 <div class="width-text-5 left">
-                                                    <span class="right marginl-10">IP地址</span>
+                                                    <span class="right">IP地址</span>
                                                 </div>
                                                 <input type="hidden" name="netConfigs[${status.index}].ethname" value="${mo.name}"/>
                                                 <input class="col-md-6 marginl-20 isIp" type="text" style="height:30px;border:1px solid #eaedf1;" name="netConfigs[${status.index}].addr"
