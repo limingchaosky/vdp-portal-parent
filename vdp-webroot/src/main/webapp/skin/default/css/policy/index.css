@@ -92,6 +92,9 @@
   margin-left: 10px;
   cursor: pointer;
 }
+.approve-disabled {
+  background-color: #38CFC0;
+}
 #settingTimes-error {
   position: absolute;
   margin-left: 20px;

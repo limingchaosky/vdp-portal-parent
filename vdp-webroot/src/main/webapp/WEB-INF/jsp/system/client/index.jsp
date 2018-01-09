@@ -29,7 +29,7 @@
                     <a id="bar_net_add" class="bar-item bar-item-icon iconfont icon-btn-add" title="添加用户"></a>
                 </div>
                 <div class="netShow">
-                    <div class="netShowList inline-block"><span>192.168.111.111-192.168.222.222</span><i class="iconfont icon-btn-close none"></i></div>
+                    <div class="netShowList inline-block" data-id=""><span>192.168.111.111-192.168.222.222</span><i id="netClose" class="iconfont icon-btn-close none"></i></div>
                     <div class="netShowList inline-block"><span>192.168.111.111-192.168.222.222</span><i class="iconfont icon-btn-close none"></i></div>
                     <div class="netShowList inline-block"><span>192.168.111.111-192.168.222.222</span><i class="iconfont icon-btn-close none"></i></div>
                     <div class="netShowList inline-block"><span>192.168.111.111-192.168.222.222</span><i class="iconfont icon-btn-close none"></i></div>
@@ -62,6 +62,14 @@
                     <a id="bar_logo_add" class="bar-item bar-item-icon iconfont icon-btn-add" title="添加用户"></a>
                 </div>
                 <div class="logoShow">
+                    <div class="logoShowList inline-block">
+                        <span class="inline-block text-ellipsis">192.168.111.1111111111111111</span>
+                        <div class="con inline-block text-top">
+                            <i class="iconfont icon-nav-monitor"></i>
+                            <span class="inline-block text-ellipsis text-top">v:\1b69\De\download(1)\font_501303_4ftfb9s8g2kgwrk9\sfsdf.exe</span>
+                            <i id="logoClose" class="iconfont icon-btn-close"></i>
+                        </div>
+                    </div>
                     <div class="logoShowList inline-block">
                         <span class="inline-block text-ellipsis">192.168.111.1111111111111111</span>
                         <div class="con inline-block text-top">

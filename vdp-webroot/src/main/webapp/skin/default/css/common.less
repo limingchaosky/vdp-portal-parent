@@ -1380,6 +1380,11 @@ body .btn-disabled {
             background-image: url(../images/checkbox-empty.png);
         }
     }
+    input[type="checkbox"]:disabled:not(:checked) {
+      &~.checkbox-icon {
+        background-image: url(../images/checkbox-empty-dis.png);
+      }
+    }
 }
 
 

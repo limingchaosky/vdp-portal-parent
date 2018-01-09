@@ -188,3 +188,64 @@
 <!--<script src="${ctxJs}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>-->
 
 <script src="${ctxJs}/system/setting/index.js"></script>
+<script>
+  var ctx = "${ctx}";
+  console.log(ctx);
+  $('#beanForm').validate({ //弹出后绑定校验
+    rules: {
+      ip: { //ip重复
+        required: true
+      },
+      mask: {
+        required: true
+      },
+      gateway: {
+        required: true,
+      }
+    },
+    messages: {
+      ip: {
+        required: "不可为空",
+      },
+      mask: {
+        required: "不可为空",
+      },
+      gateway: {
+        required: "不可为空",
+      }
+    },
+    errorPlacement: function (error, element) {
+      error.appendTo(element.parent());
+    }
+  });
+
+  function doSave() {
+    if ($("#beanForm").valid()) {
+      layer.confirm('网络配置会自动重启服务器，确认提交？', {
+        btn: ['确认', '取消'] //按钮
+      }, function () {
+        layer.closeAll();
+        $.ajax({
+          type: "post",
+          url: ctx + "/systemSetting/savenetconfig",
+          dataType: "json",
+          data: $('#beanForm').serialize(),
+          success: function (msg) {
+            if(msg == 'success'){
+              layer.msg("网络配置成功", { icon: 1 });
+            }else{
+              layer.msg("网络配置失败", { icon: 2 });
+            }
+          },
+          error: function (e) {
+            //layer.msg("网络配置失败", { icon: 2 });//服务器重启的原因，这个地方不能加
+          }
+        });
+      })
+    }
+  }
+  $("#save_config").click(function () {
+    doSave()
+  })
+
+</script>

@@ -87,8 +87,8 @@ var obj = {
 var objAll = {};
 $(function () {
   initEvents();
+  allChecked();
   getAllApprove();
-  approve();
 });
 
 function initEvents() {
@@ -305,7 +305,7 @@ function initEvents() {
   
 
 }
-
+// 获取所有的审批流程
 function getAllApprove() {
 
   getAjax(ctx + '/js/policy/approve.json', '', function (msg) {
@@ -313,13 +313,19 @@ function getAllApprove() {
   });
 
 }
-
-function approve() {
-  $("#approveExport,#approveOut").on('click', function () {
-    if ($(this).is(":checked")) {
-      $(this).parents('.beauty-checkbox').siblings('.approveButton').css("background", "#38CFC0")
-    } else {
-      $(this).parents('.beauty-checkbox').siblings('.approveButton').css("background", "#ededed")
-    }
-  })
+// 页面中的js交互
+function allChecked(){
+  if($("body #settingTime").is(":checked")){
+    $("body input[name=settingTimes]").removeAttr("disabled");
+  }
+  if($("body #passwordVerification").is(":checked")){
+    $("body input[name=passwordVerifications]").removeAttr("disabled");
+  }
+  if($("body #allowOpen").is(":checked")){
+    $("body input[name=allowOpens]").removeAttr("disabled");
+  }
+  if($("body #approveOut").is(":checked")){
+    $("body #fileOutApprove").addClass("approve-disabled");
+    $("body #fileOutApprove").unbind("click");
+  }
 }

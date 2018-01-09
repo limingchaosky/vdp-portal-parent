@@ -184,3 +184,9 @@
 .btn-save:hover {
   background: #78a6e0;
 }
+.left {
+  float: left;
+}
+.btn-save {
+  background: #38CFC0;
+}

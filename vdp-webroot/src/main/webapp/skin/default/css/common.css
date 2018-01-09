@@ -1137,6 +1137,9 @@ body .btn-disabled {
 .beauty-checkbox input[type="checkbox"]:not(:checked) ~ .checkbox-icon {
   background-image: url(../images/checkbox-empty.png);
 }
+.beauty-checkbox input[type="checkbox"]:disabled:not(:checked) ~ .checkbox-icon {
+  background-image: url(../images/checkbox-empty-dis.png);
+}
 /*switch*/
 .beauty-switch {
   position: relative;

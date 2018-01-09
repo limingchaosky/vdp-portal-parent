@@ -90,7 +90,7 @@
                         <label for="diyWater" class="checkbox-icon"></label>
                     </div>
                     <label for="diyWater">自定义水印</label>
-                    <input type="text" name="screendiyWaterContent" placeholder="自定义水印内容" value="{{$data.sbscrnwatermark.content.manualtext}}"/>
+                    <input type="text" disabled name="screendiyWaterContent" placeholder="自定义水印内容" value="{{$data.sbscrnwatermark.content.manualtext}}"/>
                 </label>
             </div>
         </div>
@@ -124,7 +124,7 @@
                         <label for="settingTime" class="checkbox-icon"></label>
                     </div>
                     <label for="settingTime">设置有效时间</label>
-                    <input type="text" name="settingTimes" value="{{$data.sbfileoutcfg.content.validtime}}" class="smallinput"/>天
+                    <input type="text" name="settingTimes" disabled value="{{$data.sbfileoutcfg.content.validtime}}" class="smallinput"/>天
                 </label>
                 <label for="" class="out">
                     <div class="beauty-checkbox">
@@ -132,7 +132,7 @@
                         <label for="passwordVerification" class="checkbox-icon"></label>
                     </div>
                     <label for="passwordVerification">密码验证</label>
-                    <input type="text" name="passwordVerifications" value="{{$data.sbfileoutcfg.content.pwd}}" class="smallinput"/>位
+                    <input type="text" disabled name="passwordVerifications" value="{{$data.sbfileoutcfg.content.pwd}}" class="smallinput"/>位
                 </label>
                 <label for="" class="out">
                     <div class="beauty-checkbox">
@@ -140,7 +140,7 @@
                         <label for="allowOpen" class="checkbox-icon"></label>
                     </div>
                     <label for="allowOpen">允许打开多少次</label>
-                    <input type="text" name="allowOpens" value="{{$data.sbfileoutcfg.content.opencount}}" class="smallinput"/>次，
+                    <input type="text" disabled name="allowOpens" value="{{$data.sbfileoutcfg.content.opencount}}" class="smallinput"/>次，
                     <div class="beauty-checkbox">
                         <input id="allowOpenDelete" name="allowOpenDelete" type="checkbox" {{if $data.sbfileoutcfg.content.autodelete==1}} checked {{/if}} class="j-check-device-all" value="1">
                         <label for="allowOpenDelete" class="checkbox-icon"></label>
