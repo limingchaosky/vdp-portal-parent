@@ -19,13 +19,13 @@ import java.util.*;
  * Created by limingchao on 2018/1/5.
  */
 @Controller
-@RequestMapping(value = "/systemSetting/index")
+@RequestMapping(value = "/systemSetting")
 public class SystemController {
 
     @Autowired
     private IDepartmentService departmentService;
 
-    @RequestMapping(value = "")
+    @RequestMapping(value = "/index")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
 
