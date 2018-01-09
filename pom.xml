@@ -15,6 +15,7 @@
         <module>vdp-policy</module>
         <module>vdp-system</module>
         <module>vdp-report</module>
+        <module>vdp-access</module>
     </modules>
     <packaging>pom</packaging>
 
