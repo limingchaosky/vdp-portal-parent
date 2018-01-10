@@ -3,6 +3,8 @@
  */
 package cn.goldencis.vdp.core.utils;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.ResourceBundle;
 
 /**
@@ -24,6 +26,14 @@ public class PathConfig {
     public final static String POLICY_BASECATALOG;//策略json文件的存放根目录
     public final static String POLICY_JSONFILENAME;//策略json文件的保存的文件名
 
+    public final static String PACKAGEUPLOADPATH;
+
+    public final static String PACKAGEUPLOADFILENAME;
+
+    public final static String UPDATEUPLOADPATH;
+
+    public final static String UPDATEUPLOADFILENAME;
+
     static {
         bundle = ResourceBundle.getBundle("vdp-common");
 
@@ -38,6 +48,11 @@ public class PathConfig {
         READ_AUTH_PATH = bundle.getString("readauthpath");
         POLICY_BASECATALOG = bundle.getString("policy.BaseCatalog");
         POLICY_JSONFILENAME = bundle.getString("policy.JsonFileName");
+
+        PACKAGEUPLOADPATH = bundle.getString("packageupload.path");
+        PACKAGEUPLOADFILENAME = bundle.getString("packageupload.fileName");
+        UPDATEUPLOADPATH = bundle.getString("updateupload.path");
+        UPDATEUPLOADFILENAME = bundle.getString("updateupload.fileName");
     }
 
 }

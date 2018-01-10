@@ -88,4 +88,5 @@ public class ConstantsDto {
     public static final String SEC_CODE_PARAMETER = "sec_code_parameter";
 
     public static final String UPLOAD_PATH = File.separator + "upload" + File.separator + "attachment" + File.separator;
+    public static final String TOMCAT = "tomcat";
 }
