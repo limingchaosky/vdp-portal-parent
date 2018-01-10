@@ -8,7 +8,7 @@ var depttreeobj = null;
 var navtreeobj=null;
 $(function () {
   initEvent();
-  initdeptTable();
+
 
 
 });
@@ -19,7 +19,7 @@ function initEvent() {
       $(this).addClass("titleTabactive").siblings("li").removeClass("titleTabactive");
       var classcon = $(this).data("class");
       $("." + classcon + "con").show().siblings("div").hide();
-
+      initdeptTable();
     })
     //删除用户
     .on('click', '.j-opt-hover-delete', function () {
@@ -219,6 +219,42 @@ function initEvent() {
     .on('mouseleave', '.table-opt-box', function () {
       $(this).find('.opt-hover-box').removeClass('opt-hover-up opt-hover-down');
     })
+    //获取文件名放到text上
+    .on('change','input[type=file]',function(){
+      var file=$(this).val();
+      var filenames=getfilename(file);
+      $(this).siblings('input[type=text]').val(filenames);
+    })
+    //点击上传升级文件
+    .on('click','#updata',function(){
+      var formData = new FormData($("#updataform")[0]);
+      console.log(formData);
+      $.ajax({
+        url: ctx + "/systemSetting/uploadClientPackage",
+        type: "post",
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+        dataType: "json",
+        data: formData,
+        success: function (msg) {
+          if (msg.resultCode == '1') {
+            layer.msg("导入成功", {
+              icon: 1,
+              end: function () {
+                window.location.reload();
+              }
+            });
+          } else {
+            layer.msg("导入失败！" + (msg.resultMsg || ''), { icon: 2 });
+          }
+        },
+        error: function (e) {
+          layer.msg("导入失败", { icon: 2 });
+        }
+      });
+    })
 }
 //账户用户表
 function initdeptTable() {
@@ -254,15 +290,12 @@ function initdeptTable() {
       "url": ctx + "/systemSetting/user/getUserPages",
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
-        // console.log(json);
         return json.data.map(function (obj) {
           return [obj.name, obj.userName, obj.roleType, obj.readonly, obj.phone || '--', obj.id];
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象
       "data": {
-        // "pid": pid,
-        // "searchstr": $('#bar_searchstr').val().trim()
       },
     },
     "columnDefs": [{
@@ -445,4 +478,29 @@ function getnodesrt(nodes){
     }
   }
   return nodestr;
+}
+//获取文件名
+function getfilename(filePath){
+  var pos=filePath.lastIndexOf("\\");
+  return filePath.substring(pos+1);
+}
+changeq("clientUpdataPath", "clientUpdata");
+changeq("clientInstallPath", "clientInstall");
+
+function changeq(a, b) {
+  var copyFile = document.getElementById(a);
+  var trueFile = document.getElementById(b);
+  trueFile.onchange = function () {
+    // 判断是不是火狐
+    if (navigator.userAgent.indexOf('Firefox') >= 0) {
+      copyFile.value = getFile(this);
+    } else {
+      copyFile.value = getFile(this).substring(12);
+    }
+  }
+  function getFile(obj) {
+    if (obj) {
+      return obj.value;
+    }
+  }
 }

@@ -21,12 +21,12 @@
     </div>
     <div class="content-box">
         <ul class="titleTab" id="titleTabul">
-            <li class="netset" data-class="net">网络</li>
-            <li class="accountset titleTabactive" data-class="account">账户</li>
+            <li class="netset titleTabactive" data-class="net">网络</li>
+            <li class="accountset" data-class="account">账户</li>
             <li class="serverset" data-class="server">服务器</li>
         </ul>
         <div class="main-contentall">
-            <div class="netcon none">
+            <div class="netcon">
                 <div class="aboutmain">
                     <form action="${ctx}/netconfig/savenetconfig" method="post" id="beanForm">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -69,7 +69,7 @@
                     </form>
                 </div>
             </div>
-            <div class="accountcon">
+            <div class="accountcon none">
                 <div class="accounttop">
                     <a id="bar_add_account" class="bar-item bar-item-icon iconfont icon-btn-add" title="添加账户"></a>
                 </div>
@@ -88,7 +88,28 @@
                     </table>
                 </div>
             </div>
-            <div class="servercon none">33</div>
+            <div class="servercon none">
+                <div class="wind-row">
+                    <label for="" class="wind-label">客户端升级包</label>
+                    <form id="updataform" action="${ctx}/systemSetting/uploadClientPackage" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="MAX_FILE_SIZE" value="100000000">
+                        <input type="text" id="clientUpdataPath" class="form-input wind-normal-input" placeholder="点击上传">
+                        <input type="file" name="packageFile" id="clientUpdata" class="uploadFile" value="浏览">
+                        <input type="button" class="sureButton" id="updata" value="上传">
+                        <span id="clientUpdataTip">上传失败</span>
+                    </form>
+                </div>
+                <div class="wind-row">
+                    <label for="" class="wind-label">客户端安装包</label>
+                    <form action="${ctx}/Bdp/Syscfg/upServer/type/clientTar" method="post" enctype="multipart/form-data" target="clientUpdate" class="">
+                        <input type="hidden" name="MAX_FILE_SIZE" value="100000000">
+                        <input type="text" id="clientInstallPath" class="form-input wind-normal-input" placeholder="点击浏览进行上传">
+                        <input type="file" name="clientTar" id="clientInstall" class="uploadFile" value="浏览">
+                        <input type="submit" class="sureButton" value="上传">
+                        <span id="clientInstallTip none">上传失败</span>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -231,10 +252,10 @@
           dataType: "json",
           data: $('#beanForm').serialize(),
           success: function (msg) {
-            if(msg == 'success'){
-              layer.msg("网络配置成功", { icon: 1 });
-            }else{
-              layer.msg("网络配置失败", { icon: 2 });
+            if (msg == 'success') {
+              layer.msg("网络配置成功", {icon: 1});
+            } else {
+              layer.msg("网络配置失败", {icon: 2});
             }
           },
           error: function (e) {

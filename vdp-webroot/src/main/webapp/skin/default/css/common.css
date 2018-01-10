@@ -301,6 +301,9 @@
   margin-top: 35px !important;
   margin-bottom: 35px !important;
 }
+.margin-left50 {
+  margin-left: 50px;
+}
 /*内边距*/
 .padding-left-0 {
   padding-left: 0 !important;
@@ -1122,7 +1125,7 @@ body .btn-disabled {
   background-image: url(../images/checkbox-half.png);
 }
 .beauty-checkbox input[type="checkbox"] {
-  display: none!important;
+  display: none !important;
 }
 .beauty-checkbox input[type="checkbox"].disabled ~ .checkbox-icon {
   background-image: url(../images/checkbox-empty.png);
@@ -1164,7 +1167,7 @@ body .btn-disabled {
   background-position: center;
 }
 .beauty-switch input[type="checkbox"] {
-  display: none!important;
+  display: none !important;
 }
 .beauty-switch input[type="checkbox"]:checked ~ .switch-icon {
   background-image: url(../images/switch-on.png);
@@ -1402,6 +1405,17 @@ body label {
   height: 20px;
   color: #BFCAD9;
   cursor: pointer;
+}
+.sureButton {
+  height: 32px;
+  border-radius: 2px;
+  cursor: pointer;
+  border: 0;
+  background-color: #10c7be;
+  color: #fff;
+  padding: 0 15px;
+  text-align: center;
+  margin-left: 10px;
 }
 ::-webkit-scrollbar {
   width: 5px;

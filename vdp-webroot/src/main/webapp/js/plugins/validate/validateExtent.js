@@ -390,7 +390,7 @@ jQuery(document).ready(function () {
             }
         }
         return false;
-    }, "IP地址格式不正确");
+    }, "IP地址段格式不正确");
 
     //禁止输入汉字地址验证
     jQuery.validator.addMethod("chinese", function (value, element) {

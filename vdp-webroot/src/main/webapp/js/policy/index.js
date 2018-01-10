@@ -116,9 +116,32 @@ function initEvents() {
           exportdiyWaterContent:{
             maxlength:30,
           },
-
         }
       });
+      if($("body input[name=diyWater]").is(":checked")){
+        if($("body input[name=screendiyWaterContent]").val()!=''){
+
+        }else {
+          layer.msg("请填写自定义水印内容",{icon:2});
+          return;
+        }
+      }
+      if($("body input[name=fileOutDiyWater]").is(":checked")){
+        if($("body input[name=outdiyWaterContent]").val()!=''){
+
+        }else {
+          layer.msg("请填写自定义水印内容",{icon:2});
+          return;
+        }
+      }
+      if($("body input[name=fileExportDiyWater]").is(":checked")){
+        if($("body input[name=exportdiyWaterContent]").val()!=''){
+
+        }else {
+          layer.msg("请填写自定义水印内容",{icon:2});
+          return;
+        }
+      }
       if (!$(".policy-content form").valid()) {
         return;
       }
@@ -166,7 +189,7 @@ function initEvents() {
       obj.sbfileoutcfg.content.opencount = temp.allowOpens?Number(temp.allowOpens):0;
       obj.sbfileoutcfg.content.autodelete = temp.allowOpenDelete?Number(temp.allowOpenDelete):0;
       obj.sbfileoutcfg.content.scwatermark.enable = temp.isScreenWater?Number(temp.isScreenWater):0;
-      obj.sbfileoutcfg.content.scwatermark.isshow = Number(temp.outWater);
+      obj.sbfileoutcfg.content.scwatermark.isshow = temp.outWater?Number(temp.outWater):0;
       obj.sbfileoutcfg.content.scwatermark.content.depname = temp.fileOutDept?Number(temp.fileOutDept):0;
       obj.sbfileoutcfg.content.scwatermark.content.username = temp.fileOutName?Number(temp.fileOutName):0;
       obj.sbfileoutcfg.content.scwatermark.content.ip = temp.fileOutIpWater?Number(temp.fileOutIpWater):0;
@@ -179,7 +202,7 @@ function initEvents() {
       obj.sbfileopt.enable = temp.fileOutSwitch?Number(temp.fileExportSwitch):0;
       obj.sbfileopt.content.mode = temp.approveExport?Number(temp.approveExport):1;//1是明文3是审批
       obj.sbfileopt.content.sbfileoptwatermark.enable = temp.isScreen?Number(temp.isScreen):0;
-      obj.sbfileopt.content.sbfileoptwatermark.isshow = Number(temp.exportWater);
+      obj.sbfileopt.content.sbfileoptwatermark.isshow = temp.exportWater?Number(temp.exportWater):0;
       obj.sbfileopt.content.sbfileoptwatermark.content.depname = temp.fileExportDept?Number(temp.fileExportDept):0;
 
       obj.sbfileopt.content.sbfileoptwatermark.content.username = temp.fileExportName?Number(temp.fileExportName):0;
@@ -198,7 +221,6 @@ function initEvents() {
 
 
       objAll = {"content":obj,"policyid":policyId};
-
       $.ajax({
         type:'post',
         url:ctx + '/policy/updatePolicyJsonFile',

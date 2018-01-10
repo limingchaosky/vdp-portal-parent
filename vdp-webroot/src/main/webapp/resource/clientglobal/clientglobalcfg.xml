@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cfg>
+  <clientAuto autoLogin="1" LoginAd="0" LoginUsb="0"/>
+  <smtplogin suffix="@neiwang.cn" smtpserv="smtp.qiye.163.com" smtpport="25" emailAddress="wangcy@neiwang.cn" emailPwd="eWFuZXIxOTg5IQ=="/>
+  <ciscfg value1="WTJsek9RPT0==" value2="WTJsek9RPT0=="/>
+  <httpconfig useHttps="0"/>
+  <netaccess traverseNat="0"/>
+  <autoregist switch="0" state="0"/>
+  <svripprotect enable="1"/>
+  <sandbox switch="WTJsek9RPT0==" sbhookspecproc="DBSvr_ABC.exe;360se.exe" qq="1" dlpspecpath="\Windows;\Program Files" svngit="127.0.0.1,192.168.1.1,10.10.20.194"/>
+  <compulRemote enable="0"/>
+  <isEnterPass enable="0"/>
+  <isGuardProcess enable="0"/>
+  <remoteLoginAlarm enable="0"/>
+  <forbidformat enable="0"/>
+  <volumecrypto enable="0"/>
+  <usbOperationAudit enable="1"/>
+  <userShowMacFloor enable="0"/>
+  <usbAppAudit enable="1"/>
+  <isOpenPatchStatis enable="0"/>
+  <manageUserShow enable="0"/>
+  <checkPrinter enable="0"/>
+  <offlineCheck enable="0"/>
+  <initiativeNotice enable="1"/>
+  <docbackup docserv="10.10.16.132" name="ttt" remoteuser="administrator" remotepswd="DxUNAw==" maxsize="4090"/>
+  <nacpmode enable="1"/>
+  <tsmmode enable="1"/>
+  <bdp recordisolate="0"/>
+  <docbackencrypt enable="1"/>
+  <servip>
+	<item ip="192.1687.0.1:80" url="192.1687.0.1:80"/>
+	<item ip="192.1687.0.2" url="c:\windows\gssoft\test.exe"/>
+  <servip/>
+</cfg>
