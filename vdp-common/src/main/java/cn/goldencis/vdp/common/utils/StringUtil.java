@@ -1,5 +1,6 @@
 package cn.goldencis.vdp.common.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,4 +76,19 @@ public class StringUtil {
         return sb.toString();
     }
 
+    /**
+     * 字符串数组转list
+     * @param arrayStr
+     * @return
+     */
+    public static List<String> arrayToList(String[] arrayStr){
+        if (arrayStr != null) {
+            List<String> rlist = new ArrayList<>();
+            for (String str : arrayStr) {
+                rlist.add(str.trim());
+            }
+            return rlist;
+        }
+        return null;
+    }
 }

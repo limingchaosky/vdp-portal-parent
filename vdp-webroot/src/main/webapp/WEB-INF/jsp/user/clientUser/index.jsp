@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/jsp/common/meta.jsp"%>-->
 
 <head>
-    <title>用户</title>
+    <title>金盾VDP</title>
     <link href="${ctxCss}/dataTables/dataTablesgray.css" rel="stylesheet" type="text/css"/>
     <link href="${ctxCss}/ztree/ztree.css" rel="stylesheet" type="text/css"/>
     <link href="${ctxCss}/user/clientUser/index.css" rel="stylesheet" type="text/css"/>
@@ -12,7 +12,7 @@
     <!--左侧部门树-->
     <div class="left-bar">
         <div class="top-bar">
-            <div class="top-title">用户</div>
+            <div class="top-title">用户管理</div>
         </div>
         <div class="left-content">
             <ul id="dept_tree" class="deptTree ztree"></ul>

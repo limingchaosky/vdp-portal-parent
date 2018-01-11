@@ -96,17 +96,17 @@
                         <input type="text" id="clientUpdataPath" class="form-input wind-normal-input" placeholder="点击上传">
                         <input type="file" name="packageFile" id="clientUpdata" class="uploadFile" value="浏览">
                         <input type="button" class="sureButton" id="updata" value="上传">
-                        <span id="clientUpdataTip">上传失败</span>
+                        <span id="clientUpdataTip" class="none">请选择文件</span>
                     </form>
                 </div>
                 <div class="wind-row">
-                    <label for="" class="wind-label">客户端安装包</label>
-                    <form action="${ctx}/Bdp/Syscfg/upServer/type/clientTar" method="post" enctype="multipart/form-data" target="clientUpdate" class="">
+                    <label id="installform" for="" class="wind-label">客户端安装包</label>
+                    <form action="${ctx}/systemSetting/uploadClientPackage" method="post" enctype="multipart/form-data" target="clientUpdate" class="">
                         <input type="hidden" name="MAX_FILE_SIZE" value="100000000">
                         <input type="text" id="clientInstallPath" class="form-input wind-normal-input" placeholder="点击浏览进行上传">
                         <input type="file" name="clientTar" id="clientInstall" class="uploadFile" value="浏览">
-                        <input type="submit" class="sureButton" value="上传">
-                        <span id="clientInstallTip none">上传失败</span>
+                        <input type="submit" class="sureButton" id="install" value="上传">
+                        <span id="clientInstallTip" class="none">请选择文件</span>
                     </form>
                 </div>
             </div>
@@ -146,7 +146,7 @@
                         </select>
                     </div>
                     <div class="wind-row cf">
-                        <label for="" class="wind-label label-required">电话</label>
+                        <label for="" class="wind-label">电话</label>
                         <input type="text" class="form-input wind-normal-input" name="phone" maxlength="20">
                     </div>
                 </div>

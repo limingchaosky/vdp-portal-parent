@@ -221,4 +221,6 @@
 }
 .none {
   display: none;
+  vertical-align: -webkit-baseline-middle;
+  margin-left: 10px;
 }

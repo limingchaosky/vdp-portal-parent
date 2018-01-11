@@ -111,9 +111,6 @@ function initEvent() {
               repassword: {
                 equalTo: $('#openWind input[name=password]')
               },
-              phone: {
-                required: true,
-              },
             }
           });
         }
@@ -194,9 +191,6 @@ function initEvent() {
               repassword: {
                 equalTo: $('#openWind input[name=password]')
               },
-              phone: {
-                required: true,
-              },
             }
           });
         }
@@ -227,8 +221,11 @@ function initEvent() {
     })
     //点击上传升级文件
     .on('click','#updata',function(){
+      if($("input#clientUpdataPath").val()==''){
+        $("#clientUpdataTip").show();
+        return
+      }
       var formData = new FormData($("#updataform")[0]);
-      console.log(formData);
       $.ajax({
         url: ctx + "/systemSetting/uploadClientPackage",
         type: "post",
@@ -240,18 +237,48 @@ function initEvent() {
         data: formData,
         success: function (msg) {
           if (msg.resultCode == '1') {
-            layer.msg("导入成功", {
+            layer.msg("上传成功", {
               icon: 1,
               end: function () {
-                window.location.reload();
+                // window.location.reload();
               }
             });
+            $("#clientUpdataTip").hide();
           } else {
-            layer.msg("导入失败！" + (msg.resultMsg || ''), { icon: 2 });
+            layer.msg("上传失败！" + (msg.resultMsg || ''), { icon: 2 });
           }
         },
         error: function (e) {
-          layer.msg("导入失败", { icon: 2 });
+          layer.msg("上传失败", { icon: 2 });
+        }
+      });
+    })
+    //点击上传升级文件
+    .on('click','#install',function(){
+      var formData = new FormData($("#installform")[0]);
+      $.ajax({
+        url: ctx + "/systemSetting/uploadClientPackage",
+        type: "post",
+        async: true,
+        cache: false,
+        contentType: false,
+        processData: false,
+        dataType: "json",
+        data: formData,
+        success: function (msg) {
+          if (msg.resultCode == '1') {
+            layer.msg("上传成功", {
+              icon: 1,
+              end: function () {
+                // window.location.reload();
+              }
+            });
+          } else {
+            layer.msg("上传失败！" + (msg.resultMsg || ''), { icon: 2 });
+          }
+        },
+        error: function (e) {
+          layer.msg("上传失败", { icon: 2 });
         }
       });
     })

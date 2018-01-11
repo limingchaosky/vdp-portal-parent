@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/jsp/common/meta.jsp"%>-->
 
 <head>
-    <title>部门</title>
+    <title>金盾VDP</title>
     <link href="${ctxCss}/dataTables/dataTablesgray.css" rel="stylesheet" type="text/css" />
     <link href="${ctxCss}/ztree/ztree.css" rel="stylesheet" type="text/css" />
     <link href="${ctxCss}/user/department/index.css" rel="stylesheet" type="text/css" />
@@ -12,7 +12,7 @@
     <!--左侧部门树-->
     <div class="left-bar">
         <div class="top-bar">
-            <div class="top-title">部门</div>
+            <div class="top-title">部门管理</div>
         </div>
         <div class="left-content">
             <ul id="dept_tree" class="deptTree ztree"></ul>
@@ -84,11 +84,11 @@
         <i class="iconfont icon-nav-system table-opt-icon"></i>
         <div class="opt-hover-box">
             <div class="opt-hover-row j-opt-hover-edit" data-id="{{id}}" data-treePath="{{treePath}}">
-                <i class="icon-bianji"></i>
+                <i class="iconfont icon-btn-edit"></i>
                 <span class="text-sm margin-left-xs">编辑</span>
             </div>
             <div class="opt-hover-row j-opt-hover-delete" data-id="{{id}}">
-                <i class="icon-shanchu"></i>
+                <i class="iconfont icon-btn-delete"></i>
                 <span class="text-sm margin-left-xs">删除</span>
             </div>
         </div>

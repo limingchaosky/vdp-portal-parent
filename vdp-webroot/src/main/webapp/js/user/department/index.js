@@ -64,6 +64,10 @@ function initEvents() {
             owner: $('#openWind input[name=owner]').val().trim(),
             departmentTel: $('#openWind input[name=departmentTel]').val().trim(),
           }
+          if(postData.parentId==2){
+            layer.msg("未分组不能添加子部门",{icon:2});
+            return;
+          }
           if ($(layero).find('.layui-layer-btn0').hasClass('btn-disabled')) {
             return;
           }
@@ -198,6 +202,7 @@ function initEvents() {
         },
         success: function (layero, index) {
           if (id == 1) {//顶级部门
+            $('#openWind .j-dept-name').hide();
             $('#openWind .j-parent-dept').hide();
           }
           if (id == 2) {//未分组

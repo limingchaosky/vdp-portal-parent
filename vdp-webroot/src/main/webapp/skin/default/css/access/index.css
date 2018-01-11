@@ -9,7 +9,7 @@
   padding: 25px 0px 0px 40px;
 }
 .item-row {
-  width: 650px;
+  width: 680px;
   height: 46px;
   line-height: 46px;
 }
@@ -54,5 +54,73 @@
   font-size: 12px;
 }
 .add-server-box .append-box {
-  margin-left: 120px;
+  margin-left: 144px;
+}
+.save {
+  position: fixed;
+  left: 200px;
+  bottom: 0px;
+  right: 0px;
+  width: 100%;
+  height: 70px;
+  border-top: 1px solid #ededed;
+  z-index: 100000;
+  background-color: #fff;
+  overflow: hidden;
+}
+.save .access-save {
+  margin: 20px 0px 0px 85px;
+  width: 90px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  background-color: #38CFC0;
+  color: #fff;
+  cursor: pointer;
+}
+.mustlabel {
+  color: red;
+  position: absolute;
+  left: 90px;
+  width: 10px;
+  display: inline-block;
+  height: 10px;
+  padding-top: 7px;
+}
+.append-box {
+  margin-left: 144px;
+}
+.append-param-box {
+  display: inline-block;
+  position: relative;
+}
+.append {
+  border: none;
+  background-color: #F5F5F7;
+  margin-top: 10px;
+  color: #929294;
+}
+.medium-input {
+  width: 220px;
+}
+.add-param-val {
+  margin-left: 10px;
+  height: 30px;
+  box-sizing: border-box;
+  border: 1px solid #E1E6EA;
+  padding: 0 10px;
+  vertical-align: middle;
+}
+.del-param {
+  position: absolute;
+  right: 5px;
+  z-index: 10;
+  top: 16px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #b9c0ca;
+}
+.item-row {
+  height: inherit;
+  line-height: inherit;
 }

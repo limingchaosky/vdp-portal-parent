@@ -462,7 +462,7 @@ table.dataTable td {
     position: absolute;
     z-index: 10;
     bottom: 10px;
-    right: 10px;
+    right: 0px;
     font-size: 14px;
 }
 

@@ -230,7 +230,7 @@ function initEvents() {
           postAjax(ctx + '/clientUser/updateClientUser', postData, function (msg) {
             if (msg.resultCode == 1) {
               layer.close(index);
-              layer.msg('编辑成功！', {icon: 1});
+
               //更新部门树
               getAjax(ctx + '/department/getDepartmentNodesByLoginUser', '', function (msg) {
                 zNodes = JSON.parse(msg);
@@ -581,7 +581,7 @@ function initdeptTable(pid) {
       "dataSrc": function (json) {
         console.log(json);
         return json.data.map(function (obj) {
-          return [obj.id, {username:obj.username,isusb:obj.isbindedUsbkey}, obj.truename, obj.policyname || '--', obj.policyid || '--', obj.id]
+          return [obj.id, {username:obj.username,isusb:obj.isbindedUsbkey}, obj.truename, obj.policyname || '--', obj.ip || '--', obj.id]
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象

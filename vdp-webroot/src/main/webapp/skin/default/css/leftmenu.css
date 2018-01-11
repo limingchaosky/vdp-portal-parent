@@ -67,6 +67,7 @@ a.ma0 {
     height: 36px;
     padding-top:14px;
     text-decoration: none;
+    text-align: center;
 
 }
 
@@ -90,7 +91,7 @@ span.namehide {
 }
 
 span.nameshow {
-    background-position: 0px 0px;
+    background-position: 15px 0px;
     width: 70px;
 }
 
@@ -116,15 +117,16 @@ ul.mul1 {
 
 li.mli1 {
     position: relative;
-    height: 45px;
+    height: 50px;
     display: block;
 }
 
 a.ma1 {
-    height: 45px;
+    height: 50px;
     display: block;
-    line-height: 45px;
-    text-align: center;
+    line-height: 50px;
+    text-align: left;
+    padding-left: 40px;
     color: white;
     text-decoration: none;
     font-size: 14px;
@@ -169,7 +171,7 @@ a.ma2 {
 }
 
 .li_on>a .nameshow {
-    background-position: 0 0 !important;
+    background-position: 15px 0 !important;
     color: white !important;
 }
 
@@ -209,10 +211,12 @@ a.listclick {
 }
 
 a.listclick span.nameshow {
-    background-position: 0px -28px;
+    background-position: 15px -28px;
     width: 70px;
 }
-
+li.li_on a.listclick span.namehide{
+    background-position: 12px 0px;
+}
 a.listclick span.namehide {
     background-position: 12px -28px;
     width: 52px;

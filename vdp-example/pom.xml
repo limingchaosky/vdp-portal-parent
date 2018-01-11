@@ -25,6 +25,11 @@
             <artifactId>vdp-core</artifactId>
             <version>6.0.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>cn.neiwang</groupId>
+            <artifactId>nac-api</artifactId>
+            <version>6.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
