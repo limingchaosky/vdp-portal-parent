@@ -54,18 +54,6 @@ public class DepartmentController {
     }
 
     /**
-     * 根据部门名称查询部门
-     *
-     * @param id
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/getDepartmentById", produces = "application/json", method = RequestMethod.GET)
-    public DepartmentDO getDepartmentById(Integer id) {
-        return departmentService.getDepartmentById(id);
-    }
-
-    /**
      * 管理员无权限限制，获取全部部门树json
      * @return
      */
@@ -138,7 +126,7 @@ public class DepartmentController {
      */
     @ResponseBody
     @RequestMapping(value = "/getDepartmentTreeByUserId", method = RequestMethod.GET)
-    public ResultMsg getDepartmentTreeByUserId(String userId) {
+    public ResultMsg getDepartmentTreeByUserId(Integer userId) {
         ResultMsg resultMsg = new ResultMsg();
         try {
             JSONArray departmentArr = departmentService.getDepartmentTreeByUserId(userId);

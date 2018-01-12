@@ -31,6 +31,7 @@ public interface IDepartmentService extends BaseService<DepartmentDO, Department
      * @return
      */
     List<DepartmentDO> getDeptarMentListByParent(Integer pId);
+
     /**
      * 根据条件查询总数
      * @param pId
@@ -65,9 +66,12 @@ public interface IDepartmentService extends BaseService<DepartmentDO, Department
      */
     boolean deleteById(Integer id);
 
+    /**
+     * 通过部门id获取对应部门对象
+     * @param id
+     * @return
+     */
     DepartmentDO getDepartmentById(Integer id);
-
-    String getFunctionNodesByLogin();
 
     /**
      * 根据部门名字查找部门
@@ -96,5 +100,5 @@ public interface IDepartmentService extends BaseService<DepartmentDO, Department
      * @param userId
      * @return
      */
-    JSONArray getDepartmentTreeByUserId(String userId);
+    JSONArray getDepartmentTreeByUserId(Integer userId);
 }

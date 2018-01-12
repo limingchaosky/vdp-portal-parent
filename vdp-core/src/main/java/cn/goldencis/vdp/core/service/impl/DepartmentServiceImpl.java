@@ -3,7 +3,8 @@ package cn.goldencis.vdp.core.service.impl;
 import java.util.*;
 
 import cn.goldencis.vdp.core.constants.ConstantsDto;
-import cn.goldencis.vdp.core.dao.CClientUserDOMapper;
+import cn.goldencis.vdp.core.dao.*;
+import cn.goldencis.vdp.core.entity.*;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,13 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cn.goldencis.vdp.common.dao.BaseDao;
 import cn.goldencis.vdp.common.service.impl.AbstractBaseServiceImpl;
-import cn.goldencis.vdp.core.dao.CustomizedMapper;
-import cn.goldencis.vdp.core.dao.DepartmentDOMapper;
-import cn.goldencis.vdp.core.dao.UserDepartmentDOMapper;
-import cn.goldencis.vdp.core.entity.DepartmentDO;
-import cn.goldencis.vdp.core.entity.DepartmentDOCriteria;
-import cn.goldencis.vdp.core.entity.UserDepartmentDO;
-import cn.goldencis.vdp.core.entity.UserDepartmentDOCriteria;
 import cn.goldencis.vdp.core.service.IDepartmentService;
 import cn.goldencis.vdp.core.utils.GetLoginUser;
 
@@ -45,6 +39,9 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
     @Autowired
     private CClientUserDOMapper cClientUserDOMapper;
 
+    @Autowired
+    private UserDOMapper userMapper;
+
     @SuppressWarnings("unchecked")
     @Override
     protected BaseDao<DepartmentDO, DepartmentDOCriteria> getDao() {
@@ -67,22 +64,32 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
      */
     public String getNodesByLogin() {
 
-        //String zNodes = "";
-        List<DepartmentDO> departmentList = GetLoginUser.getDepartmentListWithLoginUser();
+        String zNodes = "";
 
-        if (departmentList != null && departmentList.size() > 0 && "1".equals(departmentList.get(0).getId())) {
-            //如果有顶级部门权限，则参数全部为null，返回所有部门列表
-            return toTreeJson(cmapper.getDeptarMentList(null, null, null, null, null), false);
-        } else {
-            //如果没有顶级部门权限进行查询
-            List<Integer> ids = new ArrayList<>();
-            List<String> treePaths = new ArrayList<>();
-            for (DepartmentDO dept : departmentList) {
-                ids.add(dept.getId());
-                treePaths.add(dept.getTreePath() + dept.getId() + ",%");
-            }
-            return toTreeJson(cmapper.getUserRoleDepartmentByUser(ids, treePaths, true), true);
+        //获取当前登录账户
+        UserDO loginUser = GetLoginUser.getLoginUser();
+        String userGuid = loginUser.getGuid();
+
+        //获取账户关联部门的关联对象集合
+        UserDepartmentDOCriteria udexample = new UserDepartmentDOCriteria();
+        udexample.createCriteria().andUserIdEqualTo(userGuid);
+        List<UserDepartmentDO> userDepartmentList = udmapper.selectByExample(udexample);
+        List<Integer> deptIdList = new ArrayList<>();
+        //将集合转化为部门id的集合
+        for (UserDepartmentDO userDepartment : userDepartmentList) {
+            deptIdList.add(userDepartment.getDepartmentId());
         }
+
+        //查询关联的部门对象集合
+        if (deptIdList.size() > 0) {
+            DepartmentDOCriteria example = new DepartmentDOCriteria();
+            example.createCriteria().andIdIn(deptIdList);
+            List<DepartmentDO> departmentList = mapper.selectByExample(example);
+
+            zNodes = toTreeJson(departmentList, true);
+        }
+
+        return zNodes;
     }
 
     /**
@@ -162,14 +169,16 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
      */
     @Override
     public List<DepartmentDO> getDeptarMentListByParent(Integer startNum, Integer pageSize, Integer pId, String treePath, String ordercase) {
-
         RowBounds rowBounds = new RowBounds(startNum, pageSize);
 
         //通过父类id和父类treePath、和父类本身 查询子类集合
         DepartmentDOCriteria departmentDOCriteria = new DepartmentDOCriteria();
         departmentDOCriteria.createCriteria().andParentIdEqualTo(pId);
         departmentDOCriteria.or().andTreePathLike(treePath);
-        departmentDOCriteria.or().andIdEqualTo(pId);
+        //含父类本身，但是不包含顶级部门
+        if (pId != 1) {
+            departmentDOCriteria.or().andIdEqualTo(pId);
+        }
 
         List<DepartmentDO> departmentList = mapper.selectByExampleWithRowbounds(departmentDOCriteria, rowBounds);
         return departmentList;
@@ -289,32 +298,21 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         return array.toJSONString();
     }
 
+    /**
+     * 通过部门id获取对应部门对象
+     * @param id
+     * @return
+     */
     @Override
     public DepartmentDO getDepartmentById(Integer id) {
         return mapper.selectByPrimaryKey(id.toString());
     }
 
-    @Override
-    public String getFunctionNodesByLogin() {
-        List<DepartmentDO> roleDept = GetLoginUser.getDepartmentListWithLoginUser();
-        List<DepartmentDO> ids = new ArrayList<>();
-        DepartmentDO department = null;
-        if (roleDept.size() > 0) {
-            for (DepartmentDO dept : roleDept) {
-                department = new DepartmentDO();
-                department.setId(dept.getId());
-                dept.setTreePath(dept.getTreePath() == null ? "" : dept.getTreePath());
-                department.setTreePath("%" + dept.getTreePath() + dept.getId() + ",%");
-                ids.add(department);
-            }
-            return toTreeJson(cmapper.getFunctionNodesByLogin(ids), true);
-        } else {
-            List<DepartmentDO> departments = new ArrayList<DepartmentDO>();
-            departments.add(getDepartmentById(ConstantsDto.SUPER_DEPARTMENT_ID));
-            return toTreeJson(departments, true);
-        }
-    }
-
+    /**
+     * 通过部门name获取对应部门对象
+     * @param name
+     * @return
+     */
     @Override
     public List<DepartmentDO> selectDepartmentByName(String name) {
         DepartmentDOCriteria udexample = new DepartmentDOCriteria();
@@ -322,6 +320,11 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         return mapper.selectByExample(udexample);
     }
 
+    /**
+     * 添加部门
+     * @param bean
+     * @return
+     */
     @Override
     @Transactional
     public boolean addDepartment(DepartmentDO bean) {
@@ -343,6 +346,11 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         return true;
     }
 
+    /**
+     * 为列表中的部门添加父类部门名称
+     * @param parentDept 总父类
+     * @param departmentList 需要添加父类部门名称的列表
+     */
     @Override
     public void setParentDepartmentNames(DepartmentDO parentDept, List<DepartmentDO> departmentList) {
 
@@ -392,13 +400,15 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
      * @return
      */
     @Override
-    public JSONArray getDepartmentTreeByUserId(String userId) {
+    public JSONArray getDepartmentTreeByUserId(Integer userId) {
         List<Integer> departmentIdList = null;
 
-        //如果账户id不为0，查询账户的部门权限
-        if (!"0".equals(userId)) {
+        //如果账户id不为0，查询账户的部门权限，如果为0，则是新建，不查询。
+        if (userId != 0) {
+            UserDO user = userMapper.selectByPrimaryKey(userId);
+
             UserDepartmentDOCriteria udExample = new UserDepartmentDOCriteria();
-            udExample.createCriteria().andUserIdEqualTo(userId);
+            udExample.createCriteria().andUserIdEqualTo(user.getGuid());
             List<UserDepartmentDO> userDepartmentList = udmapper.selectByExample(udExample);
 
             departmentIdList = new ArrayList<>();
