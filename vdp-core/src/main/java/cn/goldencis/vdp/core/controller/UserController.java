@@ -120,6 +120,9 @@ public class UserController implements ServletContextAware {
                 return resultMsg;
             }
 
+            if (StringUtil.isEmpty(user.getPassword())) {
+                user.setPassword(null);
+            }
             userService.addOrUpdateUser(user, departmentListStr, navigationListStr);
 
             resultMsg.setResultMsg("账户更改成功！");
