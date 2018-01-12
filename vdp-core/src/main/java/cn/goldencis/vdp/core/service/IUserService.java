@@ -109,4 +109,11 @@ public interface IUserService extends BaseService<UserDO, UserDOCriteria> {
      * @return 可用返回true
      */
     boolean checkUserNameDuplicate(UserDO user);
+
+    /**
+     * 根据账户id，查询账户对象
+     * @param userId
+     * @return
+     */
+    UserDO getUserByUserId(Integer userId);
 }

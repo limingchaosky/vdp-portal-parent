@@ -31,10 +31,6 @@ import cn.goldencis.vdp.core.utils.GetLoginUser;
 @Component("userService")
 public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCriteria> implements IUserService {
 
-    private final static int UPDATE_FLAG = 2;
-    private final static int UPDATE_ROLE = 3;
-    private final static int ADD_FLAG = 1;
-
     @Autowired
     private UserDOMapper mapper;
 
@@ -51,16 +47,7 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
     private CUserDepartmentDOMapper cuserDepartmentDOMapper;
 
     @Autowired
-    private CDepartmentDOMapper cdepartmentDOMapper;
-
-    @Autowired
-    private PermissionNavigationDOMapper permissionNavigationDOMapper;
-
-    @Autowired
     private CUserNavigationDOMapper cUserNavigationDOMapper;
-
-    @Autowired
-    private UserPermissionDOMapper userPermissionDOMapper;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -237,6 +224,16 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
             return false;
         }
         return true;
+    }
+
+    /**
+     * 根据账户id，查询账户对象
+     * @param userId
+     * @return
+     */
+    @Override
+    public UserDO getUserByUserId(Integer userId) {
+        return mapper.selectByPrimaryKey(userId);
     }
 
     /**

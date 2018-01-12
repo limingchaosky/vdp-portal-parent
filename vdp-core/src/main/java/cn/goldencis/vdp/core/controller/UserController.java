@@ -135,10 +135,10 @@ public class UserController implements ServletContextAware {
 
     @ResponseBody
     @RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-    public ResultMsg deleteUser(String userId) {
+    public ResultMsg deleteUser(Integer userId) {
         ResultMsg resultMsg = new ResultMsg();
         try {
-            UserDO user = userService.getByPrimaryKey(userId);
+            UserDO user = userService.getUserByUserId(userId);
             if (user == null) {
                 resultMsg.setResultMsg("不存在此账户！");
                 resultMsg.setResultCode(ConstantsDto.RESULT_CODE_FALSE);
@@ -158,7 +158,6 @@ public class UserController implements ServletContextAware {
 
     /**
      * 根据当前登录账户的角色类型，获取同角色类型的所有账户并返回。
-     *
      * @return
      */
     @ResponseBody
