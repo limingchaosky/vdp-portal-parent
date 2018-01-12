@@ -18,4 +18,11 @@ public interface INavigationService {
      * @return
      */
     JSONArray getNavigationListByRoleType(Integer roleType);
+
+    /**
+     * 通过账户的Guid，查询对应的页面集合
+     * @param guid
+     * @return
+     */
+    JSONArray getNavigationListByGuid(String guid);
 }

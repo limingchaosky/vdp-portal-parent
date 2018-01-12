@@ -103,6 +103,30 @@ public class NavigationServiceImpl extends AbstractBaseServiceImpl<NavigationDO,
 
     }
 
+    /**
+     * 通过账户的Guid，查询对应的页面集合
+     * @param guid
+     * @return
+     */
+    @Override
+    public JSONArray getNavigationListByGuid(String guid) {
+        //通过账户的Guid，查询对应的页面id集合
+        List<Integer> navigationIdList = cUserNavigationDOMapper.getNavigationListByUser(guid);
+
+        //获取全部页面集合
+        NavigationDOCriteria navigationExample = new NavigationDOCriteria();
+        List<NavigationDO> navigationList = mapper.selectByExample(navigationExample);
+
+        //组装成需要返回的Json数组
+        return toJson(navigationList, navigationIdList);
+    }
+
+    /**
+     *
+     * @param navigations 全部权限集合
+     * @param navigationIdList 有该页面权限，回显时打钩的，checked:true的。
+     * @return
+     */
     private JSONArray toJson(List<NavigationDO> navigations, List<Integer> navigationIdList) {
         JSONArray NavigationArray = new JSONArray();
         for (NavigationDO navigation : navigations) {

@@ -98,7 +98,7 @@ function initEvent() {
           // 校验
           $('#openWind .j-add-account-form').validate({
             rules: {
-              username: {
+              userName: {
                 required: true,
               },
               name: {
@@ -145,13 +145,15 @@ function initEvent() {
             layer.msg('部门或者功能权限必选！', {icon: 2});
             return;
           }
-          var pass = $("input[name=password]").val()
-          $("input[name=password]").val(encrypt(pass).toUpperCase());
-          $("input[name=repassword]").val(encrypt(pass).toUpperCase());
+          var pass = $("#openWind input[name=password]").val();
+          if(pass!=''){
+            $("input[name=password]").val(encrypt(pass).toUpperCase());
+            $("input[name=repassword]").val(encrypt(pass).toUpperCase());
+          }
           $("input[name=departmentListStr]").val(getnodesrt(deptnodes));
           $("input[name=navigationListStr]").val(getnodesrt(navnodes));
           var temp = $("#openWind form").serialize();
-
+console.log(temp)
           $.ajax({
             type: 'post',
             url: ctx + '/systemSetting/user/addOrUpdateUser',
@@ -174,7 +176,7 @@ function initEvent() {
           })
         },
         success: function (layero, index) {
-          initNavTree(1);
+          initNavTree(1,guid);
           // 部门权限树
           initDeptTree(id);
           $('#openWind input[name=userName]').val(accountTable.ajax.json().data[idx].userName);
@@ -460,7 +462,7 @@ function initDeptTree(id) {
   });
 }
 //获取所有权限tree
-function initNavTree(id) {
+function initNavTree(id,guid) {
   // 获取权限树
   var setting2 = {
     view: {
@@ -488,7 +490,8 @@ function initNavTree(id) {
       }
     }
   };
-  getAjax(ctx + '/system/navigation/getNavigationListByRoleType', {roleType: id}, function (msg) {
+  var guidid = guid?guid:''
+  getAjax(ctx + '/system/navigation/getNavigationListByRoleType', {roleType: id,guid:guidid}, function (msg) {
     if (msg.resultCode == 1) {
       var navzNodes = eval(msg.data);
       if(navTree){
