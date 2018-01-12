@@ -17,7 +17,7 @@ $(function () {
         var password = $("#password").val();
         password = $.trim(password);
         if (name == '' || password == '') {
-            $("#errorMessage").html("用户名或密码不正确")
+            $("#errorMessage").html("用户名或密码不能为空")
             return;
         }
         $("#password").val(encrypt(password).toUpperCase());

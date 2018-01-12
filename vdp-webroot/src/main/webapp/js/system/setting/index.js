@@ -64,10 +64,11 @@ function initEvent() {
             layer.msg('部门或者功能权限必选！', {icon: 2});
             return;
           }
-          var pass = $("input[name=password]").val()
-          $("input[name=password]").val(encrypt(pass).toUpperCase())
-
-          $("input[name=departmentListStr]").val(getnodesrt(deptnodes))
+          var pass = $("input[name=password]").val();
+          $("input[name=password]").val(encrypt(pass).toUpperCase());
+          pass = $.trim(pass);
+console.log(encrypt(pass).toUpperCase());
+          $("input[name=departmentListStr]").val(getnodesrt(deptnodes));
           $("input[name=navigationListStr]").val(getnodesrt(navnodes));
           var temp = $("#openWind form").serialize();
           console.log(temp);
@@ -105,8 +106,6 @@ function initEvent() {
                 required: true,
               },
               password: {
-                required: true,
-                minlength: 6
               },
               repassword: {
                 equalTo: $('#openWind input[name=password]')

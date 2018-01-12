@@ -11,9 +11,11 @@ $(function () {
  * 初始化事件
  */
 function initEvent() {
-  if ($("#onoff").is(":checked")) {
-    $("input[name=ctrlAreas-x]").siblings('span.mustlabel').show();
+  $("#access-form").html(template('accessTem',accessObj))
+  if ($("body #onoff").is(":checked")) {
+    $("body input[name=ctrlAreas-x]").siblings('span.mustlabel').show();
   } else {
+    $("body input[name=ctrlAreas-x]").siblings('span.mustlabel').hide();
   }
   $('#access-form form').validate({
     rules: {
@@ -27,7 +29,7 @@ function initEvent() {
       },
     },
   });
-  // $("#access-form").html(template('accessTem',accessObj))
+
 }
 function initEvents() {
   initEvent();
@@ -51,7 +53,7 @@ function initEvents() {
           var flag = true;
           el = $(layero).find('input[name=ctrlAreas-x]');
           if ($(".layui-layer-content").find(".switch-btn").hasClass("on")) {
-            if ($(layero).find('input[name=ctrlAreas]').length == 0) {
+            if ($(layero).find('input[name=ctrlAreas-x]').length == 0) {
               $(el).focus();
               $(el).closest('.row').find('.error-text').text('至少要有一个准入控制网段').show();
               flag = false;
@@ -229,11 +231,10 @@ function initEvents() {
     })
     //准入状态开关
     .on('change', '#onoff', function () {
-      // debugger;
       if ($(this).is(":checked")) {
-        $("input[name=ctrlAreas-x]").siblings('span.mustlabel').show();
+        $("body input[name=ctrlAreas-x]").siblings('span.mustlabel').show();
       } else {
-        $("input[name=ctrlAreas-x]").siblings('span.mustlabel').hide();
+        $("body input[name=ctrlAreas-x]").siblings('span.mustlabel').hide();
       }
     })
     //点击进行保存

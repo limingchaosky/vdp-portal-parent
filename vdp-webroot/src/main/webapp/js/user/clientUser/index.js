@@ -27,7 +27,6 @@ function getPolicyList() {
 function getEmUsbList() {
   getAjax(ctx + '/usbKey/getAllUnbindUsbKey', '', function (msg) {
     if (msg.resultCode == 1) {
-      console.log(msg.data)
       usbDeviceList = msg.data;
       // var html = '';
       // $.each(msg.data, function (index, obj) {
@@ -88,7 +87,6 @@ function initEvents() {
             return;
           }
           var temp = $("#openWind form").serializeJSON();
-          console.log(temp)
           var postData = {
             username: $('#openWind input[name=username]').val().trim(),
             truename: $('#openWind input[name=truename]').val().trim(),
@@ -137,7 +135,7 @@ function initEvents() {
           }
           $('#openWind select[name=selectPolicy]').html(htmlpolicy);
           var htmlusb = '';
-          htmlusb +='<option value="-1"></option>';
+          htmlusb += '<option value="-1"></option>';
           for (var i = 0; i < usbDeviceList.length; i++) {
             htmlusb += '<option value=' + usbDeviceList[i].id + '>' + usbDeviceList[i].name + '</option>';
           }
@@ -157,9 +155,6 @@ function initEvents() {
               onClick: function (event, treeId, treeNode, clickFlag) {
                 $('#openWind .parent-dept').val(treeNode.name).attr('data-id', treeNode.id);
                 $('#openWind .parent-dept-tree-box').slideUp('fast');
-                // if (nameValidate) {
-                //   nameValidate.settings.rules.name.remote.data.pid = treeNode.id;
-                // }
               }
             }
           };
@@ -222,7 +217,6 @@ function initEvents() {
             policyid: temp.selectPolicy,
             usbkeyid: temp.usbKeyList,
           };
-          console.log(postData)
           if ($(layero).find('.layui-layer-btn0').hasClass('btn-disabled')) {
             return;
           }
@@ -252,7 +246,7 @@ function initEvents() {
           }
           $('#openWind select[name=selectPolicy]').html(htmlpolicy);
           var htmlusb = '';
-          htmlusb +='<option value="-1"></option>';
+          htmlusb += '<option value="-1"></option>';
           for (var i = 0; i < usbDeviceList.length; i++) {
             htmlusb += '<option value=' + usbDeviceList[i].id + '>' + usbDeviceList[i].name + '</option>';
           }
@@ -280,14 +274,16 @@ function initEvents() {
             return obj.treePath.indexOf(',' + id + ',') < 0 && obj.id !== id;
           });
           parentDeptTree = $.fn.zTree.init($("#openWind .j-parent-dept-tree"), setting, zNodesBak);
+          console.log(deptTable.ajax.json().data[idx].deptguid);
           if (zNodesBak.length > 0) {
-            var node = parentDeptTree.getNodeByParam('id', deptTree.getNodeByParam('id', id));
+            var node = parentDeptTree.getNodeByParam('id', deptTree.getNodeByParam('id', deptTable.ajax.json().data[idx].deptguid));
             if (node) {
               $('#' + node.tId + '_a').click();
             }
           }
           $('#openWind input[name=username]').val(deptTable.ajax.json().data[idx].username);
           $('#openWind input[name=truename]').val(deptTable.ajax.json().data[idx].truename);
+
           //校验
           $('#openWind .j-add-user-form').validate({
             rules: {
@@ -298,11 +294,11 @@ function initEvents() {
                 required: true,
               },
               password: {
-                required: true,
-                minlength: 6
+                maxlength: 20
               },
               repassword: {
-                equalTo: $('#openWind input[name=password]')
+                equalTo: $('#openWind input[name=password]'),
+                maxlength: 20
               },
               parentdept: {
                 required: true,
@@ -340,7 +336,8 @@ function initEvents() {
             data: postData,
             success: function (msg) {
               if (msg.resultCode == '1') {
-                deptTable.ajax.reload(function () {}, true);
+                deptTable.ajax.reload(function () {
+                }, true);
                 $('.j-check-user-all').prop('checked', false);
                 layer.close(index);
                 layer.msg('修改成功！', {icon: 1});
@@ -369,7 +366,7 @@ function initEvents() {
       var ids = [];
       if ($(this).is('#bar_relieve')) {
         if ($('.j-check-user:checked').length == 0) {
-          layer.msg('请先选中用户！', { icon: 0 });
+          layer.msg('请先选中用户！', {icon: 0});
           return;
         }
         else {
@@ -392,15 +389,16 @@ function initEvents() {
           data: postData,
           success: function (msg) {
             if (msg.resultCode == '1') {
-              deptTable.ajax.reload(function () { }, true);
+              deptTable.ajax.reload(function () {
+              }, true);
               $('.j-check-user-all').prop('checked', false);
-              layer.msg('解绑成功！', { icon: 1 });
+              layer.msg('解绑成功！', {icon: 1});
             } else {
-              layer.msg('解绑失败！', { icon: 2 });
+              layer.msg('解绑失败！', {icon: 2});
             }
           },
           error: function () {
-            layer.msg('解绑失败！', { icon: 2 });
+            layer.msg('解绑失败！', {icon: 2});
           }
         })
       });
@@ -581,7 +579,7 @@ function initdeptTable(pid) {
       "dataSrc": function (json) {
         console.log(json);
         return json.data.map(function (obj) {
-          return [obj.id, {username:obj.username,isusb:obj.isbindedUsbkey}, obj.truename, obj.policyname || '--', obj.ip || '--', obj.id]
+          return [obj.id, {username: obj.username, isusb: obj.isbindedUsbkey}, obj.truename, obj.policyname || '--', obj.ip || '--', obj.id]
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象
@@ -606,10 +604,10 @@ function initdeptTable(pid) {
       "orderable": false,
       "class": "text-ellipsis",
       "render": function (data, type, full) {
-        if(data.isusb == 1 ){
-          return '<i class="iconfont icon-list-USB" style="position: absolute;left: 40px;"></i><span>'+data.username+'</span>';
-        }else {
-          return '<span>'+data.username+'</span>';
+        if (data.isusb == 1) {
+          return '<i class="iconfont icon-list-USB" style="position: absolute;left: 40px;"></i><span>' + data.username + '</span>';
+        } else {
+          return '<span>' + data.username + '</span>';
         }
 
       }

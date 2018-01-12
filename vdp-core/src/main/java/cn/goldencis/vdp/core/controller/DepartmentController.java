@@ -67,7 +67,6 @@ public class DepartmentController {
 
     /**
      * 管理员无权限限制，获取全部部门树json
-     *
      * @return
      */
     @ResponseBody

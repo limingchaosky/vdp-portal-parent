@@ -89,7 +89,7 @@
                 <label for="" class="wind-label label-required">所属部门</label>
                 <input type="text" class="form-input wind-normal-input parent-dept" readonly name="parentdept" placeholder="请选择所属部门">
                 <div class="parent-dept-tree-box none">
-                    <ul class="ztree j-parent-dept-tree"></ul>
+                    <ul class="ztree j-parent-dept-tree" id="deptment_tree"></ul>
                 </div>
             </div>
             <div class="wind-row cf">
