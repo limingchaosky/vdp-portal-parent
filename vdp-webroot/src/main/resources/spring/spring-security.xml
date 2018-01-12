@@ -26,6 +26,7 @@
 	<http pattern="/download/*/*.*" security="none" />
 	<!-- 开放客户端登录的HTTP接口 -->
 	<http pattern="/clientUser/clientUserLogin" security="none" />
+	<http pattern="/clientUser/clientUserLogout" security="none" />
 
 	<!-- 开放resource -->
 	<http pattern="/resource/policy/*/*.json" security="none" />
