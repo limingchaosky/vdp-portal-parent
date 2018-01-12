@@ -21,6 +21,8 @@ $(function () {
             return;
         }
         $("#password").val(encrypt(password).toUpperCase());
+        console.log(password)
+        console.log(encrypt(password).toUpperCase())
         $("#loginForm").submit();
     });
     //更换验证码

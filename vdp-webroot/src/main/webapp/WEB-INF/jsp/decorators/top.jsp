@@ -5,7 +5,7 @@
 <c:set var="serverPort" value="${pageContext.request.serverPort}"/>
 <c:set var="outUrl" value="/logout"/>
 <c:if test="${loginFlag == '1'}">
-    <c:set var="pro" value="/tsa/logout"/>
+    <c:set var="pro" value="/vdp/logout"/>
     <c:if test="${!empty serverName}">
         <c:set var="outUrl" value="http://${serverName}${pro}"/>
     </c:if>

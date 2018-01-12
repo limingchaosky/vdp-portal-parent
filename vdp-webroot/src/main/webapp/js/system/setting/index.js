@@ -64,14 +64,13 @@ function initEvent() {
             layer.msg('部门或者功能权限必选！', {icon: 2});
             return;
           }
-          var pass = $("input[name=password]").val();
+          var pass = $("#openWind input[name=password]").val();
           $("input[name=password]").val(encrypt(pass).toUpperCase());
+
           pass = $.trim(pass);
-console.log(encrypt(pass).toUpperCase());
           $("input[name=departmentListStr]").val(getnodesrt(deptnodes));
           $("input[name=navigationListStr]").val(getnodesrt(navnodes));
           var temp = $("#openWind form").serialize();
-          console.log(temp);
 
           $.ajax({
             type: 'post',
@@ -106,10 +105,14 @@ console.log(encrypt(pass).toUpperCase());
                 required: true,
               },
               password: {
+                required:true,
               },
               repassword: {
                 equalTo: $('#openWind input[name=password]')
               },
+              phone:{
+                isPhone:true
+              }
             }
           });
         }
@@ -118,11 +121,13 @@ console.log(encrypt(pass).toUpperCase());
     //编辑用户
     .on('click', '.j-opt-hover-edit', function () {
       var idx = $('.j-opt-hover-edit').index(this);
+      // idx =idx+4;
       var id = $(this).attr('data-id');//这是账户的id
-      if (id == 1 || id == 2 || id == 3) {
-        layer.msg("内置管理员不能编辑", {icon: 2});
-        return
-      }
+      var guid = $(this).attr('data-guid');//这是账户的id
+      // if (id == 1 || id == 2 || id == 3 || id ==4) {
+      //   layer.msg("内置管理员不能编辑", {icon: 2});
+      //   return
+      // }
       layer.open({
         id: 'openWind',//这个地方会自动给弹出框添加一个id
         type: 1,
@@ -146,12 +151,11 @@ console.log(encrypt(pass).toUpperCase());
           $("input[name=departmentListStr]").val(getnodesrt(deptnodes));
           $("input[name=navigationListStr]").val(getnodesrt(navnodes));
           var temp = $("#openWind form").serialize();
-          // console.log(temp+'&id='+id);
 
           $.ajax({
             type: 'post',
             url: ctx + '/systemSetting/user/addOrUpdateUser',
-            data: String(temp+'&id='+id),
+            data: String(temp+'&id='+id+'&guid='+guid),
             success: function (msg) {
               console.log(msg);
               if (msg.resultCode == 1) {
@@ -160,10 +164,12 @@ console.log(encrypt(pass).toUpperCase());
                 layer.msg('修改成功！', {icon: 1});
               } else {
                 layer.msg('修改失败！' + (msg.resultMsg || ''), {icon: 2});
+                layer.close(index);
               }
             },
             error: function () {
-              layer.msg('修改失败！' + (msg.resultMsg || ''), {icon: 2});
+              layer.msg('修改错误！' + (msg.resultMsg || ''), {icon: 2});
+              layer.close(index);
             }
           })
         },
@@ -184,12 +190,13 @@ console.log(encrypt(pass).toUpperCase());
                 required: true,
               },
               password: {
-                required: true,
-                minlength: 6
               },
               repassword: {
                 equalTo: $('#openWind input[name=password]')
               },
+              phone:{
+                isPhone:true
+              }
             }
           });
         }
@@ -226,7 +233,7 @@ console.log(encrypt(pass).toUpperCase());
       }
       var formData = new FormData($("#updataform")[0]);
       $.ajax({
-        url: ctx + "/systemSetting/uploadClientPackage",
+        url: ctx + "/systemSetting/uploadClientUpdate",
         type: "post",
         async: true,
         cache: false,
@@ -254,6 +261,10 @@ console.log(encrypt(pass).toUpperCase());
     })
     //点击上传升级文件
     .on('click','#install',function(){
+      if($("input#clientInstallPath").val()==''){
+        $("#clientInstallTip").show();
+        return
+      }
       var formData = new FormData($("#installform")[0]);
       $.ajax({
         url: ctx + "/systemSetting/uploadClientPackage",
@@ -269,7 +280,6 @@ console.log(encrypt(pass).toUpperCase());
             layer.msg("上传成功", {
               icon: 1,
               end: function () {
-                // window.location.reload();
               }
             });
           } else {
@@ -316,8 +326,9 @@ function initdeptTable() {
       "url": ctx + "/systemSetting/user/getUserPages",
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
+        console.log(json)
         return json.data.map(function (obj) {
-          return [obj.name, obj.userName, obj.roleType, obj.readonly, obj.phone || '--', obj.id];
+          return [obj.name, obj.userName, obj.roleType, obj.readonly, obj.phone || '--', {id:obj.id,guid:obj.guid}];
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象
@@ -369,7 +380,7 @@ function initdeptTable() {
       "class": "center-text",
       "width": "80px",
       "render": function (data, type, full) {
-        return template('temp_opt_box', {id: data});
+        return template('temp_opt_box', {id: data.id,guid:data.guid});
       }
     }],
     //当每次表格重绘的时候触发一个操作，比如更新数据后或者创建新的元素

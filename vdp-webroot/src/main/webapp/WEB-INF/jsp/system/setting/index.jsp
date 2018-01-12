@@ -91,21 +91,21 @@
             <div class="servercon none">
                 <div class="wind-row">
                     <label for="" class="wind-label">客户端升级包</label>
-                    <form id="updataform" action="${ctx}/systemSetting/uploadClientPackage" method="post" enctype="multipart/form-data">
+                    <form id="updataform" action="${ctx}/systemSetting/uploadClientUpdate" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="MAX_FILE_SIZE" value="100000000">
-                        <input type="text" id="clientUpdataPath" class="form-input wind-normal-input" placeholder="点击上传">
-                        <input type="file" name="packageFile" id="clientUpdata" class="uploadFile" value="浏览">
+                        <input type="text" id="clientUpdataPath" class="form-input wind-normal-input" placeholder="点击浏览进行上传">
+                        <input type="file" name="updateFile" id="clientUpdata" class="uploadFile" value="浏览">
                         <input type="button" class="sureButton" id="updata" value="上传">
                         <span id="clientUpdataTip" class="none">请选择文件</span>
                     </form>
                 </div>
                 <div class="wind-row">
-                    <label id="installform" for="" class="wind-label">客户端安装包</label>
-                    <form action="${ctx}/systemSetting/uploadClientPackage" method="post" enctype="multipart/form-data" target="clientUpdate" class="">
+                    <label for="" class="wind-label">客户端安装包</label>
+                    <form id="installform" action="${ctx}/systemSetting/uploadClientPackage" method="post" enctype="multipart/form-data" target="clientUpdate" class="">
                         <input type="hidden" name="MAX_FILE_SIZE" value="100000000">
                         <input type="text" id="clientInstallPath" class="form-input wind-normal-input" placeholder="点击浏览进行上传">
-                        <input type="file" name="clientTar" id="clientInstall" class="uploadFile" value="浏览">
-                        <input type="submit" class="sureButton" id="install" value="上传">
+                        <input type="file" name="packageFile" id="clientInstall" class="uploadFile" value="浏览">
+                        <input type="button" class="sureButton" id="install" value="上传">
                         <span id="clientInstallTip" class="none">请选择文件</span>
                     </form>
                 </div>
@@ -182,7 +182,7 @@
     <div class="table-opt-box">
         <i class="iconfont icon-nav-system table-opt-icon"></i>
         <div class="opt-hover-box">
-            <div class="opt-hover-row j-opt-hover-edit" data-id="{{id}}">
+            <div class="opt-hover-row j-opt-hover-edit" data-id="{{id}}" data-guid="{{guid}}">
                 <i class="iconfont icon-btn-edit text-sm"></i>
                 <span class="text-sm margin-left-xs">编辑</span>
             </div>

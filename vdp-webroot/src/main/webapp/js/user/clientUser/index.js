@@ -276,14 +276,19 @@ function initEvents() {
           parentDeptTree = $.fn.zTree.init($("#openWind .j-parent-dept-tree"), setting, zNodesBak);
           console.log(deptTable.ajax.json().data[idx].deptguid);
           if (zNodesBak.length > 0) {
-            var node = parentDeptTree.getNodeByParam('id', deptTree.getNodeByParam('id', deptTable.ajax.json().data[idx].deptguid));
+
+            var node = parentDeptTree.getNodeByParam('id', deptTree.getNodeByParam('id', deptTable.ajax.json().data[idx].deptguid).id);
+            console.log(node)
             if (node) {
               $('#' + node.tId + '_a').click();
             }
           }
           $('#openWind input[name=username]').val(deptTable.ajax.json().data[idx].username);
           $('#openWind input[name=truename]').val(deptTable.ajax.json().data[idx].truename);
-
+          $('#openWind select[name=selectPolicy]').val(deptTable.ajax.json().data[idx].policyid);
+          // debugger;
+          //
+          // $('#openWind select[name=selectPolicy]').val(deptTable.ajax.json().data[idx].policyname).attr('value', deptTable.ajax.json().data[idx].policyid);
           //校验
           $('#openWind .j-add-user-form').validate({
             rules: {
@@ -577,7 +582,6 @@ function initdeptTable(pid) {
       "url": ctx + "/clientUser/getClientUserPageByDepartmentId",
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
-        console.log(json);
         return json.data.map(function (obj) {
           return [obj.id, {username: obj.username, isusb: obj.isbindedUsbkey}, obj.truename, obj.policyname || '--', obj.ip || '--', obj.id]
         });

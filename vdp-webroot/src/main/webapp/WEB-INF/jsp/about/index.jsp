@@ -5,7 +5,7 @@
 
 
 <head>
-    <title>关于</title>
+    <title>金盾VDP</title>
     <link href="${ctxCss}/layout/inpage.css" rel="stylesheet" type="text/css" />
 
     <style type="text/css">

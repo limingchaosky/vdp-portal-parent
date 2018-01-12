@@ -178,6 +178,10 @@ function initEvents() {
             owner: $('#openWind input[name=owner]').val().trim(),
             departmentTel: $('#openWind input[name=departmentTel]').val().trim(),
           };
+          if(postData.parentId==2){
+            layer.msg("未分组不能添加子部门",{icon:2});
+            return;
+          }
           console.log(postData);
           if ($(layero).find('.layui-layer-btn0').hasClass('btn-disabled')) {
             return;
@@ -391,6 +395,7 @@ function initdeptTable(pid) {
       "url": ctx + "/department/datalist",
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
+        console.log(json);
         return json.data.map(function (obj) {
           return [obj.name, obj.parentName || '--', obj.owner || '--', obj.departmentTel || '--', {id:obj.id,treePath:obj.treePath}]
         });
