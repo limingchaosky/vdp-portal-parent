@@ -84,7 +84,7 @@ public class LoginController implements ServletContextAware {
         Map<String, Object> authInfo = AuthUtils.getAuthInfo(servletContext);
 
         if (authInfo.get("promptMsg") != null && !"".equals(authInfo.get("promptMsg"))
-                && userService.queryRefusePromptUser(user.getId()) == 0) {
+                && userService.queryRefusePromptUser(user.getGuid()) == 0) {
             //request.getSession().setAttribute("promptMsg", authInfo.get("promptMsg"));
             Cookie cookie = new Cookie("promptMsg", URLEncoder.encode(URLEncoder.encode(authInfo.get("promptMsg")
                     .toString(), "utf-8")));
@@ -119,13 +119,7 @@ public class LoginController implements ServletContextAware {
                 list = new ArrayList<NavigationDO>();
                 list.add(navigationDO);
             }
-        }/* else {
-            Long userCount = userService.countUserList(null, null, null, null);
-            if (userCount > Long.valueOf(authInfo.get("maxCustomerCnt") == null ? "0" : authInfo.get("maxCustomerCnt")
-                    .toString())) {
-                request.getSession().setAttribute("authmsg", "已超出最大用户数");
-            }
-         }*/
+        }
 
         if (AuthUtils.checkFileExsits(PathConfig.HOM_PATH, PathConfig.TSA_AUTH_FILE_NAME)) {
             request.getSession().setAttribute("tsaMenu", "1");

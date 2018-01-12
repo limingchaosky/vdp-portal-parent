@@ -65,8 +65,8 @@ public interface CustomizedMapper {
             "<script>",
             "SELECT d.id, d.name, d.parent_id as parentId,d.ip_part as ipPart ,d.tree_path AS treePath, d.owner,d.department_tel as departmentTel  ",
             "FROM t_user_department ud left join t_department d on ud.department_id=d.id ",
-            "WHERE  1=1 AND ud.user_id = #{userId} ", "</script>"})
-    List<DepartmentDO> getUserDepartmentByUser(@Param("userId") String userId);
+            "WHERE  1=1 AND ud.user_id = #{userGuid} ", "</script>"})
+    List<DepartmentDO> getUserDepartmentByUser(@Param("userGuid") String userGuid);
 
     @Select({
             "<script>",

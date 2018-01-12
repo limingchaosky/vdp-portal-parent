@@ -54,15 +54,6 @@ public class UserController implements ServletContextAware {
     private IUserService userService;
 
     @Autowired
-    private IDepartmentService departmentService;
-
-    @Autowired
-    private INavigationService navigationService;
-
-    @Autowired
-    private IPermissionNavigationService permissionNavigationService;
-
-    @Autowired
     private GuavaCacheManager cacheManager;
 
     private static final String FILE_NAME = "用户信息";
@@ -177,7 +168,7 @@ public class UserController implements ServletContextAware {
         UserDO user = GetLoginUser.getLoginUser();
         List<UserDO> userList;
 
-        if ("1".equals(user.getId())) {
+        if ("1".equals(user.getGuid())) {
             userList = userService.getAllUser();
         } else {
             Integer roleType = user.getRoleType();
@@ -219,53 +210,13 @@ public class UserController implements ServletContextAware {
     }
 
     @ResponseBody
-    @RequestMapping("/getUserListByDepartment")
-    public List<DepartmentDO> getUserListByDepartment(String userId) {
-        return userService.getUserListByDepartment(userId);
-    }
-
-    @RequestMapping("/validatOmsUser")
-    public String validatOmsUser(HttpServletRequest request, HttpServletResponse response) {
-        String userName = request.getParameter("name");
-        String password = request.getParameter("password");
-        Integer flag = ConstantsDto.CONST_FALSE;
-
-        //判断是否过期或者没有授权 普通用户不让校验通过
-        Map<String, Object> authInfo = AuthUtils.getAuthInfo(servletContext);
-        if ("".equals(authInfo.get("authmsg")) || ConstantsDto.ADMIN_NAME.equals(userName)) {
-            if (!StringUtil.isEmpty(userName) && !StringUtil.isEmpty(password)) {
-                UserDO userDO = userService.getLoginUserNoCacheByUserName(userName);
-                if (userDO != null && password.equals(userDO.getPassword())) {
-                    flag = ConstantsDto.CONST_TRUE;
-                }
-            }
-        }
-
-        //String callbackparam = request.getParameter("callbackparam");
-        PrintWriter out;
-        try {
-            response.setCharacterEncoding("utf-8");
-            out = response.getWriter();
-            //前台更改跨域查询方式 后台更改下接口
-            /*String result = callbackparam + "(" + flag + ")";
-            System.out.println(result);*/
-            out.print(flag);
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @ResponseBody
     @RequestMapping(value = "/insertRefusePromptUser", produces = "application/json", method = RequestMethod.POST)
     public Map<String, Object> insertRefusePromptUser(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("resultCode", ConstantsDto.CONST_FALSE);
         try {
             UserDO user = GetLoginUser.getLoginUser();
-            userService.insertRefusePromptUser(user.getId());
+            userService.insertRefusePromptUser(user.getGuid());
             resultMap.put("resultCode", ConstantsDto.CONST_TRUE);
         } catch (Exception e) {
         }

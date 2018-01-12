@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class UserDO extends BaseEntity implements Serializable {
-    private String id;
+    private Integer id;
+
+    private String guid;
 
     private String userName;
 
@@ -41,12 +43,20 @@ public class UserDO extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid == null ? null : guid.trim();
     }
 
     public String getUserName() {
@@ -178,6 +188,6 @@ public class UserDO extends BaseEntity implements Serializable {
     }
 
     public String getPrimaryKey() {
-        return getId();
+        return getId().toString();
     }
 }

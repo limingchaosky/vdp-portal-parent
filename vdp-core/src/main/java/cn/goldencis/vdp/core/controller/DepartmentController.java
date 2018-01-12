@@ -90,7 +90,7 @@ public class DepartmentController {
     }
 
     /**
-     * 下级部门列表
+     * 下级部门列表，分页查询
      *
      * @param pid
      * @param draw
@@ -133,7 +133,7 @@ public class DepartmentController {
     }
 
     /**
-     * 获取全部部门树，如果账户id，查询账户对应的部门权限，加上check:true
+     * 获取全部部门树，如果有账户id，查询账户对应的部门权限，加上check:true
      * @param userId
      * @return
      */
@@ -228,14 +228,6 @@ public class DepartmentController {
         return resultMsg;
     }
 
-
-    @ResponseBody
-    @RequestMapping(value = "/deleteUserByDepartmentId", produces = "application/json", method = RequestMethod.POST)
-    public String deleteUserByDepartmentId(String departmentId, String userId) {
-        userService.deleteUserByDepartmentId(departmentId, userId);
-        return "success";
-    }
-
     /**
      * 删除接口
      *
@@ -268,23 +260,6 @@ public class DepartmentController {
             result.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
         }
         return result;
-    }
-
-    /**
-     * 刷新树json
-     *
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/getnodes", produces = "application/json", method = RequestMethod.GET)
-    public String getnodes() {
-        return departmentService.getManagerNodes();
-    }
-
-    @RequestMapping(value = "/getDepartment", produces = "application/json", method = RequestMethod.GET)
-    public @ResponseBody
-    String getDepartment() {
-        return departmentService.getFunctionNodesByLogin();
     }
 
 }

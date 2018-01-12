@@ -115,63 +115,123 @@ public class UserDOCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(String value) {
+        public Criteria andIdEqualTo(Integer value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(String value) {
+        public Criteria andIdNotEqualTo(Integer value) {
             addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(String value) {
+        public Criteria andIdGreaterThan(Integer value) {
             addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(String value) {
+        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(String value) {
+        public Criteria andIdLessThan(Integer value) {
             addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(String value) {
+        public Criteria andIdLessThanOrEqualTo(Integer value) {
             addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLike(String value) {
-            addCriterion("id like", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotLike(String value) {
-            addCriterion("id not like", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIn(List<String> values) {
+        public Criteria andIdIn(List<Integer> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<String> values) {
+        public Criteria andIdNotIn(List<Integer> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(String value1, String value2) {
+        public Criteria andIdBetween(Integer value1, Integer value2) {
             addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(String value1, String value2) {
+        public Criteria andIdNotBetween(Integer value1, Integer value2) {
             addCriterion("id not between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidIsNull() {
+            addCriterion("guid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidIsNotNull() {
+            addCriterion("guid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidEqualTo(String value) {
+            addCriterion("guid =", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidNotEqualTo(String value) {
+            addCriterion("guid <>", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidGreaterThan(String value) {
+            addCriterion("guid >", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidGreaterThanOrEqualTo(String value) {
+            addCriterion("guid >=", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidLessThan(String value) {
+            addCriterion("guid <", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidLessThanOrEqualTo(String value) {
+            addCriterion("guid <=", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidLike(String value) {
+            addCriterion("guid like", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidNotLike(String value) {
+            addCriterion("guid not like", value, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidIn(List<String> values) {
+            addCriterion("guid in", values, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidNotIn(List<String> values) {
+            addCriterion("guid not in", values, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidBetween(String value1, String value2) {
+            addCriterion("guid between", value1, value2, "guid");
+            return (Criteria) this;
+        }
+
+        public Criteria andGuidNotBetween(String value1, String value2) {
+            addCriterion("guid not between", value1, value2, "guid");
             return (Criteria) this;
         }
 
@@ -1205,8 +1265,8 @@ public class UserDOCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIdLikeInsensitive(String value) {
-            addCriterion("upper(id) like", value.toUpperCase(), "id");
+        public Criteria andGuidLikeInsensitive(String value) {
+            addCriterion("upper(guid) like", value.toUpperCase(), "guid");
             return (Criteria) this;
         }
 

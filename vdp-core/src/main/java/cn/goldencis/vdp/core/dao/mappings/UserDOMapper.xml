@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.goldencis.vdp.core.dao.UserDOMapper">
   <resultMap id="BaseResultMap" type="cn.goldencis.vdp.core.entity.UserDO">
-    <id column="id" jdbcType="VARCHAR" property="id" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="guid" jdbcType="VARCHAR" property="guid" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="department" jdbcType="INTEGER" property="department" />
@@ -79,8 +80,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_name, password, department, name, sex, visible, email, phone, address, status,
-    role_type, readonly, skin, error_login_count, error_login_last_time, create_time
+    id, guid, user_name, password, department, name, sex, visible, email, phone, address,
+    status, role_type, readonly, skin, error_login_count, error_login_last_time, create_time
   </sql>
   <select id="selectByExample" parameterType="cn.goldencis.vdp.core.entity.UserDOCriteria" resultMap="BaseResultMap">
     select
@@ -96,15 +97,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from t_user
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_user
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="cn.goldencis.vdp.core.entity.UserDOCriteria">
     delete from t_user
@@ -112,25 +113,30 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="cn.goldencis.vdp.core.entity.UserDO" useGeneratedKeys="true" keyProperty="id">
-    insert into t_user (id, user_name, password,
-      department, name, sex,
-      visible, email, phone,
-      address, status, role_type,
-      readonly, skin, error_login_count,
-      error_login_last_time, create_time)
-    values (#{id,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-      #{department,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER},
-      #{visible,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
-      #{address,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{roleType,jdbcType=INTEGER},
-      #{readonly,jdbcType=INTEGER}, #{skin,jdbcType=VARCHAR}, #{errorLoginCount,jdbcType=INTEGER},
-      #{errorLoginLastTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
+  <insert id="insert" parameterType="cn.goldencis.vdp.core.entity.UserDO">
+    insert into t_user (id, guid, user_name,
+      password, department, name,
+      sex, visible, email,
+      phone, address, status,
+      role_type, readonly, skin,
+      error_login_count, error_login_last_time,
+      create_time)
+    values (#{id,jdbcType=INTEGER}, #{guid,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+      #{password,jdbcType=VARCHAR}, #{department,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+      #{sex,jdbcType=INTEGER}, #{visible,jdbcType=INTEGER}, #{email,jdbcType=VARCHAR},
+      #{phone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+      #{roleType,jdbcType=INTEGER}, #{readonly,jdbcType=INTEGER}, #{skin,jdbcType=VARCHAR},
+      #{errorLoginCount,jdbcType=INTEGER}, #{errorLoginLastTime,jdbcType=TIMESTAMP},
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="cn.goldencis.vdp.core.entity.UserDO" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="cn.goldencis.vdp.core.entity.UserDO">
     insert into t_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="guid != null">
+        guid,
       </if>
       <if test="userName != null">
         user_name,
@@ -183,7 +189,10 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="guid != null">
+        #{guid,jdbcType=VARCHAR},
       </if>
       <if test="userName != null">
         #{userName,jdbcType=VARCHAR},
@@ -245,7 +254,10 @@
     update t_user
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.guid != null">
+        guid = #{record.guid,jdbcType=VARCHAR},
       </if>
       <if test="record.userName != null">
         user_name = #{record.userName,jdbcType=VARCHAR},
@@ -302,7 +314,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update t_user
-    set id = #{record.id,jdbcType=VARCHAR},
+    set id = #{record.id,jdbcType=INTEGER},
+      guid = #{record.guid,jdbcType=VARCHAR},
       user_name = #{record.userName,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
       department = #{record.department,jdbcType=INTEGER},
@@ -326,6 +339,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="cn.goldencis.vdp.core.entity.UserDO">
     update t_user
     <set>
+      <if test="guid != null">
+        guid = #{guid,jdbcType=VARCHAR},
+      </if>
       <if test="userName != null">
         user_name = #{userName,jdbcType=VARCHAR},
       </if>
@@ -375,11 +391,12 @@
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.goldencis.vdp.core.entity.UserDO">
     update t_user
-    set user_name = #{userName,jdbcType=VARCHAR},
+    set guid = #{guid,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       department = #{department,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
@@ -395,7 +412,7 @@
       error_login_count = #{errorLoginCount,jdbcType=INTEGER},
       error_login_last_time = #{errorLoginLastTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByExampleWithRowbounds" parameterType="cn.goldencis.vdp.core.entity.UserDOCriteria" resultMap="BaseResultMap">
     select

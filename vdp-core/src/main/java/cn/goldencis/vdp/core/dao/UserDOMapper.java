@@ -14,7 +14,7 @@ public interface UserDOMapper extends BaseDao {
 
     int deleteByExample(UserDOCriteria example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(UserDO record);
 
@@ -24,7 +24,7 @@ public interface UserDOMapper extends BaseDao {
 
     List<UserDO> selectByExample(UserDOCriteria example);
 
-    UserDO selectByPrimaryKey(String id);
+    UserDO selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") UserDO record, @Param("example") UserDOCriteria example);
 

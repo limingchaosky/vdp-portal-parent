@@ -52,25 +52,11 @@ public interface IDepartmentService extends BaseService<DepartmentDO, Department
     String getNodesByLogin();
 
     /**
-     * 通过管理员Id获取已选中部门
-     * @param uid
-     * @return
-     */
-    String getChecked(Integer uid);
-
-    /**
      * 修改部门
      * @param bean
      * @return
      */
     boolean updatedept(DepartmentDO bean);
-
-    /**
-     * 获取所有权限的列表
-     * @param id
-     * @return
-     */
-    List<String> getAllRoleDept(Integer id);
 
     /**
      * 删除部门

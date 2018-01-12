@@ -75,7 +75,7 @@ public class GetLoginUser {
      */
     public static List<DepartmentDO> getDepartmentByUser() {
         UserDO user = GetLoginUser.getLoginUser();
-        return getLoginUser.userService.getUserRoleDepartmentByUserOptimised(user.getId());
+        return getLoginUser.userService.getUserRoleDepartmentByUserOptimised(user.getGuid());
     }
 
 }

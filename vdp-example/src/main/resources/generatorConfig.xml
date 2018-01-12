@@ -56,8 +56,12 @@
 			<property name="primariKey" value="id" />
 		</table>-->
 
-		<table schema="" tableName="t_navigation" domainObjectName="NavigationDO">
+		<!--<table schema="" tableName="t_navigation" domainObjectName="NavigationDO">-->
+			<!--<property name="primariKey" value="id" />-->
+		<!--</table>-->
+
+		<table schema="" tableName="t_user" domainObjectName="UserDO">
 			<property name="primariKey" value="id" />
 		</table>
-	</context>
-</generatorConfiguration>
+        </context>
+    </generatorConfiguration>

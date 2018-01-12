@@ -83,7 +83,6 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
             }
             return toTreeJson(cmapper.getUserRoleDepartmentByUser(ids, treePaths, true), true);
         }
-
     }
 
     /**
@@ -153,53 +152,6 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
     }
 
     /**
-     * 未用
-     * @param id
-     * @return
-     */
-    @Override
-    public List<String> getAllRoleDept(Integer id) {
-        List<DepartmentDO> roleDept = new ArrayList<>();
-        List<String> rlist = new ArrayList<>();
-        //避免权限为空时跳过条件而查询出所有，前端已限制不可输入未分组
-        rlist.add("0");
-        //未分组查询
-        if (id != null && id.intValue() == 0) {
-            return rlist;
-            //查询单个(如果是1则查询全部)
-        } else if (id != null && id.intValue() != 1) {
-            roleDept.add(mapper.selectByPrimaryKey(id.toString()));
-            //查询全部
-        } else {
-            roleDept = GetLoginUser.getDepartmentListWithLoginUser();
-        }
-
-        List<Integer> ids = new ArrayList<>();
-        List<String> treePaths = new ArrayList<>();
-        for (DepartmentDO dept : roleDept) {
-            ids.add(dept.getId());
-            treePaths.add(dept.getTreePath() + dept.getId() + ",%");
-        }
-        rlist.addAll(getIdlist(cmapper.getUserRoleDepartmentByUser(ids, treePaths, false)));
-        return rlist;
-    }
-
-    /**
-     * 获取部门名称
-     * @param roledept
-     * @return
-     */
-    public List<String> getIdlist(List<DepartmentDO> roledept) {
-        List<String> rlist = new ArrayList<>();
-        if (roledept != null) {
-            for (DepartmentDO dept : roledept) {
-                rlist.add(dept.getId().toString());
-            }
-        }
-        return rlist;
-    }
-
-    /**
      * 通过父类id和父类treePath查询子类集合，返回列表中包含父类本身。分页查询。
      * @param startNum
      * @param pageSize
@@ -224,7 +176,7 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
     }
 
     /**
-     *
+     * 根据父类id，查询该部门下所有部门的集合
      * @param pId
      * @return
      */
@@ -233,7 +185,7 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         DepartmentDO parentDept = mapper.selectByPrimaryKey(String.valueOf(pId));
         DepartmentDOCriteria departmentDOCriteria = new DepartmentDOCriteria();
         departmentDOCriteria.createCriteria().andParentIdEqualTo(pId);
-        departmentDOCriteria.or().andTreePathLike(parentDept.getTreePath() + parentDept.getId() + "%");
+        departmentDOCriteria.or().andTreePathLike(parentDept.getTreePath() + parentDept.getId() + ",%");
         List<DepartmentDO> departmentList = mapper.selectByExample(departmentDOCriteria);
         departmentList.add(parentDept);
         return departmentList;
@@ -256,15 +208,10 @@ public class DepartmentServiceImpl extends AbstractBaseServiceImpl<DepartmentDO,
         return mapper.countByExample(departmentDOCriteria);
     }
 
-    @Override
-    public String getChecked(Integer uid) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see cn.goldencis.tsa.system.service.IDepartmentService#deleteById(java.lang.Integer)
+    /**
+     * 删除部门
+     * @param id
+     * @return
      */
     @Transactional
     public boolean deleteById(Integer id) {

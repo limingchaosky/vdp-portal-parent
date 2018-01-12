@@ -94,9 +94,9 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
         }
 
         //判断是新建还是更新，没有即新建账户，补全对象属性。
-        if (StringUtil.isEmpty(user.getId())) {
+        if (user.getId() == null) {
 
-            user.setId(UUID.randomUUID().toString());
+            user.setGuid(UUID.randomUUID().toString());
             user.setCreateTime(new Date());
             //创建账户,同时获取新建账户的id
             mapper.insertSelective(user);
@@ -107,21 +107,21 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
 
             //更新部门权限
             //先删除账户部门关联表中，该用户关联的部门权限
-            cuserDepartmentDOMapper.batchDeleteUserDepartmentByUserId(user.getId());
+            cuserDepartmentDOMapper.batchDeleteUserDepartmentByUserId(user.getGuid());
 
             //更新页面权限
             //先删除账户页面关联表中，该用户关联的页面权限
-            cUserNavigationDOMapper.batchDeleteUserNavigationByUserId(user.getId());
+            cUserNavigationDOMapper.batchDeleteUserNavigationByUserId(user.getGuid());
         }
 
         //为账户批量添加部门权限
         if (departmentIdList != null) {
-            cuserDepartmentDOMapper.batchInsertByOneUserAndDepartmentList(user.getId(), departmentIdList);
+            cuserDepartmentDOMapper.batchInsertByOneUserAndDepartmentList(user.getGuid(), departmentIdList);
         }
 
         //为账户添加页面权限
         if (navigationIdList != null) {
-            cUserNavigationDOMapper.batchInsertByOneUserAndNavigationList(user.getId(),navigationIdList);
+            cUserNavigationDOMapper.batchInsertByOneUserAndNavigationList(user.getGuid(),navigationIdList);
         }
         return true;
     }
@@ -145,7 +145,7 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
         UserDOCriteria userexample = new UserDOCriteria();
         userexample.createCriteria().andUserNameEqualTo(name).andStatusEqualTo(11);
         UserDO user = super.getBy(userexample);
-        return cmapper.getUserDepartmentByUser(user.getId());
+        return cmapper.getUserDepartmentByUser(user.getGuid());
     }
 
     @Override
@@ -194,7 +194,7 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
 
         UserDOCriteria example = new UserDOCriteria();
         //如果是超级管理员，返回查询所有用户,如果是其他用户，根据角色类型，查询相同类型的用户
-        if (!"1".equals(user.getId())) {
+        if (!"1".equals(user.getGuid())) {
             example.createCriteria().andRoleTypeEqualTo(user.getRoleType());
         }
         List<UserDO> userList = mapper.selectByExampleWithRowbounds(example, rowBounds);
@@ -211,7 +211,7 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
     public int countUserListByLoginUserRoleTypeInPages(UserDO user) {
         UserDOCriteria example = new UserDOCriteria();
         //如果是超级管理员，返回查询所有用户,如果是其他用户，根据角色类型，查询相同类型的用户
-        if (!"1".equals(user.getId())) {
+        if (!"1".equals(user.getGuid())) {
             example.createCriteria().andRoleTypeEqualTo(user.getRoleType());
         }
 
@@ -230,7 +230,7 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
         //判断数据库是否有该记录，不存在即可用，返回true，如果有继续判断
         if (preUser != null) {
             //比较两个对象的id，若一致，是同一个对象没有改变名称的情况，返回可用true。
-            if (preUser.getId().equals(user.getId())) {
+            if (preUser.getId() == user.getId()) {
                 return true;
             }
             //若果不同，说明为两个用户，名称重复，不可用，返回false
@@ -247,10 +247,10 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
     @Transactional
     public void deleteUser(UserDO user) {
         //删除账户部门关联表中关联该账户的记录
-        cuserDepartmentDOMapper.batchDeleteUserDepartmentByUserId(user.getId());
+        cuserDepartmentDOMapper.batchDeleteUserDepartmentByUserId(user.getGuid());
 
         //删除账户页面权限关联表中关联该账户的记录
-        cUserNavigationDOMapper.batchDeleteUserNavigationByUserId(user.getId());
+        cUserNavigationDOMapper.batchDeleteUserNavigationByUserId(user.getGuid());
 
         //删除账户
         mapper.deleteByPrimaryKey(user.getId());
@@ -292,43 +292,6 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
     }
 
     @Override
-    public List<DepartmentDO> getUserListByDepartment(String userId) {
-        boolean flag = false;
-        if (StringUtil.isEmpty(userId)) {
-            userId = GetLoginUser.getLoginUser().getId();
-        }
-
-        if (userId.equals(ConstantsDto.ADMIN_ID))
-            flag = true;
-
-        UserDepartmentDOCriteria userexample = new UserDepartmentDOCriteria();
-        userexample.createCriteria().andUserIdEqualTo(userId);
-
-        List<UserDepartmentDO> list = userDepartmentDOMapper.selectByExample(userexample);
-        List<DepartmentDO> depList = cdepartmentDOMapper.selectNoParentDepartment();
-        List<DepartmentDO> redepList = new ArrayList<DepartmentDO>();
-        if (flag) {
-            for (DepartmentDO temp1 : depList) {
-                UserDepartmentDO udp = new UserDepartmentDO();
-                udp.setDepartmentId(temp1.getId());
-                udp.setUserId(ConstantsDto.ADMIN_ID);
-                temp1.setUserList(cuserDepartmentDOMapper.selectUserListByDepartment(udp));
-                redepList.add(temp1);
-            }
-        } else {
-            for (DepartmentDO temp1 : depList) {
-                for (UserDepartmentDO temp2 : list) {
-                    if (temp2.getDepartmentId().toString().equals(temp1.getId())) {
-                        temp1.setUserList(cuserDepartmentDOMapper.selectUserListByDepartment(temp2));
-                        redepList.add(temp1);
-                    }
-                }
-            }
-        }
-        return redepList;
-    }
-
-    @Override
     public Long selectUserCountByPermission(String permissionId) {
         UserDOCriteria example = new UserDOCriteria();
         example.createCriteria().andRoleTypeEqualTo(Integer.parseInt(permissionId));
@@ -355,7 +318,7 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
     @Override
     public UserDO getLoginUserNoCache(String username) {
         UserDOCriteria userexample = new UserDOCriteria();
-        userexample.createCriteria().andIdEqualTo(username);
+        userexample.createCriteria().andUserNameEqualTo(username);
         UserDO user = super.getBy(userexample);
         return user;
     }

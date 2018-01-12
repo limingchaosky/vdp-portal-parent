@@ -52,8 +52,6 @@ public interface IUserService extends BaseService<UserDO, UserDOCriteria> {
 
     void deleteUserByDepartmentId(String departmentId, String userId);
 
-    List<DepartmentDO> getUserListByDepartment(String userId);
-
     Long selectUserCountByPermission(String permissionId);
 
     /**

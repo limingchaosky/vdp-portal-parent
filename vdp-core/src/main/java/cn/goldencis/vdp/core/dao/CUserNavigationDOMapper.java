@@ -11,6 +11,11 @@ import java.util.List;
 @Mybatis
 public interface CUserNavigationDOMapper {
 
+    /**
+     * 为一个账户批量插入页面权限
+     * @param userId
+     * @param navigationIdList
+     */
     void batchInsertByOneUserAndNavigationList(@Param("userId") String userId, @Param("navigationIdList") List<Integer> navigationIdList);
 
     /**
@@ -18,4 +23,11 @@ public interface CUserNavigationDOMapper {
      * @param userId
      */
     void batchDeleteUserNavigationByUserId(String userId);
+
+    /**
+     * 通过用户的guid，查询所有关联的页面权限id集合
+     * @param userGuid
+     * @return
+     */
+    List<Integer> getNavigationListByUser(@Param(value = "userGuid") String userGuid);
 }

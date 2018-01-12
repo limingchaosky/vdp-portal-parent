@@ -30,55 +30,30 @@ public class NavigationServiceImpl extends AbstractBaseServiceImpl<NavigationDO,
     private PermissionNavigationDOMapper permissionNavigationDOMapper;
 
     @Autowired
-    private CPermissionNavigationDOMapper cpermissionNavigationDOMapper;
-
-    @Autowired
-    private UserDOMapper userDOMapper;
-
-    @Autowired
-    private UserPermissionDOMapper userPermissionDOMapper;
+    private CUserNavigationDOMapper cUserNavigationDOMapper;
 
     @SuppressWarnings("unchecked")
     @Override
-
     protected BaseDao<NavigationDO, NavigationDOCriteria> getDao() {
         return mapper;
     }
 
+    /**
+     * 获取用户权限集合
+     * @param user
+     * @return
+     */
     public List<NavigationDO> getUserNavigation(UserDO user) {
 
         NavigationDOCriteria nexample = new NavigationDOCriteria();
 
         //如果是超级管理员，则获取全部权限
-        if ("1".equals(user.getId())) {
+        if ("1".equals(user.getGuid())) {
             nexample.setOrderByClause("compositor asc");
             return mapper.selectByExample(nexample);
         }
 
-        //获取用户的角色类型
-        UserDO temp = userDOMapper.selectByPrimaryKey(user.getId());
-        String roleType = temp.getRoleType().toString();
-
-        //根据角色类型获取对应的权限id的列表
-        List<PermissionNavigationDO> perList = cpermissionNavigationDOMapper.selectList(roleType);
-
-        if (perList.size() < 1) {
-            return null;
-        }
-
-        List<Integer> ids = new ArrayList<Integer>();
-        for (PermissionNavigationDO mo : perList) {
-            ids.add(mo.getNavigationId());
-        }
-
-        UserPermissionDOCriteria userPermissionDOCriteria = new UserPermissionDOCriteria();
-        userPermissionDOCriteria.createCriteria().andUserIdEqualTo(user.getId());
-        List<UserPermissionDO> userPermissionDOS = userPermissionDOMapper.selectByExample(userPermissionDOCriteria);
-        for (UserPermissionDO userPermissionDO : userPermissionDOS) {
-            if (ids.contains(userPermissionDO.getNavigationId())) {
-                ids.add(userPermissionDO.getNavigationId());
-            }
-        }
+        List<Integer> ids = cUserNavigationDOMapper.getNavigationListByUser(user.getGuid());
 
         //根据id列表查询对应权限列表
         NavigationDOCriteria.Criteria ncriteria = nexample.createCriteria();

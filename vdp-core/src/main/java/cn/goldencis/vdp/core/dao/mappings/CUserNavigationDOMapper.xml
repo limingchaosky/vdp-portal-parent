@@ -8,8 +8,15 @@
       (#{userId},#{navigationId})
     </foreach>
   </insert>
+
   <delete id="batchDeleteUserNavigationByUserId" parameterType="java.lang.String">
     DELETE FROM t_user_navigation
     WHERE user_id = #{userId,jdbcType=VARCHAR}
   </delete>
+
+  <select id="getNavigationListByUser" parameterType="java.lang.String" resultType="java.lang.Integer">
+    SELECT t.navigation_id
+    FROM t_user_navigation t
+    WHERE t.user_id = #{userGuid}
+  </select>
 </mapper>
