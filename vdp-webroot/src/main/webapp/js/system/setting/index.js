@@ -24,7 +24,7 @@ function initEvent() {
     //删除用户
     .on('click', '.j-opt-hover-delete', function () {
       var id = $(this).attr('data-id');
-      if (id == 1 || id == 2 || id == 3) {
+      if (id == 1 || id == 2 || id == 3|| id == 4) {
         layer.msg("内置管理员不能删除", {icon: 2});
         return
       }
@@ -124,10 +124,11 @@ function initEvent() {
       // idx =idx+4;
       var id = $(this).attr('data-id');//这是账户的id
       var guid = $(this).attr('data-guid');//这是账户的id
-      // if (id == 1 || id == 2 || id == 3 || id ==4) {
-      //   layer.msg("内置管理员不能编辑", {icon: 2});
-      //   return
-      // }
+      var only = $(this).attr('data-only');//这是账户的id
+      if (id == 1 || id == 2 || id == 3 || id ==4) {
+        layer.msg("内置管理员不能编辑", {icon: 2});
+        return
+      }
       layer.open({
         id: 'openWind',//这个地方会自动给弹出框添加一个id
         type: 1,
@@ -150,10 +151,11 @@ function initEvent() {
             $("input[name=password]").val(encrypt(pass).toUpperCase());
             $("input[name=repassword]").val(encrypt(pass).toUpperCase());
           }
-          $("input[name=departmentListStr]").val(getnodesrt(deptnodes));
-          $("input[name=navigationListStr]").val(getnodesrt(navnodes));
+          $("#openWind input[name=departmentListStr]").val(getnodesrt(deptnodes));
+          $("#openWind input[name=navigationListStr]").val(getnodesrt(navnodes));
+
           var temp = $("#openWind form").serialize();
-console.log(temp)
+          console.log(temp)
           $.ajax({
             type: 'post',
             url: ctx + '/systemSetting/user/addOrUpdateUser',
@@ -177,6 +179,8 @@ console.log(temp)
         },
         success: function (layero, index) {
           initNavTree(1,guid);
+          $("#openWind select[name=readonly]").val(accountTable.ajax.json().data[idx].readonly);
+          // $("#openWind select[name=readonly]").find("option[value='"+only+"']").attr("selected",true);
           // 部门权限树
           initDeptTree(id);
           $('#openWind input[name=userName]').val(accountTable.ajax.json().data[idx].userName);
@@ -330,7 +334,7 @@ function initdeptTable() {
       "dataSrc": function (json) {
         console.log(json)
         return json.data.map(function (obj) {
-          return [obj.name, obj.userName, obj.roleType, obj.readonly, obj.phone || '--', {id:obj.id,guid:obj.guid}];
+          return [obj.name, obj.userName, obj.roleType, obj.readonly, obj.phone || '--', {id:obj.id,guid:obj.guid,only:obj.readonly}];
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象
@@ -382,7 +386,7 @@ function initdeptTable() {
       "class": "center-text",
       "width": "80px",
       "render": function (data, type, full) {
-        return template('temp_opt_box', {id: data.id,guid:data.guid});
+        return template('temp_opt_box', {id: data.id,guid:data.guid,only:data.only});
       }
     }],
     //当每次表格重绘的时候触发一个操作，比如更新数据后或者创建新的元素

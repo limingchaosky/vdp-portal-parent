@@ -182,7 +182,7 @@
     <div class="table-opt-box">
         <i class="iconfont icon-nav-system table-opt-icon"></i>
         <div class="opt-hover-box">
-            <div class="opt-hover-row j-opt-hover-edit" data-id="{{id}}" data-guid="{{guid}}">
+            <div class="opt-hover-row j-opt-hover-edit" data-id="{{id}}" data-guid="{{guid}}" data-only="{{only}}">
                 <i class="iconfont icon-btn-edit text-sm"></i>
                 <span class="text-sm margin-left-xs">编辑</span>
             </div>
