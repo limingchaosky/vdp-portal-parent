@@ -1,11 +1,6 @@
 package cn.goldencis.vdp.core.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import cn.goldencis.vdp.core.dao.*;
 import cn.goldencis.vdp.core.entity.*;
@@ -259,6 +254,26 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
         example.or().andIdEqualTo(1);
         List<UserDO> userList = mapper.selectByExample(example);
         return userList;
+    }
+
+    /**
+     * 根据审批流程模型中的审批人，获取对应账户的姓名
+     * @param approverIdList
+     * @return
+     */
+    @Override
+    public Map<String, String> getUserMapByIdList(List<String> approverIdList) {
+        UserDOCriteria example = new UserDOCriteria();
+        example.createCriteria().andGuidIn(approverIdList);
+        List<UserDO> userList = mapper.selectByExample(example);
+        Map<String, String> map = null;
+        if (userList != null && userList.size() > 0) {
+            map = new HashMap<>();
+            for (UserDO user : userList) {
+                map.put(user.getGuid(), user.getName());
+            }
+        }
+        return map;
     }
 
     /**

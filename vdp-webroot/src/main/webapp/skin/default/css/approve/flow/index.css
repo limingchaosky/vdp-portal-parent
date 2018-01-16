@@ -61,9 +61,31 @@
   width: 170px;
   border: 1px solid #d9d9d9;
   padding: 5px;
+  z-index: 1;
+  background: #fff;
 }
 .approveFlow_box .approve_start .approve_con .content .mode label {
   vertical-align: middle;
+}
+.approveFlow_box .approve_start .approve_con .content .approve_h {
+  display: inline-block;
+}
+.approveFlow_box .approve_start .approve_con .content .approve_h a {
+  background-color: #ededed;
+  color: #38D1BF;
+  width: 30px;
+  height: 28px;
+  display: inline-block;
+  text-align: center;
+  line-height: 28px;
+  vertical-align: top;
+}
+.approveFlow_box .approve_start .approve_con .content .approve_h span i {
+  font-size: 12px;
+  float: right;
+  margin-left: 15px;
+  margin-right: 5px;
+  color: #38D1BF;
 }
 .begin_bar,
 .default_bar,
@@ -86,6 +108,7 @@
   background-repeat: no-repeat;
   background-position: center center;
   border-radius: 60px;
+  cursor: pointer;
 }
 .begin_bar img,
 .default_bar img,
@@ -103,6 +126,13 @@
 .default_bar > label {
   background-image: url(../../../images/approve/step_show.png);
 }
+.default_bar > label:hover {
+  background-color: #38D1BF;
+  background-image: url(../../../images/approve/step_gray.png);
+}
 .end_bar > label {
   background-image: url(../../../images/approve/app_end.png);
+}
+.save-button {
+  margin-left: 115px;
 }

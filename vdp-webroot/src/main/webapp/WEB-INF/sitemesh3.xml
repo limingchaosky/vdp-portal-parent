@@ -35,5 +35,7 @@
     <mapping path="/systemSetting/user" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
     <mapping path="/usbKey/index" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
     <mapping path="/systemClient/index" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
+    <mapping path="/approveDefinition/index" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
+    <mapping path="/approveFlow/index" decorator="/WEB-INF/jsp/decorators/decorator.jsp"/>
 
 </sitemesh>

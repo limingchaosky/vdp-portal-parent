@@ -71,7 +71,7 @@ public abstract class AbstractBaseServiceImpl<T extends BaseEntity, C> implement
     /**
      * 根据ID删除记录.
      *
-     * @param id .
+     * @param primaryKey .
      */
     public void deleteByPrimaryKey(String primaryKey) {
         this.getDao().deleteByPrimaryKey(primaryKey);
@@ -80,8 +80,9 @@ public abstract class AbstractBaseServiceImpl<T extends BaseEntity, C> implement
     /**
      * 分页查询 .
      *
-     * @param pageParam 分页参数.
-     * @param paramMap 业务条件查询参数.
+     * @param page  分页参数.
+     * @param limit  分页参数.
+     * @param example 业务条件查询参数.
      * @return
      */
     public List<T> listPage(int page, int limit, C example) {

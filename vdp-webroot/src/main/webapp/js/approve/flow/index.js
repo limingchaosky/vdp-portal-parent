@@ -5,7 +5,6 @@ var approveList = null;
 $(function () {
   getApprroveList('.left-list:first');//获取审批列表
   initEvents();//初始化页面事件
-  // randerNavigation();
 });
 function initEvents() {
   $('body')
@@ -14,7 +13,7 @@ function initEvents() {
       if (!$(this).hasClass('list-active')) {
         $('.list-active').removeClass('list-active');
         $(this).addClass('list-active');
-        // $("#approveFlow_box").html('').load(ctx + '/approveDefinition/getApproveDefinitionDetail?approveDefinitionId=' + $(this).attr('data-id'), function() {});
+        $("#approveFlow_box").html('').load(ctx + '/approveDefinition/approveDetailView?approveDefinitionId=' + $(this).attr('data-id'));
         // getRoleInfo($(this).attr('data-id'));
       }
     })
@@ -25,19 +24,19 @@ function initEvents() {
         type: 1,
         title: '添加审批流程',
         content: $('#new_flow').html(),
-        area: ['400px', '300px'],
+        area: ['430px', '300px'],
         btn: ['确定', '取消'],
         yes: function (index, layero) {
           var postData = {};
           postData.name = $('#openWind input[name=flowname]').val();
-          postData.pid = $('#openWind select[name=userSelectFlow] option:selected').val();
+          postData.parentApproveId = $('#openWind select[name=userSelectFlow] option:selected').val();
           if ($('#openWind input[name=flowname]').val() == '') {
             $("body #openWind #flowTip").css('display', 'inline-block');
             return
           }
           $.ajax({
             type: 'post',
-            url: '${ctx}/policy/12121211',//新建流程接口
+            url: ctx + '/approveDefinition/addApproveDefinition',//新建流程接口
             data: postData,
             success: function (msg) {
               console.log(msg);
@@ -60,60 +59,44 @@ function initEvents() {
           for (var i = 0; i < approveList.length; i++) {
             htmlflow += '<option value=' + approveList[i].id + '>' + approveList[i].name + '</option>';
           }
-          $('#openWind select[name=userSelectPolicy]').html(htmlflow);
+          $('#openWind select[name=userSelectFlow]').html(htmlflow);
         }
       });
     })
     //删除流程未完成
     .on('click', '.list-del', function () {
       var el = $(this);
+      var id  = $(this).data("id");
       layer.confirm('确定要删除流程？', {
         btn: ['确定', '取消'],
         zIndex: 100
       }, function (index) {
+      if(id == 1){
+        layer.msg("默认策略不能删除",{icon:7});
+        return;
+      }
         layer.close(index);
         $.ajax({
-          type: 'get',
-          url: ctx + '/access/delete?id=' + $.trim($(el).attr('data-id')),
+          type: 'post',
+          url: ctx + '/approveDefinition/deleteApproveDefinition',
+          data: {approveDefinitionId:id},
           success: function (msg) {
-            if (msg === 'success') {
+            if (msg.resultCode == '1') {
               layer.msg('删除成功！', {icon: 1});
-              if ($(el).closest('.list-item').hasClass('active')) {
-                $(el).closest('li').remove();
-                $('#name').text('');
-                $('#inright-content').text('');
-                $('.list-item:eq(0)').click();
-                showEmpty();
-              } else {
-                $(el).closest('li').remove();
-              }
+              getApprroveList('.left-list:first');
             } else {
               layer.msg('删除失败！', {icon: 2});
             }
           },
           error: function (e) {
-            //closeLodingWindow();
             layer.msg('删除失败！', {icon: 2});
           }
         })
 
       });
     })
-    //提示显示隐藏
-    // .on('hover', '.mode .tips', function () {
-
-    // })
 
 }
-
-$(".tips").hover(function(){
-  $(this).find("span").css("background-color","#38CEC0");
-  $(this).find('div').show()
-},function(){
-  $(this).find("span").css("background-color","#d9d9d9");
-  $(this).find('div').hide();
-});
-
 // 获取所有的审批流程
 function getApprroveList(el) {
   getAjax(ctx + '/approveDefinition/getAllApproveDefinition', '', function (msg) {

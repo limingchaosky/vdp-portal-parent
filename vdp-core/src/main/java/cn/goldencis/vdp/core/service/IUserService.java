@@ -128,4 +128,11 @@ public interface IUserService extends BaseService<UserDO, UserDOCriteria> {
      * @return
      */
     List<UserDO> getAllOperatorList();
+
+    /**
+     * 根据审批流程模型中的审批人，获取对应账户的姓名
+     * @param approverIdList
+     * @return
+     */
+    Map<String,String> getUserMapByIdList(List<String> approverIdList);
 }

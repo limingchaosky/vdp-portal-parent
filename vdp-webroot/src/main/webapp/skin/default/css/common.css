@@ -1416,6 +1416,16 @@ body label {
   color: #BFCAD9;
   cursor: pointer;
 }
+.wind-span {
+  padding: 0px 2px;
+  height: 28px;
+  background-color: #eaeaea;
+  display: inline-block;
+  line-height: 28px;
+  text-align: left;
+  width: 140px;
+  vertical-align: middle;
+}
 .sureButton {
   height: 32px;
   border-radius: 2px;
@@ -1427,6 +1437,28 @@ body label {
   text-align: center;
   margin-left: 10px;
   width: 80px;
+}
+.save-button {
+  margin: 20px 0px 0px 85px;
+  width: 90px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  background-color: #38CFC0;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+}
+.cancel-button {
+  margin: 20px 0px 0px 20px;
+  width: 90px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  background-color: #E5E5E5;
+  color: #333333;
+  cursor: pointer;
+  display: inline-block;
 }
 /*layer msg样式*/
 .layui-layer-msg {
