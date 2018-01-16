@@ -296,7 +296,7 @@ public class UserController implements ServletContextAware {
     }
 
     /**
-     * 获取全部操作员的列表，为审批定义界面,定义审批环节时提供审批人的选择列表
+     * 获取全部操作员的列表，为审批定义界面,定义审批环节时提供审批人的选择列表，包含超级管理员
      * @return
      */
     @ResponseBody

@@ -249,13 +249,14 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
     }
 
     /**
-     * 获取全部操作员的列表，即roleType为2的全部
+     * 获取全部操作员的列表，即roleType为2的全部，包含超级管理员
      * @return
      */
     @Override
     public List<UserDO> getAllOperatorList() {
         UserDOCriteria example = new UserDOCriteria();
         example.createCriteria().andRoleTypeEqualTo(2);
+        example.or().andIdEqualTo(1);
         List<UserDO> userList = mapper.selectByExample(example);
         return userList;
     }
