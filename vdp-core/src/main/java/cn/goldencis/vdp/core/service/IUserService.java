@@ -116,4 +116,10 @@ public interface IUserService extends BaseService<UserDO, UserDOCriteria> {
      * @return
      */
     UserDO getUserByUserId(Integer userId);
+
+    /**
+     * 修改账户个人资料
+     * @param user
+     */
+    void updateUserInfo(UserDO user);
 }

@@ -232,8 +232,20 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
      * @return
      */
     @Override
+    @Transactional
     public UserDO getUserByUserId(Integer userId) {
         return mapper.selectByPrimaryKey(userId);
+    }
+
+    /**
+     * 修改账户个人资料
+     * @param user
+     */
+    @Override
+    public void updateUserInfo(UserDO user) {
+        UserDOCriteria example = new UserDOCriteria();
+        example.createCriteria().andIdEqualTo(user.getId());
+        mapper.updateByExampleSelective(user, example);
     }
 
     /**

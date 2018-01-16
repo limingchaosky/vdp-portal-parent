@@ -23,10 +23,7 @@ import cn.goldencis.vdp.core.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.ServletContextAware;
 
 import cn.goldencis.vdp.common.cache.manager.GuavaCacheManager;
@@ -136,6 +133,11 @@ public class UserController implements ServletContextAware {
         return resultMsg;
     }
 
+    /**
+     * 删除账户接口
+     * @param userId
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
     public ResultMsg deleteUser(Integer userId) {
@@ -224,5 +226,72 @@ public class UserController implements ServletContextAware {
         }
 
         return resultMap;
+    }
+
+    /**
+     * 根据账户id获取账户对象
+     * @param userId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getUserById", method = RequestMethod.GET)
+    public ResultMsg getUserById(Integer userId) {
+        ResultMsg resultMsg = new ResultMsg();
+
+        try {
+            //根据账户id获取账户对象
+            UserDO user = userService.getUserByUserId(userId);
+
+            resultMsg.setData(user);
+            resultMsg.setResultMsg("获取账户信息成功");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
+        } catch (Exception e) {
+            resultMsg.setData(e);
+            resultMsg.setResultMsg("获取账户信息失败");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
+        }
+
+        return resultMsg;
+    }
+
+    /**
+     * 针对账户所有人，开放修改账户个人资料的接口，密码、手机。
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/editPersonalUserInfo", method = RequestMethod.POST)
+    public ResultMsg editPersonalUserInfo(UserDO user, String prePassword) {
+        ResultMsg resultMsg = new ResultMsg();
+
+        try {
+
+            UserDO preUser = userService.getUserByUserId(user.getId());
+            if (preUser == null) {
+                resultMsg.setResultMsg("该账户不存在");
+                resultMsg.setResultCode(ConstantsDto.RESULT_CODE_FALSE);
+                return resultMsg;
+            }
+            if (!preUser.getPassword().equals(prePassword)) {
+                resultMsg.setResultMsg("原密码不正确");
+                resultMsg.setResultCode(ConstantsDto.RESULT_CODE_FALSE);
+                return resultMsg;
+            }
+
+            //如果修改的密码为空，则认为不对密码进行修改
+            if (StringUtil.isEmpty(user.getPassword())) {
+                user.setPassword(null);
+            }
+
+            //修改账户个人资料
+            userService.updateUserInfo(user);
+            resultMsg.setResultMsg("修改账户信息成功");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
+        } catch (Exception e) {
+            resultMsg.setData(e);
+            resultMsg.setResultMsg("修改账户信息失败");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
+        }
+
+        return resultMsg;
     }
 }
