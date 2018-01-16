@@ -959,7 +959,6 @@ select {
   width: 240px;
   height: 100%;
   background: white;
-  border-right: 1px solid #E1E2E3;
   box-sizing: border-box;
   float: left;
   position: relative;
@@ -971,7 +970,7 @@ select {
   right: 0;
   bottom: 0;
   overflow: auto;
-  background: white;
+  background: #EBECED;
 }
 .left-content-box.empty {
   background: url(../images/nodata.png);
@@ -990,14 +989,14 @@ select {
 .left-list {
   height: 50px;
   line-height: 50px;
-  color: #879CB3;
+  color: #363636;
   font-size: 14px;
   cursor: pointer;
   position: relative;
   padding: 0 10px;
 }
 .left-list:hover {
-  background: #f9f9f9;
+  background: #ffffff;
 }
 .left-list:hover .list-del,
 .left-list:hover .list-edit {
@@ -1007,13 +1006,13 @@ select {
   margin-left: 20px;
 }
 .left-list.list-active {
-  background: #10c7be;
+  background: #ffffff;
 }
 .left-list.list-active .list-icon,
 .left-list.list-active .list-name,
 .left-list.list-active .list-del,
 .left-list.list-active .list-edit {
-  color: white;
+  color: #17C4BB;
 }
 .left-list .list-name {
   max-width: calc(100% - 30px);
@@ -1028,9 +1027,10 @@ select {
   position: absolute;
   right: 10px;
   display: none;
+  color: #17C4BB;
 }
 .left-list .list-del:hover {
-  color: #68829f;
+  color: #17C4BB;
 }
 .left-list .list-edit {
   font-size: 14px;
@@ -1361,6 +1361,13 @@ body label {
   font-size: 14px;
   padding: 0 5px;
 }
+.wind-label-max {
+  display: inline-block;
+  width: 110px;
+  text-align: left;
+  font-size: 14px;
+  padding: 0 5px;
+}
 .wind-input {
   width: 220px;
   height: 30px;
@@ -1378,6 +1385,9 @@ body label {
 }
 .wind-normal-input {
   width: 220px;
+}
+.wind-normal-input-max {
+  width: 350px;
 }
 .wind-long-input {
   width: 430px;

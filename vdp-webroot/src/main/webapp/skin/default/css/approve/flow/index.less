@@ -1,0 +1,109 @@
+.bar-item-box .bar-item {
+  background-color: transparent;
+}
+
+.approveFlow_box {
+  padding: 50px 10px 0px 30px;
+  .approve_start {
+    & > label {
+      display: inline-block;
+      vertical-align: top;
+      .flow_line{
+        width: 100px;
+        height: 36px;
+        display: inline-block;
+        vertical-align: top;
+        text-align: center;
+        line-height: 36px;
+        border-bottom: 2px solid #ededed;
+        i{
+          cursor: pointer;
+          color: #38CEC2;
+        }
+      }
+    }
+    .approve_con{
+      position: absolute;
+      left: 0px;
+      height: 340px;
+      width: 100%;
+      box-shadow: 0px -2px 5px #ededed;
+      padding: 0px 20px;
+      .top-bar{
+        background-color: #fff;
+        border-bottom: 1px solid #ededed;
+      }
+      .content{
+        padding: 40px 0px 0px 20px;
+        .mode{
+          display: inline-block;
+          cursor: pointer;
+          margin-right: 10px;
+          .tips{
+            display: inline-block;
+            vertical-align: top;
+            span{
+              display: inline-block;
+              width: 14px;
+              height: 14px;
+              border-radius: 14px;
+              background-color: #d9d9d9;
+              vertical-align: middle;
+              line-height: 14px;
+              text-align: center;
+              color: #fff;
+            }
+            div{
+              position: absolute;
+              width: 170px;
+              border: 1px solid #d9d9d9;
+              padding: 5px;
+            }
+          }
+          label{
+            vertical-align: middle;
+          }
+        }
+      }
+    }
+  }
+}
+
+.begin_bar, .default_bar, .end_bar {
+  display: inline-block;
+  height: 160px;
+  text-align: center;
+  position: relative;
+  & > label {
+    display: block;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    background-color: #ededed;
+    background-image: url(../../../images/approve/app_start.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    border-radius: 60px;
+
+  }
+  img{
+    position: absolute;
+    bottom: -6px;
+    z-index: 1;
+    left: 20px;
+  }
+  span{
+    display: block;
+  }
+}
+.default_bar{
+  &>label{
+    background-image: url(../../../images/approve/step_show.png);
+  }
+}
+.end_bar{
+  &>label{
+    background-image: url(../../../images/approve/app_end.png);
+  }
+}

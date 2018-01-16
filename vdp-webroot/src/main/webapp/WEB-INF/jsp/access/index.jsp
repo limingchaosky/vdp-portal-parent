@@ -151,7 +151,7 @@
 <!--<script src="${ctxJs}/plugins/ueditor/ueditor.all.js"></script>-->
 <!--<script src="${ctxJs}/plugins/jquery.PrintArea/jquery.PrintArea.js"></script>-->
 <script src="${ctxJs}/plugins/validate/jquery.validate.js"></script>
-<script src="${ctxJs}/validateExtent.js"></script>
+<script src="${ctxJs}/plugins/validate/validateExtent.js"></script>
 <script src="${ctxJs}/plugins/bootstrap/bootstrap.min.js" type="text/javascript"></script>
 <!--<script src="${ctxJs}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>-->
 <!--<script src="${ctxJs}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>-->

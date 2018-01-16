@@ -294,4 +294,29 @@ public class UserController implements ServletContextAware {
 
         return resultMsg;
     }
+
+    /**
+     * 获取全部操作员的列表，为审批定义界面,定义审批环节时提供审批人的选择列表
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getAllOperatorList", method = RequestMethod.GET)
+    public ResultMsg getAllOperatorList() {
+        ResultMsg resultMsg = new ResultMsg();
+
+        try {
+            //获取全部操作员的列表，即roleType为2的全部
+            List<UserDO> userList = userService.getAllOperatorList();
+
+            resultMsg.setData(userList);
+            resultMsg.setResultMsg("获取审计人列表成功");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
+        } catch (Exception e) {
+            resultMsg.setData(e);
+            resultMsg.setResultMsg("获取审计人列表失败");
+            resultMsg.setResultCode(ConstantsDto.RESULT_CODE_ERROR);
+        }
+
+        return resultMsg;
+    }
 }

@@ -1150,7 +1150,6 @@ select {
   width: 240px;
   height: 100%;
   background: white;
-  border-right: 1px solid #E1E2E3;
   box-sizing: border-box;
   float: left;
   position: relative;
@@ -1163,7 +1162,7 @@ select {
   right: 0;
   bottom: 0;
   overflow: auto;
-  background: white;
+  background: #EBECED;
   &.empty {
     background: url(../images/nodata.png);
     background-repeat: no-repeat;
@@ -1186,13 +1185,13 @@ select {
 .left-list {
   height: 50px;
   line-height: 50px;
-  color: #879CB3;
+  color: #363636;
   font-size: 14px;
   cursor: pointer;
   position: relative;
   padding: 0 10px;
   &:hover {
-    background: #f9f9f9;
+    background: #ffffff;
     .list-del,
     .list-edit {
       display: inline-block;
@@ -1202,12 +1201,12 @@ select {
     margin-left: 20px;
   }
   &.list-active {
-    background: #10c7be;
+    background: #ffffff;
     .list-icon,
     .list-name,
     .list-del,
     .list-edit {
-      color: white;
+      color: #17C4BB;
     }
   }
   .list-name {
@@ -1223,9 +1222,11 @@ select {
     position: absolute;
     right: 10px;
     display: none;
+    color: #17C4BB;
     &:hover {
-      color: darken(#879CB3, 10%);
+      color: #17C4BB;
     }
+    
   }
   .list-edit {
     font-size: 14px;
@@ -1653,6 +1654,13 @@ body label {
   font-size: 14px;
   padding: 0 5px;
 }
+.wind-label-max {
+  display: inline-block;
+  width: 150px;
+  text-align: left;
+  font-size: 14px;
+  padding: 0 5px;
+}
 
 .wind-input {
   width: 220px;
@@ -1673,6 +1681,9 @@ body label {
 
 .wind-normal-input {
   width: 220px;
+}
+.wind-normal-input-max {
+  width: 350px;
 }
 
 .wind-long-input {

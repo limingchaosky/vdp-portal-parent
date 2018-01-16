@@ -58,9 +58,7 @@
 </div>
 
 <div id="userinfo-html" style="display:none;">
-    <script src="${ctxJs}/plugins/validate/jquery.validate.js" type="text/javascript"></script>
-    <script src="${ctxJs}/plugins/validate/messages_zh.js" type="text/javascript"></script>
-    <script src="${ctxJs}/validateExtent.js" type="text/javascript"></script>
+
     <div class="userinfo-box">
         <form id="userinfo-form">
             <div class="u-row">
@@ -68,7 +66,7 @@
                 />
             </div>
             <div class="u-row">
-                <div class="label-box "><label class="j-label-role">管理角色：</label></div><input type="text" name="roleTypeName" readonly class="readonly-input"
+                <div class="label-box "><label class="j-label-role">账户角色：</label></div><input type="text" name="roleTypeName" readonly class="readonly-input"
                     style="border:none !important;" />
             </div>
             <div class="u-row">
@@ -87,33 +85,33 @@
             <div class="u-row">
                 <div class="label-box"><label>电话：</label></div><input type="text" name="phone" placeholder="请输入11位正整数" />
             </div>
-            <div class="u-row">
-                <div class="label-box"><label>邮箱：</label></div><input type="text" name="email" placeholder="请输入邮箱" />
-            </div>
             <input type="hidden" name="id" value="" />
         </form>
     </div>
 </div>
 <input type="hidden" name="" class="messhid" value="">
 <!--<script src="${ctxJs}/reconnecting-websocket.js"></script>-->
+<script src="${ctxJs}/plugins/validate/jquery.validate.js" type="text/javascript"></script>
+<script src="${ctxJs}/plugins/validate/messages_zh.js" type="text/javascript"></script>
+<script src="${ctxJs}/plugins/validate/validateExtent.js" type="text/javascript"></script>
 <script type="text/javascript">
     var ctx = '${ctx}';
-    var host = window.location.host;
-    //较验授权信息，弹窗提示
-    var promptMsg = decodeURIComponent(getCookie("promptMsg"));
-    if (promptMsg != 'null' && promptMsg != '') {
-        layer.confirm(promptMsg, {
-            btn: ['不再提示', '关闭'],
-            end: function () {
-                delCookie("promptMsg");
-            }
-        }, function (index) {
-            $.ajax({
-                type: 'post',
-                url: ctx + '/user/insertRefusePromptUser',
-            });
-            layer.close(index);
-        });
-    }
+//    var host = window.location.host;
+//    //较验授权信息，弹窗提示
+//    var promptMsg = decodeURIComponent(getCookie("promptMsg"));
+//    if (promptMsg != 'null' && promptMsg != '') {
+//        layer.confirm(promptMsg, {
+//            btn: ['不再提示', '关闭'],
+//            end: function () {
+//                delCookie("promptMsg");
+//            }
+//        }, function (index) {
+//            $.ajax({
+//                type: 'post',
+//                url: ctx + '/user/insertRefusePromptUser',
+//            });
+//            layer.close(index);
+//        });
+//    }
 
 </script>

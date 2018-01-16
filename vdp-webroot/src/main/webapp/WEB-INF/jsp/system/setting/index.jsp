@@ -201,7 +201,7 @@
 <!--<script src="${ctxJs}/plugins/jquery.PrintArea/jquery.PrintArea.js"></script>-->
 <script src="${ctxJs}/plugins/validate/jquery.validate.js"></script>
 <script src="${ctxJs}/plugins/validate/messages_zh.js"></script>
-<script src="${ctxJs}/validateExtent.js"></script>
+<script src="${ctxJs}/plugins/validate/validateExtent.js"></script>
 <script src="${ctxJs}/plugins/bootstrap/bootstrap.min.js" type="text/javascript"></script>
 <script src="${ctxJs}/plugins/zTree/jquery.ztree.core-3.5.js" type="text/javascript"></script>
 <script src="${ctxJs}/plugins/zTree/jquery.ztree.excheck-3.5.js" type="text/javascript"></script>

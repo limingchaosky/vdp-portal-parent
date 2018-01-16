@@ -122,4 +122,10 @@ public interface IUserService extends BaseService<UserDO, UserDOCriteria> {
      * @param user
      */
     void updateUserInfo(UserDO user);
+
+    /**
+     * 获取全部操作员的列表，即roleType为2的全部
+     * @return
+     */
+    List<UserDO> getAllOperatorList();
 }

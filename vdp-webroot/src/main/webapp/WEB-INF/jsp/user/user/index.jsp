@@ -200,9 +200,10 @@
 </script>
 <!-- 用户详情结束 -->
 <script src="${ctxJs}/plugins/dataTables/jquery.dataTables.min.js"></script>
-<script src="${ctxJs}/plugins/dataTables/ColReorderWithResize.min.js"></script>
+<!--<script src="${ctxJs}/plugins/dataTables/ColReorderWithResize.min.js"></script>-->
 <script src="${ctxJs}/plugins/validate/jquery.validate.js"></script>
-<script src="${ctxJs}/validateExtent.js"></script>
+<script src="${ctxJs}/plugins/validate/messages_zh.js"></script>
+<script src="${ctxJs}/plugins/validate/validateExtent.js"></script>
 <script src="${ctxJs}/plugins/zTree/jquery.ztree.core-3.5.js" type="text/javascript"></script>
 <script src="${ctxJs}/plugins/zTree/jquery.ztree.excheck-3.5.js" type="text/javascript"></script>
 <script src="${ctxJs}/plugins/template/template-web.js" type="text/javascript"></script>
