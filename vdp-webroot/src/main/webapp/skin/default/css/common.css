@@ -1425,6 +1425,7 @@ body label {
   text-align: left;
   width: 140px;
   vertical-align: middle;
+  margin-right: 5px;
 }
 .sureButton {
   height: 32px;

@@ -34,6 +34,9 @@
 	<http pattern="/resource/*/*" security="none" />
 	<http pattern="/resource/*/*/*" security="none" />
 
+	<!-- 开放客户端登录的 -->
+	<http pattern="/approveFlow/submitApproveFlow" security="none" />
+
 	<!-- <http pattern="/system/import/import" security="none"></http> <http
 		pattern="/system/import/importdevice" security="none"></http> -->
 	<http pattern="/ueditor/config*" security="none" />

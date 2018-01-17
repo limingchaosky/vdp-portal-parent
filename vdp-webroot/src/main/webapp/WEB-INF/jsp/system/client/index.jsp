@@ -11,7 +11,7 @@
 <div class="main-right">
     <!--内容区头部-->
     <div class="top-bar">
-        <div class="top-title">客户端</div>
+        <div class="top-title">视频平台</div>
     </div>
     <!--内容区头部结束-->
     <!--内容区-表格-->

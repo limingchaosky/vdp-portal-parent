@@ -136,4 +136,19 @@ public interface IUserService extends BaseService<UserDO, UserDOCriteria> {
      * @return
      */
     JSONArray getUserMapByIdList(List<String> approverIdList);
+
+    /**
+     *根据审批模型id，获取审批人guid字符串
+     * @param approveModelId
+     * @return
+     */
+    String getUserIdListByApproveModelId(Integer approveModelId);
+
+    /**
+     * 转化为审批界面回显审批人需要的JsonArray结构，包含guid和name，回显账户的check:true
+     * @param userList
+     * @param approvers
+     * @return
+     */
+    JSONArray toApproveJsonArr(List<UserDO> userList, String approvers);
 }

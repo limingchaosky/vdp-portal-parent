@@ -279,6 +279,45 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
     }
 
     /**
+     * 根据审批模型id，获取审批人guid字符串
+     * @param approveModelId
+     * @return
+     */
+    @Override
+    public String getUserIdListByApproveModelId(Integer approveModelId) {
+        return cmapper.getUserIdListByApproveModelId(approveModelId);
+    }
+
+    /**
+     * 转化为审批界面回显审批人需要的JsonArray结构，包含guid和name，回显账户的check:true
+     * @param userList
+     * @param approvers
+     * @return
+     */
+    @Override
+    public JSONArray toApproveJsonArr(List<UserDO> userList, String approvers) {
+        String[] approverArr = null;
+        if (approvers != null) {
+            approverArr = approvers.split(";");
+        }
+        JSONArray userArr = new JSONArray();
+        for (UserDO user : userList) {
+            JSONObject userJson = new JSONObject();
+            userJson.put("guid", user.getGuid());
+            userJson.put("name", user.getName());
+            if (approverArr != null) {
+                for (String approve : approverArr) {
+                    if (user.getGuid().equals(approve)) {
+                        userJson.put("checked", true);
+                    }
+                }
+            }
+            userArr.add(userJson);
+        }
+        return userArr;
+    }
+
+    /**
      * 删除用户，真实删除
      * @param user
      */
@@ -294,20 +333,6 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
         //删除账户
         mapper.deleteByPrimaryKey(user.getId());
     }
-
-  /*  @Override
-    public UserDO getUser(String id) {
-        UserDO temp = mapper.selectByPrimaryKey(id);
-        String str = JSONObject.toJSONString(temp);
-        UserDO record = JSONObject.parseObject(str, UserDO.class);
-        UserDepartmentDOCriteria userexample = new UserDepartmentDOCriteria();
-        userexample.createCriteria().andUserIdEqualTo(id);
-        List<UserDepartmentDO> list = userDepartmentDOMapper.selectByExample(userexample);
-        if (list.size() > 0) {
-            record.setDepartmentList(list);
-        }
-        return record;
-    }*/
 
     @Override
     public void deleteUserByDepartmentId(String departmentId, String userId) {

@@ -21,6 +21,7 @@ import cn.goldencis.vdp.core.entity.ResultMsg;
 import cn.goldencis.vdp.core.entity.UserDO;
 import cn.goldencis.vdp.core.service.*;
 
+import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -296,19 +297,29 @@ public class UserController implements ServletContextAware {
     }
 
     /**
-     * 获取全部操作员的列表，为审批定义界面,定义审批环节时提供审批人的选择列表，包含超级管理员
+     * 获取全部操作员的列表，为审批定义界面,定义审批环节时提供审批人的选择列表，包含超级管理员,同时回显已勾选账户
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/getAllOperatorList", method = RequestMethod.GET)
-    public ResultMsg getAllOperatorList() {
+    public ResultMsg getAllOperatorList(Integer approveModelId) {
         ResultMsg resultMsg = new ResultMsg();
 
         try {
             //获取全部操作员的列表，即roleType为2的全部
             List<UserDO> userList = userService.getAllOperatorList();
 
-            resultMsg.setData(userList);
+            String approvers = null;
+            if (approveModelId != null) {
+                //根据审批模型id，获取账户id集合
+                approvers = userService.getUserIdListByApproveModelId(approveModelId);
+            }
+
+            //转化为审批界面回显审批人需要的JsonArray结构，包含guid和name，回显账户的check:true
+            JSONArray userJsonArr = userService.toApproveJsonArr(userList, approvers);
+
+
+            resultMsg.setData(userJsonArr);
             resultMsg.setResultMsg("获取审计人列表成功");
             resultMsg.setResultCode(ConstantsDto.RESULT_CODE_TRUE);
         } catch (Exception e) {
