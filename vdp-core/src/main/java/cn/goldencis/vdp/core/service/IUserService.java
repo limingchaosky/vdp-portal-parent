@@ -7,6 +7,7 @@ import cn.goldencis.vdp.common.service.BaseService;
 import cn.goldencis.vdp.core.entity.DepartmentDO;
 import cn.goldencis.vdp.core.entity.UserDO;
 import cn.goldencis.vdp.core.entity.UserDOCriteria;
+import net.sf.json.JSONArray;
 
 /**
  * 管理员service
@@ -134,5 +135,5 @@ public interface IUserService extends BaseService<UserDO, UserDOCriteria> {
      * @param approverIdList
      * @return
      */
-    Map<String,String> getUserMapByIdList(List<String> approverIdList);
+    JSONArray getUserMapByIdList(List<String> approverIdList);
 }

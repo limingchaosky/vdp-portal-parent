@@ -4,6 +4,8 @@ import java.util.*;
 
 import cn.goldencis.vdp.core.dao.*;
 import cn.goldencis.vdp.core.entity.*;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -13,10 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import cn.goldencis.vdp.common.dao.BaseDao;
 import cn.goldencis.vdp.common.service.impl.AbstractBaseServiceImpl;
 import cn.goldencis.vdp.common.utils.DateUtil;
-import cn.goldencis.vdp.common.utils.StringUtil;
 import cn.goldencis.vdp.core.constants.ConstantsDto;
 import cn.goldencis.vdp.core.service.IUserService;
-import cn.goldencis.vdp.core.utils.GetLoginUser;
 
 /**
  * 管理员service实现类
@@ -262,18 +262,20 @@ public class UserServiceImpl extends AbstractBaseServiceImpl<UserDO, UserDOCrite
      * @return
      */
     @Override
-    public Map<String, String> getUserMapByIdList(List<String> approverIdList) {
+    public JSONArray getUserMapByIdList(List<String> approverIdList) {
         UserDOCriteria example = new UserDOCriteria();
         example.createCriteria().andGuidIn(approverIdList);
         List<UserDO> userList = mapper.selectByExample(example);
-        Map<String, String> map = null;
+        JSONArray jsonArray = null;
         if (userList != null && userList.size() > 0) {
-            map = new HashMap<>();
+            jsonArray = new JSONArray();
             for (UserDO user : userList) {
-                map.put(user.getGuid(), user.getName());
+                JSONObject userJson = new JSONObject();
+                userJson.put(user.getGuid(), user.getName());
+                jsonArray.add(userJson);
             }
         }
-        return map;
+        return jsonArray;
     }
 
     /**
