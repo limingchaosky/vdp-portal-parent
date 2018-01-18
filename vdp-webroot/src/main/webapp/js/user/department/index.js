@@ -12,12 +12,12 @@ function initEvents() {
   //删除部门
     .on('click', '.j-opt-hover-delete', function () {
       var id = $(this).attr('data-id');
-      if (id === 1) {
-        layer.msg('顶级部门不能删除！', { icon: 0 });
+      if (id == 1) {
+        layer.msg('顶级部门不能删除！', { icon: 7 });
         return;
       }
-      if (id === 2) {
-        layer.msg('未分组不能删除！', { icon: 0 });
+      if (id == 2) {
+        layer.msg('未分组不能删除！', { icon: 7 });
         return;
       }
       layer.confirm('确定要删除该部门吗？', {

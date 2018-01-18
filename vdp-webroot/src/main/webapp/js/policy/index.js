@@ -176,7 +176,7 @@ function initEvents() {
       obj.sbscrnwatermark.content.computername = temp.computerWater?Number(temp.computerWater):0;
       obj.sbscrnwatermark.content.time = temp.timeWater?Number(temp.timeWater):0;
       obj.sbscrnwatermark.content.manual = temp.diyWater?Number(temp.diyWater):0;
-      obj.sbscrnwatermark.content.manualtext = temp.screendiyWaterContent;
+      obj.sbscrnwatermark.content.manualtext = temp.screendiyWaterContent||'';
       // 文件外发
       obj.sbfileoutcfg.enable = temp.fileOutSwitch?Number(temp.fileOutSwitch):0;
       obj.sbfileoutcfg.content.mode = temp.approveOut?Number(temp.approveOut):1;
@@ -197,7 +197,7 @@ function initEvents() {
       obj.sbfileoutcfg.content.scwatermark.content.computername = temp.fileOutComputerWater?Number(temp.fileOutComputerWater):0;
       obj.sbfileoutcfg.content.scwatermark.content.time = temp.fileOutTimeWater?Number(temp.fileOutTimeWater):0;
       obj.sbfileoutcfg.content.scwatermark.content.manual = temp.fileOutDiyWater?Number(temp.fileOutDiyWater):0;
-      obj.sbfileoutcfg.content.scwatermark.content.manualtext = temp.outdiyWaterContent;
+      obj.sbfileoutcfg.content.scwatermark.content.manualtext = temp.outdiyWaterContent||'';
       //文件导出
       obj.sbfileopt.enable = temp.fileOutSwitch?Number(temp.fileExportSwitch):0;
       obj.sbfileopt.content.mode = temp.approveExport?Number(temp.approveExport):1;//1是明文3是审批
@@ -214,13 +214,14 @@ function initEvents() {
       obj.sbfileopt.content.sbfileoptwatermark.content.computername = temp.fileExportComputerWater?Number(temp.fileExportComputerWater):0;
       obj.sbfileopt.content.sbfileoptwatermark.content.time = temp.fileExportTimeWater?Number(temp.fileExportTimeWater):0;
       obj.sbfileopt.content.sbfileoptwatermark.content.manual = temp.fileExportDiyWater?Number(temp.fileExportDiyWater):0;
-      obj.sbfileopt.content.sbfileoptwatermark.content.manualtext = temp.exportdiyWaterContent;
+      obj.sbfileopt.content.sbfileoptwatermark.content.manualtext = temp.exportdiyWaterContent||'';
       // console.log(temp.videoApprove);
       //图片审计
       obj.videoappro=temp.videoApprove?Number(temp.videoApprove):0;
 
 
       objAll = {"content":obj,"policyid":policyId};
+      console.log(objAll);
       $.ajax({
         type:'post',
         url:ctx + '/policy/updatePolicyJsonFile',

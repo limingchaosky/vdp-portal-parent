@@ -1487,3 +1487,6 @@ body label {
 .layui-layer-ico7 {
   background: url(../images/tips_icon_warning.png) 0 0 no-repeat !important;
 }
+.layui-layer-dialog .layui-layer-content {
+  text-align: center;
+}

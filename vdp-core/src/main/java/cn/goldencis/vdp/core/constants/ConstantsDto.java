@@ -18,6 +18,21 @@ public class ConstantsDto {
     public static final int RESULT_CODE_TRUE = 1;
     public static final int RESULT_CODE_ERROR = -1;
 
+    //审批流程的执行状态，-1为审批被驳回，0为审批进行中，1为审批通过',
+    public static final Integer APPROVE_FLOW_STATUS_ADOPT = 1;
+    public static final Integer APPROVE_FLOW_STATUS_APPROVING = 0;
+    public static final Integer APPROVE_FLOW_STATUS_REFUSE = -1;
+
+    //审批结果，-1为审批被驳回，0为审批进行中，1为审批通过，若null则未开始。
+    public static final Integer APPROVE_DETAIL_RESULT_ADOPT = 1;
+    public static final Integer APPROVE_DETAIL_RESULT_APPROVING = 0;
+    public static final Integer APPROVE_DETAIL_RESULT_REFUSE = -1;
+    public static final Integer APPROVE_DETAIL_RESULT_INQUEEN = null;
+
+    //是否标准环节,1为标准环节，0为严格环节
+    public static final Integer APPROVE_MODEL_STANDARD = 1;
+    public static final Integer APPROVE_MODEL_STRICT = 0;
+
     public static final String CONST_FORM_PROPERTY_TYPE = "formProperty";
 
     public static final String CONST_TASK_LISTENER_TYPE = "taskListener";
@@ -88,5 +103,4 @@ public class ConstantsDto {
     public static final String SEC_CODE_PARAMETER = "sec_code_parameter";
 
     public static final String UPLOAD_PATH = File.separator + "upload" + File.separator + "attachment" + File.separator;
-    public static final String TOMCAT = "tomcat";
 }

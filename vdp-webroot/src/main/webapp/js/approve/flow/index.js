@@ -39,7 +39,6 @@ function initEvents() {
             url: ctx + '/approveDefinition/addApproveDefinition',//新建流程接口
             data: postData,
             success: function (msg) {
-              console.log(msg);
               if (msg.resultCode == '1') {
                 layer.close(index);
                 layer.msg('新建成功！', {icon: 1});
@@ -72,7 +71,7 @@ function initEvents() {
         zIndex: 100
       }, function (index) {
       if(id == 1){
-        layer.msg("默认策略不能删除",{icon:7});
+        layer.msg("默认流程不能删除",{icon:7});
         return;
       }
         layer.close(index);
@@ -100,7 +99,6 @@ function initEvents() {
 // 获取所有的审批流程
 function getApprroveList(el) {
   getAjax(ctx + '/approveDefinition/getAllApproveDefinition', '', function (msg) {
-    console.log(msg);
     if (msg.resultCode == 1) {
       approveList = msg.data;
       $("#flow_list_box").html(template('flow_list',approveList))
