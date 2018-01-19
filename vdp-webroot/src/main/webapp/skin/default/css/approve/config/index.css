@@ -51,6 +51,15 @@ textarea {
   width: 500px;
   height: 100px;
 }
+#openWind .dataTables_wrapper {
+  position: inherit;
+  top: 391px;
+  left: 70px;
+  height: 100%;
+}
+#openWind .dataTables_scrollBody {
+  position: inherit !important;
+}
 #openWind .top {
   width: 860px;
   height: 170px;
@@ -81,7 +90,6 @@ textarea {
 }
 #openWind .flow {
   width: 860px;
-  height: 90px;
   margin: 20px auto;
   color: #333333;
 }
@@ -89,7 +97,7 @@ textarea {
   margin-top: 30px;
 }
 #openWind .flow .flowContent {
-  width: 700px;
+  width: 86%;
   display: inline-block;
   vertical-align: middle;
 }
@@ -120,6 +128,12 @@ textarea {
   background-position: center center;
   border-radius: 50px;
 }
+#openWind .flow .flowContent > label .begin_bar span,
+#openWind .flow .flowContent > label .default_bar span,
+#openWind .flow .flowContent > label .end_bar span {
+  display: inline-block;
+  width: 50px;
+}
 #openWind .flow .flowContent > label .default_bar > label {
   background-image: url(../../../images/approve/step_show.png);
 }
@@ -134,6 +148,10 @@ textarea {
   text-align: center;
   line-height: 28px;
   border-bottom: 2px solid #ededed;
+}
+#openWind .flow .flowContent > label.default-hover .default_bar label {
+  background-color: #38D1BF;
+  background-image: url(../../../images/approve/step_gray.png);
 }
 #openWind .opinion {
   width: 860px;
@@ -150,4 +168,5 @@ textarea {
 #openWind .table .approveHistory {
   width: 740px;
   display: inline-block;
+  vertical-align: top;
 }

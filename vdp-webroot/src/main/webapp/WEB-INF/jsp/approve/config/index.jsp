@@ -58,37 +58,44 @@
                     </table>
                 </div>
             </div>
-            <!--<div class="complatecon none">-->
-            <!--<div class="processtop">-->
-            <!--<div class="left">-->
-            <!--<a id="bar_del_process" class="bar-item bar-item-icon iconfont icon-btn-delete" title="删除流程"></a>-->
-            <!--</div>-->
-            <!--<div class="right bar-item-box">-->
-            <!--<div class="bar-item bar-item-search wind-content">-->
-            <!--<input type="text" class="wind-content-input wind-content-input-date valid" name="" readonly="" aria-invalid="false" id="timechange">-->
-            <!--</div>-->
-            <!--<div class="bar-item bar-item-search">-->
-            <!--<input id="bar_searchstr" type="text" placeholder="提交人">-->
-            <!--<i id="bar_searchstr_icon" class="iconfont icon-btn-serch"></i>-->
-            <!--</div>-->
-            <!--</div>-->
+            <div class="complatecon none">
+                <div class="processtop">
+                    <div class="left">
+                        <a id="bar_del_process" class="bar-item bar-item-icon iconfont icon-btn-delete" title="删除流程"></a>
+                    </div>
+                    <div class="right bar-item-box">
+                        <div class="bar-item bar-item-search wind-content">
+                            <input type="text" class="wind-content-input wind-content-input-date valid" name="" readonly="" aria-invalid="false" id="timechangeOver">
+                        </div>
+                        <div class="bar-item bar-item-search">
+                            <input id="bar_searchstrOver" type="text" placeholder="提交人">
+                            <i id="bar_searchstr_iconOver" class="iconfont icon-btn-serch"></i>
+                        </div>
+                    </div>
 
-            <!--</div>-->
-            <!--<div class="processshow">-->
-            <!--<table id="processTable" cellspacing="0" cellpadding="0" border="0" width="100%">-->
-            <!--<thead>-->
-            <!--<tr>-->
-            <!--<th>流程名称</th>-->
-            <!--<th>审批类型</th>-->
-            <!--<th>提交人</th>-->
-            <!--<th>当前环节</th>-->
-            <!--<th>提交时间</th>-->
-            <!--<th style="text-align:center;">操作</th>-->
-            <!--</tr>-->
-            <!--</thead>-->
-            <!--</table>-->
-            <!--</div>-->
-            <!--</div>-->
+                </div>
+                <div class="processshow">
+                    <table id="processTableOver" cellspacing="0" cellpadding="0" border="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th class="text-center">
+                                <div class="beauty-checkbox">
+                                    <input id="check_user_all" type="checkbox" class="j-check-user-all">
+                                    <label for="check_user_all" class="checkbox-icon"></label>
+                                </div>
+                            </th>
+                            <th>流程名称</th>
+                            <th>审批类型</th>
+                            <th>提交人</th>
+                            <th>提交时间</th>
+                            <th>审批结果</th>
+                            <th>审批完成时间</th>
+                            <th style="text-align:center;">操作</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -116,43 +123,15 @@
 
     </div>
     <div class="flow">
-        <div class="wind-row">
-            <label class="wind-label flowTitle">审批流程</label>
-            <div class="flowContent">
-                <label class="begin" for="">
-                    <div class="begin_bar">
-                        <label for=""></label>
-                        <span>开始</span>
-                    </div>
-                    <div class="flow_line">
 
-                    </div>
-                </label>
-                <label class="default" for="">
-                    <div class="default_bar">
-                        <label for=""></label>
-                        <span>开始</span>
-                    </div>
-                    <div class="flow_line">
-
-                    </div>
-                </label>
-                <label class="end" for="">
-                    <div class="end_bar">
-                        <label for=""></label>
-                        <span>结束</span>
-                    </div>
-                </label>
-            </div>
-        </div>
     </div>
     <div class="opinion">
         <div class="wind-row">
             <label class="wind-label">审批意见</label>
-            <input id="agree" value="1" type="radio" name="approveIdea"/>
+            <input id="agree" value="1" checked type="radio" name="approveIdea"/>
             <label for="agree" class="margin-right-xl">通过</label>
             <input id="reject" value="0" type="radio" name="approveIdea"/>
-            <label for="reject">驳回</label>
+            <label for="reject">拒绝</label>
         </div>
         <div class="wind-row">
             <label class="wind-label">备注</label>
@@ -209,8 +188,42 @@
             <!--<label for="">打开次数：4次，未启动自动删除</label>-->
             <!--<label for="">机器码绑定：XXXXXX</label>-->
             <!--<label for="">有效日期：20171.1-20171.2</label></div>-->
+        </div>
+</script>
+<script id="getNode_tem" type="text/html">
+    <div class="wind-row">
+        <label class="wind-label flowTitle">审批流程</label>
+        <div class="flowContent">
+            <label class="begin" for="">
+                <div class="begin_bar">
+                    <label for=""></label>
+                    <span>开始</span>
+                </div>
+                <div class="flow_line">
+
+                </div>
+            </label>
+            {{each data item}}
+            <label class="default default-hover" for="">
+                <div class="default_bar">
+                    <label for=""></label>
+                    <span class="text-ellipsis">{{item.name}}</span>
+                </div>
+                <div class="flow_line">
+
+                </div>
+            </label>
+            {{/each}}
+            <label class="end" for="">
+                <div class="end_bar">
+                    <label for=""></label>
+                    <span>结束</span>
+                </div>
+            </label>
+        </div>
     </div>
 </script>
+<!--<script id=""></script>-->
 <script id="temp_approve" type="text/html">
     {{if type == 1}}
     <!--1是导出-->

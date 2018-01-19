@@ -56,7 +56,15 @@ textarea {
   width: 500px;
   height: 100px;
 }
-
+#openWind .dataTables_wrapper{
+  position: inherit;
+  top: 391px;
+  left: 70px;
+  height: 100%;
+}
+#openWind .dataTables_scrollBody{
+  position:inherit !important;
+}
 #openWind {
   .top {
     width: 860px;
@@ -88,7 +96,7 @@ textarea {
   }
   .flow {
     width: 860px;
-    height: 90px;
+    //height: 90px;
     margin: 20px auto;
     color: #333333;
     //overflow-y: auto;
@@ -96,7 +104,7 @@ textarea {
       margin-top: 30px;
     }
     .flowContent {
-      width: 700px;
+      width: 86%;
       display: inline-block;
       vertical-align: middle;
       & > label {
@@ -120,6 +128,10 @@ textarea {
             background-position: center center;
             border-radius: 50px;
           }
+          span{
+            display: inline-block;
+            width: 50px;
+          }
         }
         .default_bar {
           &>label {
@@ -141,6 +153,11 @@ textarea {
           border-bottom: 2px solid #ededed;
         }
       }
+      &>label.default-hover .default_bar label{
+        background-color: #38D1BF;
+        background-image: url(../../../images/approve/step_gray.png);
+
+      }
 
     }
   }
@@ -158,6 +175,7 @@ textarea {
     .approveHistory{
       width: 740px;
       display: inline-block;
+      vertical-align: top;
     }
   }
 }

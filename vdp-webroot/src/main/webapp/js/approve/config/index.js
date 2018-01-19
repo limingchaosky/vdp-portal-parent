@@ -2,17 +2,23 @@
  * Created by chengl on 2018/1/15 0015.
  */
 var processTable = null;
+var processDetailTable = null;
+var processOverTable = null;
 var needOnly = 1;
 var submitDate = getDateStr(0);
 var applicantOrType = '';
+var submitDateOver = getDateStr(0);
+var fl = true;
 $(function () {
   initEvent();
-  initProcessTable();
+  initProcessTable(0);
+  // initProcessOverTable(1);
 
 
 });
 function initEvent() {
-  ininDateTimePicker()
+  ininDateTimePicker();
+  ininDateTimePickerOver();
   $("body")
   //tab页导航
     .on("click", ".titleTab li", function () {
@@ -26,6 +32,7 @@ function initEvent() {
         $('#bar_searchstr_icon').click();
       }
     })
+
     //用户名点击搜索
     .on('click', '#bar_searchstr_icon', function () {
       processTable.settings()[0].ajax.data.searchstr = $('#bar_searchstr').val().trim();
@@ -39,35 +46,72 @@ function initEvent() {
         processTable.ajax.reload();
       }
     })
+
     //点击查看是不是要审批一下
     .on('click', '.approve-opt-icon', function () {
       var id = $(this).data('id');//他的id是多少
       var type = $(this).data('type');//类型是不是外发
       var is = $(this).data('is');//是不是到他审批了
-      console.log(id, type, is);
       layer.open({
         id: 'openWind',
         type: 1,
         title: '审批',
         content: $('#approve_wind').html(),
-        area: ['900px', '600px'],
+        area: ['900px', '650px'],
         btn: ['确定', '取消'],
         yes: function (index, layero) {
+
+          if (fl) {
+            var result = $("#openWind input[name=approveIdea]:checked").val();
+            var remark = $("#openWind textarea[name=textarea]").val();
+            // console.log(result,remark);
+            postAjax(ctx + '/approveFlow/approveFlow', {approveDetailId: id, result: result, remark: remark}, function (msg) {
+              if (msg.resultCode == 1) {
+                layer.msg('审批！', {icon: 1});
+                layer.close(index);
+              } else {
+                layer.msg('审批失败！' + (msg.resultMsg || ''), {icon: 2});
+              }
+            });
+          } else {
+            layer.close(index);
+          }
+
 
         },
         success: function (layero, index) {
           // 获取详情
-          getAjax(ctx + '/approveFlow/getApproveFlowInfoById', {approveFlowId:id}, function (msg) {
-            console.log(msg);
-            if(msg.resultCode == 1){
-              if(type == 0){
-                $("#openWind .top").html(template('approve_tem_out_top',msg.data));
-              }else {
-                $("#openWind .top").html(template('approve_tem_export_top',msg.data));
+          getAjax(ctx + '/approveFlow/getApproveFlowInfoById', {approveFlowId: id}, function (msg) {
+            // console.log(msg);
+            if (msg.resultCode == 1) {
+              if (type == 0) {
+                $("#openWind .top").html(template('approve_tem_out_top', msg.data));
+              } else {
+                $("#openWind .top").html(template('approve_tem_export_top', msg.data));
               }
 
             }
           });
+          //获取环节
+          getAjax(ctx + '/approveDetail/getApproveFlowModel', {approveFlowId: id}, function (msg) {
+            // console.log(msg);
+            if (msg.resultCode == 1) {
+              if (type == 0) {
+                $("#openWind .flow").html(template('getNode_tem', msg));
+              } else {
+                $("#openWind .flow").html(template('getNode_tem', msg));
+              }
+
+            }
+          });
+          ProcessTable(id);
+          if (is == 0) {//到了当前人审批，需要审批
+            $("#openWind .table").hide();
+            fl = true
+          } else {
+            $("#openWind .opinion").hide();
+            fl = false;
+          }
         }
       });
 
@@ -90,6 +134,19 @@ function initEvent() {
     //删除已完成的流程
     .on('click', '#bar_del_process', function () {
 
+    })
+    //显示操作悬浮框
+    .on('mouseover', '.table-opt-icon', function () {
+      var offset = document.documentElement.clientHeight - $(this).offset().top;
+      $(this).next().addClass('opt-hover-down');
+      if (offset > $(this).next().outerHeight() + 70) {
+        $(this).next().removeClass('opt-hover-down').addClass('opt-hover-up');
+      }
+    })
+
+    //隐藏操作悬浮框
+    .on('mouseleave', '.table-opt-box', function () {
+      $(this).find('.opt-hover-box').removeClass('opt-hover-up opt-hover-down');
     })
 
 }
@@ -124,8 +181,38 @@ function ininDateTimePicker() {
     }, 50);
   });
 }
-//账户用户表
-function initProcessTable() {
+/**
+ * 初始化时间控件
+ * @return {[type]} [description]
+ */
+function ininDateTimePickerOver() {
+  $('#timechangeOver').val(new Date().Format('yyyy-MM-dd')).datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    autoclose: true,
+    minView: 2,
+    todayBtn: true,
+    endDate: new Date()
+  })
+    .on('changeDate', function (ev) {
+      processOverTable.settings()[0].ajax.data.searchstr = $('#bar_searchstrOver').val().trim();
+      processOverTable.settings()[0].ajax.data.submitDate = $.trim($("#timechangeOver").val());
+      // if ($("#onlyProcess").is(':checked')) {
+      //   processTable.settings()[0].ajax.data.needOnly = 1;
+      //   processTable.ajax.reload();
+      //
+      // } else {
+      //   processTable.settings()[0].ajax.data.needOnly = 0;
+      //   processTable.ajax.reload();
+      // }
+    }).on('hide', function () {
+    setTimeout(function () {
+      $('#timechangeOver').blur();
+    }, 50);
+  });
+}
+//未完成审批表
+function initProcessTable(status) {
   if (processTable) {
     processTable.ajax.reload();
     return;
@@ -158,16 +245,17 @@ function initProcessTable() {
       "url": ctx + "/approveFlow/getApproveFlowPage",
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
-        // console.log(json);
+        console.log(json);
         return json.data.map(function (obj) {
           return [obj.name, obj.type, obj.applicantName, obj.type, obj.applyTime, {id: obj.id, type: obj.type, isa: obj.type}];//是不是到了当前人
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象
       "data": {
-        // "needOnly":needOnly,
-        // "applicantOrType":applicantOrType,
-        // "submitDate":submitDate
+        // "needOnly": needOnly,
+        // "applicantOrType": applicantOrType,
+        // "submitDate": submitDate,
+        // "status": status,
       },
     },
     "columnDefs": [{
@@ -218,7 +306,7 @@ function initProcessTable() {
         $(obj).attr("title", $(obj).text());
       })
       //添加跳转到指定页
-      $(".dataTables_paginate").append("<span style='margin-left: 10px;font-size: 14px;'>到第 </span><input style='height:20px;line-height:28px;width:28px;margin-top: 5px;' class='margin text-center' id='changePage' type='text'> <span style='font-size: 14px;'>页</span>  <a class='shiny' href='javascript:void(0);' id='dataTable-btn'>确认</a>");
+      $(".processcon .dataTables_paginate").append("<span style='margin-left: 10px;font-size: 14px;'>到第 </span><input style='height:20px;line-height:28px;width:28px;margin-top: 5px;' class='margin text-center' id='changePage' type='text'> <span style='font-size: 14px;'>页</span>  <a class='shiny' href='javascript:void(0);' id='dataTable-btn'>确认</a>");
       $('#dataTable-btn').click(function (e) {
         if ($("#changePage").val() && $("#changePage").val() > 0) {
           var redirectpage = $("#changePage").val() - 1;
@@ -247,6 +335,253 @@ function initProcessTable() {
       location.href = "/vdp/login";
     }
   });
+}
+//完成审批表
+function initProcessOverTable(status) {
+  if (processOverTable) {
+    processOverTable.ajax.reload();
+    return;
+  }
+  processOverTable = $('#processTableOver').DataTable({ //表格初始化
+    "searching": true,//关闭Datatables的搜索功能:
+    "destroy": true,//摧毁一个已经存在的Datatables，然后创建一个新的
+    "retrieve": true, //检索已存在的Datatables实例,如果已经初始化了，则继续使用之前的Datatables实例
+    "autoWidth": true,//自动计算列宽
+    "processing": false,//是否显示正在处理的状态
+    "stateSave": false, //开启或者禁用状态储存。当你开启了状态储存，Datatables会存储一个状态到浏览器上， 包含分页位置，每页显示的长度，过滤后的结果和排序。当用户重新刷新页面，表格的状态将会被设置为之前的设置。
+    "serverSide": true,//服务器端处理模式——此模式下如：过滤、分页、排序的处理都放在服务器端进行。
+    "scrollY": "auto",//控制表格的垂直滚动。
+    /*l - Length changing 改变每页显示多少条数据的控件
+     f - Filtering input 即时搜索框控件
+     t - The Table 表格本身
+     i - Information 表格相关信息控件
+     p - Pagination 分页控件
+     r - pRocessing 加载等待显示信息*/
+    "dom": 'rlfrtip',
+    "stateLoadParams": function (settings, data) { //状态加载完成之后，对数据处理的回调函数
+    },
+    "lengthMenu": [
+      [20, 30, 50, 100],
+      ["20条", "30条", "50条", "100条"]
+    ],//定义在每页显示记录数的select中显示的选项
+    "ajax": {
+      "beforeSend": function () {
+      },
+      "url": ctx + "/approveFlow/getApproveFlowPage",
+      //改变从服务器返回的数据给Datatable
+      "dataSrc": function (json) {
+        console.log(json);
+        return json.data.map(function (obj) {
+          return [obj.id,obj.name, obj.type, obj.applicantName, obj.type, obj.applyTime, {id: obj.id, type: obj.type, isa: obj.type}];//是不是到了当前人
+        });
+      },
+      //将额外的参数添加到请求或修改需要被提交的数据对象
+      "data": {
+        // "needOnly":needOnly,
+        // "applicantOrType":applicantOrType,
+        // "submitDate":submitDate,
+        // "status":status
+      },
+    },
+    "columnDefs": [{
+      "targets": [0],
+      "orderable": false,
+      "width": "35px",
+      "class": "text-center",
+      "render": function (data, type, full) {
+        return '<div class="beauty-checkbox">' +
+          '<input id="table_check_' + data + '" type="checkbox" class="j-check-user" data-id="' + data + '">' +
+          '<label for="table_check_' + data + '" class="checkbox-icon"></label>' +
+          '</div>';
+      }
+
+    }, {
+      "targets": [1],
+      "orderable": false,
+      "class": "text-ellipsis"
+    }, {
+      "targets": [2],
+      "orderable": false,
+      "class": "text-ellipsis",
+      "render": function (data, type, full) {
+        if (data == 1) {
+          return '<span>外发</span>'
+        } else {
+          return '<span>导出</span>'
+        }
+      }
+    }, {
+      "targets": [3],
+      "orderable": false,
+      "class": "text-ellipsis",
+    }, {
+      "targets": [4],
+      "orderable": false,
+      "class": "text-ellipsis"
+    }, {
+      "targets": [5],
+      "orderable": false,
+      "class": "text-ellipsis"
+    }, {
+      "targets": [6],
+      "orderable": false,
+      "class": "text-ellipsis"
+    }, {
+      "targets": [7],
+      "orderable": false,
+      "class": "center-text",
+      "width": "80px",
+      "render": function (data, type, full) {
+
+        // return template('temp_opt_box', {id: data.id, type: data.type, isa: data.isa});
+
+      }
+    }],
+    //当每次表格重绘的时候触发一个操作，比如更新数据后或者创建新的元素
+    "drawCallback": function (oTable) {
+      var oTable = $("#processTableOver").dataTable();
+      //设置每一列的title
+      $("table").find("tr td:not(:last-child)").each(function (index, obj) {
+        $(obj).attr("title", $(obj).text());
+      })
+      //添加跳转到指定页
+      $(".complatecon .dataTables_paginate").append("<span style='margin-left: 10px;font-size: 14px;'>到第 </span><input style='height:20px;line-height:28px;width:28px;margin-top: 5px;' class='margin text-center' id='changePageOver' type='text'> <span style='font-size: 14px;'>页</span>  <a class='shiny' href='javascript:void(0);' id='dataTable-btnOver'>确认</a>");
+      $('#dataTable-btnOver').click(function (e) {
+        if ($("#changePageOver").val() && $("#changePageOver").val() > 0) {
+          var redirectpage = $("#changePageOver").val() - 1;
+        } else {
+          var redirectpage = 0;
+        }
+        oTable.fnPageChange(redirectpage);
+      });
+
+      //键盘事件  回车键 跳页
+      $("#changePageOver").keydown(function () {
+        var e = event || window.event;
+        if (e && e.keyCode == 13) {
+          if ($("#changePageOver").val() && $("#changePageOver").val() > 0) {
+            var redirectpage = $("#changePageOver").val() - 1;
+          } else {
+            var redirectpage = 0;
+          }
+          oTable.fnPageChange(redirectpage);
+        }
+      })
+    }
+  }).on('xhr.dt', function (e, settings, json, xhr) {
+    //登陆超时重定向
+    if (xhr.getResponseHeader('isRedirect') == 'yes') {
+      location.href = "/vdp/login";
+    }
+  });
+}
+//审批流程细节表
+function ProcessTable(id) {
+
+  processDetailTable = $('#openWind #approveHistoryTable').DataTable({ //表格初始化
+    "paging": false,//禁用分页
+    "info": false,//禁止显示信息
+    "searching": true,//关闭Datatables的搜索功能:
+    "destroy": true,//摧毁一个已经存在的Datatables，然后创建一个新的
+    // "retrieve": true, //检索已存在的Datatables实例,如果已经初始化了，则继续使用之前的Datatables实例
+    "autoWidth": true,//自动计算列宽
+    "processing": false,//是否显示正在处理的状态
+    "stateSave": false, //开启或者禁用状态储存。当你开启了状态储存，Datatables会存储一个状态到浏览器上， 包含分页位置，每页显示的长度，过滤后的结果和排序。当用户重新刷新页面，表格的状态将会被设置为之前的设置。
+    "serverSide": true,//服务器端处理模式——此模式下如：过滤、分页、排序的处理都放在服务器端进行。
+    "scrollY": "auto",//控制表格的垂直滚动。
+    /*l - Length changing 改变每页显示多少条数据的控件
+     f - Filtering input 即时搜索框控件
+     t - The Table 表格本身
+     i - Information 表格相关信息控件
+     p - Pagination 分页控件
+     r - pRocessing 加载等待显示信息*/
+    // "dom": 'rlfrtip',
+    "stateLoadParams": function (settings, data) { //状态加载完成之后，对数据处理的回调函数
+    },
+    // "lengthMenu": [
+    // [20, 30, 50, 100],
+    // ["20条", "30条", "50条", "100条"]
+    // ],//定义在每页显示记录数的select中显示的选项
+    "ajax": {
+      "beforeSend": function () {
+      },
+      "url": ctx + "/approveDetail/getApproveDetailsByFlowId",
+      //改变从服务器返回的数据给Datatable
+      "dataSrc": function (json) {
+        // console.log(json);
+        return json.data.map(function (obj) {
+          return [obj.approver, obj.result, obj.remark, obj.modifyTime];//是不是到了当前人
+        });
+      },
+      //将额外的参数添加到请求或修改需要被提交的数据对象
+      "data": {
+        "approveFlowId": id,
+      },
+    },
+    "columnDefs": [{
+      "targets": [0],
+      "orderable": false,
+      "class": "text-ellipsis",
+
+    }, {
+      "targets": [1],
+      "orderable": false,
+      "class": "text-ellipsis",
+      "render": function (data, type, full) {
+        if (data == 1) {
+          return '<span>同意</span>'
+        } else {
+          return '<span>拒绝</span>'
+        }
+      }
+
+    }, {
+      "targets": [2],
+      "orderable": false,
+      "class": "text-ellipsis",
+    }, {
+      "targets": [3],
+      "orderable": false,
+      "class": "text-ellipsis",
+    }],
+    //当每次表格重绘的时候触发一个操作，比如更新数据后或者创建新的元素
+    // "drawCallback": function (oTable) {
+    //   var oTable = $("#openWind #approveHistoryTable").dataTable();
+    //   //设置每一列的title
+    //   $("table").find("tr td:not(:last-child)").each(function (index, obj) {
+    //     $(obj).attr("title", $(obj).text());
+    //   })
+    //   //添加跳转到指定页
+    //   $(".dataTables_paginate").append("<span style='margin-left: 10px;font-size: 14px;'>到第 </span><input style='height:20px;line-height:28px;width:28px;margin-top: 5px;' class='margin text-center' id='changePage' type='text'> <span style='font-size: 14px;'>页</span>  <a class='shiny' href='javascript:void(0);' id='dataTable-btn'>确认</a>");
+    //   $('#dataTable-btn').click(function (e) {
+    //     if ($("#changePage").val() && $("#changePage").val() > 0) {
+    //       var redirectpage = $("#changePage").val() - 1;
+    //     } else {
+    //       var redirectpage = 0;
+    //     }
+    //     oTable.fnPageChange(redirectpage);
+    //   });
+    //
+    //   //键盘事件  回车键 跳页
+    //   $("#changePage").keydown(function () {
+    //     var e = event || window.event;
+    //     if (e && e.keyCode == 13) {
+    //       if ($("#changePage").val() && $("#changePage").val() > 0) {
+    //         var redirectpage = $("#changePage").val() - 1;
+    //       } else {
+    //         var redirectpage = 0;
+    //       }
+    //       oTable.fnPageChange(redirectpage);
+    //     }
+    //   })
+    // }
+  })
+  //   .on('xhr.dt', function (e, settings, json, xhr) {
+  //   //登陆超时重定向
+  //   if (xhr.getResponseHeader('isRedirect') == 'yes') {
+  //     location.href = "/vdp/login";
+  //   }
+  // });
 }
 
 /**
