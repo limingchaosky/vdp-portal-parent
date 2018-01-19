@@ -33,6 +33,8 @@ public class ConstantsDto {
     public static final Integer APPROVE_MODEL_STANDARD = 1;
     public static final Integer APPROVE_MODEL_STRICT = 0;
 
+    public static final Integer APPROVE_NEEDAPPROVE = 1;
+
     public static final String CONST_FORM_PROPERTY_TYPE = "formProperty";
 
     public static final String CONST_TASK_LISTENER_TYPE = "taskListener";

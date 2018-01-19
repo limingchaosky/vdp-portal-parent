@@ -1,0 +1,163 @@
+.main-contentall {
+  background-color: white;
+  position: absolute;
+  top: 40px;
+  left: 0px;
+  right: 0px;
+  bottom: 0;
+  font-size: 14px;
+  clear: both;
+  overflow-y: auto;
+  overflow-x: hidden;
+  .processcon {
+    padding: 5px 20px 10px 20px;
+    .processtop {
+      height: 44px;
+      line-height: 44px;
+      width: 100%;
+      .left {
+        float: left;
+        span {
+          vertical-align: middle;
+        }
+      }
+      .right {
+        float: right;
+      }
+    }
+    .processshow {
+      position: absolute;
+      width: 98%;
+      height: 93%;
+    }
+  }
+}
+
+.bar-item-box .bar-item-search input[type="text"] {
+  background: #ededed;
+  width: 200px;
+}
+
+.approve-opt-icon {
+  color: #E1E1E1;
+}
+
+.approve-opt-icon:hover {
+  color: #38D1BF;
+  cursor: pointer;
+}
+
+.wind-label {
+  text-align: left !important;
+}
+
+textarea {
+  vertical-align: top;
+  width: 500px;
+  height: 100px;
+}
+
+#openWind {
+  .top {
+    width: 860px;
+    height: 170px;
+    margin: 0 auto;
+    background-color: #FAFAFA;
+    color: #666666;
+    border: 1px solid #E5E5E5;
+    margin-top: 20px;
+    padding: 15px 0px 15px 15px;
+    .title {
+      font-size: 15px;
+      font-weight: bold;
+      color: #333333;
+      margin-bottom: 12px;
+    }
+    .content {
+      .left, .right {
+        width: 415px;
+        display: inline-block;
+        .dig {
+          display: inline-block;
+        }
+      }
+      label {
+        display: block;
+      }
+    }
+  }
+  .flow {
+    width: 860px;
+    height: 90px;
+    margin: 20px auto;
+    color: #333333;
+    //overflow-y: auto;
+    .flowTitle {
+      margin-top: 30px;
+    }
+    .flowContent {
+      width: 700px;
+      display: inline-block;
+      vertical-align: middle;
+      & > label {
+        display: inline-block;
+        vertical-align: top;
+        width: 120px;
+        .begin_bar, .default_bar, .end_bar {
+          height: 50px;
+          text-align: center;
+          position: relative;
+          display: inline-block;
+          & > label {
+            display: block;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            background-color: #ededed;
+            background-image: url(../../../images/approve/app_start.png);
+            background-repeat: no-repeat;
+            background-position: center center;
+            border-radius: 50px;
+          }
+        }
+        .default_bar {
+          &>label {
+            background-image: url(../../../images/approve/step_show.png);
+          }
+        }
+        .end_bar {
+          &>label {
+            background-image: url(../../../images/approve/app_end.png);
+          }
+        }
+        .flow_line {
+          width: 50px;
+          height: 28px;
+          display: inline-block;
+          vertical-align: top;
+          text-align: center;
+          line-height: 28px;
+          border-bottom: 2px solid #ededed;
+        }
+      }
+
+    }
+  }
+  .opinion {
+    width: 860px;
+    height: 150px;
+    margin: 0 auto;
+    color: #333333;
+  }
+  .table{
+    width: 860px;
+    height: 150px;
+    margin: 0 auto;
+    color: #333333;
+    .approveHistory{
+      width: 740px;
+      display: inline-block;
+    }
+  }
+}

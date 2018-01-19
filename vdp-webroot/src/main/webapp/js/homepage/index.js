@@ -341,7 +341,7 @@ vedioDataExportOpt = {
   },
   yAxis: [{
     type: 'category',
-    data: ['OPPO R9S','Vivo X9','OPPO R9m','Vivo X7','Hisense M20-T','OPPO A37m','OPPO A57','OPPO A33','OPPO R11S','OPPO R11S'],
+    data: ['杨利伟','孙杨','孙浩','杨丽丽','陈萍萍','李天阳','张子在','张晓明','李晓明','涨一天'],
 
     axisTick: {
       alignWithLabel: true,
@@ -384,7 +384,7 @@ vedioDataExportOpt = {
   name: 'Top 10',
   type: 'bar',
   barWidth:15,
-  data: [7700, 8800, 9900, 11100, 14200, 16000, 18400, 20500, 22600, 24700],
+  data: [20, 30, 40, 50, 60, 65, 77, 85, 95, 99],
   label: {
     normal: {
       show: true,

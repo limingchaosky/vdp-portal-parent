@@ -1461,6 +1461,25 @@ body label {
   cursor: pointer;
   display: inline-block;
 }
+.titleTab {
+  height: 40px;
+  width: 100%;
+  border-bottom: 1px solid #dedede;
+  background-color: #fff;
+}
+.titleTab li {
+  float: left;
+  height: 40px;
+  line-height: 40px;
+  width: 110px;
+  text-align: center;
+  cursor: pointer;
+}
+.titleTabactive {
+  color: #38D1BF;
+  border-bottom: 3px solid #38D1BF;
+  box-sizing: border-box;
+}
 /*layer msg样式*/
 .layui-layer-msg {
   min-width: 100px!important;

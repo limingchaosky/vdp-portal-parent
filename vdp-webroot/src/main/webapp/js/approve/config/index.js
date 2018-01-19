@@ -1,3 +1,263 @@
 /**
  * Created by chengl on 2018/1/15 0015.
  */
+var processTable = null;
+var needOnly = 1;
+var submitDate = getDateStr(0);
+var applicantOrType = '';
+$(function () {
+  initEvent();
+  initProcessTable();
+
+
+});
+function initEvent() {
+  ininDateTimePicker()
+  $("body")
+  //tab页导航
+    .on("click", ".titleTab li", function () {
+      $(this).addClass("titleTabactive").siblings("li").removeClass("titleTabactive");
+      var classcon = $(this).data("class");
+      $("." + classcon + "con").show().siblings("div").hide();
+    })
+    //用户名回车搜索
+    .on('keydown', '#bar_searchstr', function (e) {
+      if (e.keyCode == 13) {
+        $('#bar_searchstr_icon').click();
+      }
+    })
+    //用户名点击搜索
+    .on('click', '#bar_searchstr_icon', function () {
+      processTable.settings()[0].ajax.data.searchstr = $('#bar_searchstr').val().trim();
+      processTable.settings()[0].ajax.data.submitDate = $.trim($("#timechange").val());
+      if ($("#onlyProcess").is(':checked')) {
+        processTable.settings()[0].ajax.data.needOnly = 1;
+        processTable.ajax.reload();
+
+      } else {
+        processTable.settings()[0].ajax.data.needOnly = 0;
+        processTable.ajax.reload();
+      }
+    })
+    //点击查看是不是要审批一下
+    .on('click', '.approve-opt-icon', function () {
+      var id = $(this).data('id');//他的id是多少
+      var type = $(this).data('type');//类型是不是外发
+      var is = $(this).data('is');//是不是到他审批了
+      console.log(id, type, is);
+      layer.open({
+        id: 'openWind',
+        type: 1,
+        title: '审批',
+        content: $('#approve_wind').html(),
+        area: ['900px', '600px'],
+        btn: ['确定', '取消'],
+        yes: function (index, layero) {
+
+        },
+        success: function (layero, index) {
+          // 获取详情
+          getAjax(ctx + '/approveFlow/getApproveFlowInfoById', {approveFlowId:id}, function (msg) {
+            console.log(msg);
+            if(msg.resultCode == 1){
+              if(type == 0){
+                $("#openWind .top").html(template('approve_tem_out_top',msg.data));
+              }else {
+                $("#openWind .top").html(template('approve_tem_export_top',msg.data));
+              }
+
+            }
+          });
+        }
+      });
+
+    })
+
+    //只看需要审批的
+    .on('change', '#onlyProcess', function () {
+      processTable.settings()[0].ajax.data.searchstr = $('#bar_searchstr').val().trim();
+      processTable.settings()[0].ajax.data.submitDate = $.trim($("#timechange").val());
+      if ($(this).is(':checked')) {
+        processTable.settings()[0].ajax.data.needOnly = 1;
+        processTable.ajax.reload();
+
+      } else {
+        processTable.settings()[0].ajax.data.needOnly = 0;
+        processTable.ajax.reload();
+      }
+    })
+
+    //删除已完成的流程
+    .on('click', '#bar_del_process', function () {
+
+    })
+
+}
+
+/**
+ * 初始化时间控件
+ * @return {[type]} [description]
+ */
+function ininDateTimePicker() {
+  $('#timechange').val(new Date().Format('yyyy-MM-dd')).datetimepicker({
+    language: 'zh-CN',
+    format: 'yyyy-mm-dd',
+    autoclose: true,
+    minView: 2,
+    todayBtn: true,
+    endDate: new Date()
+  })
+    .on('changeDate', function (ev) {
+      processTable.settings()[0].ajax.data.searchstr = $('#bar_searchstr').val().trim();
+      processTable.settings()[0].ajax.data.submitDate = $.trim($("#timechange").val());
+      if ($("#onlyProcess").is(':checked')) {
+        processTable.settings()[0].ajax.data.needOnly = 1;
+        processTable.ajax.reload();
+
+      } else {
+        processTable.settings()[0].ajax.data.needOnly = 0;
+        processTable.ajax.reload();
+      }
+    }).on('hide', function () {
+    setTimeout(function () {
+      $('#timechange').blur();
+    }, 50);
+  });
+}
+//账户用户表
+function initProcessTable() {
+  if (processTable) {
+    processTable.ajax.reload();
+    return;
+  }
+  processTable = $('#processTable').DataTable({ //表格初始化
+    "searching": true,//关闭Datatables的搜索功能:
+    "destroy": true,//摧毁一个已经存在的Datatables，然后创建一个新的
+    "retrieve": true, //检索已存在的Datatables实例,如果已经初始化了，则继续使用之前的Datatables实例
+    "autoWidth": true,//自动计算列宽
+    "processing": false,//是否显示正在处理的状态
+    "stateSave": false, //开启或者禁用状态储存。当你开启了状态储存，Datatables会存储一个状态到浏览器上， 包含分页位置，每页显示的长度，过滤后的结果和排序。当用户重新刷新页面，表格的状态将会被设置为之前的设置。
+    "serverSide": true,//服务器端处理模式——此模式下如：过滤、分页、排序的处理都放在服务器端进行。
+    "scrollY": "auto",//控制表格的垂直滚动。
+    /*l - Length changing 改变每页显示多少条数据的控件
+     f - Filtering input 即时搜索框控件
+     t - The Table 表格本身
+     i - Information 表格相关信息控件
+     p - Pagination 分页控件
+     r - pRocessing 加载等待显示信息*/
+    "dom": 'rlfrtip',
+    "stateLoadParams": function (settings, data) { //状态加载完成之后，对数据处理的回调函数
+    },
+    "lengthMenu": [
+      [20, 30, 50, 100],
+      ["20条", "30条", "50条", "100条"]
+    ],//定义在每页显示记录数的select中显示的选项
+    "ajax": {
+      "beforeSend": function () {
+      },
+      "url": ctx + "/approveFlow/getApproveFlowPage",
+      //改变从服务器返回的数据给Datatable
+      "dataSrc": function (json) {
+        // console.log(json);
+        return json.data.map(function (obj) {
+          return [obj.name, obj.type, obj.applicantName, obj.type, obj.applyTime, {id: obj.id, type: obj.type, isa: obj.type}];//是不是到了当前人
+        });
+      },
+      //将额外的参数添加到请求或修改需要被提交的数据对象
+      "data": {
+        // "needOnly":needOnly,
+        // "applicantOrType":applicantOrType,
+        // "submitDate":submitDate
+      },
+    },
+    "columnDefs": [{
+      "targets": [0],
+      "orderable": false,
+      "class": "text-ellipsis",
+
+    }, {
+      "targets": [1],
+      "orderable": false,
+      "class": "text-ellipsis",
+      "render": function (data, type, full) {
+        if (data == 1) {
+          return '<span>外发</span>'
+        } else {
+          return '<span>导出</span>'
+        }
+      }
+    }, {
+      "targets": [2],
+      "orderable": false,
+      "class": "text-ellipsis",
+    }, {
+      "targets": [3],
+      "orderable": false,
+      "class": "text-ellipsis",
+    }, {
+      "targets": [4],
+      "orderable": false,
+      "class": "text-ellipsis"
+    }, {
+      "targets": [5],
+      "orderable": false,
+      "class": "center-text",
+      "width": "80px",
+      "render": function (data, type, full) {
+
+        return template('temp_approve', {id: data.id, type: data.type, isa: data.isa});
+
+        // return template('temp_opt_box', {id: data.id,guid:data.guid,only:data.only});
+      }
+    }],
+    //当每次表格重绘的时候触发一个操作，比如更新数据后或者创建新的元素
+    "drawCallback": function (oTable) {
+      var oTable = $("#processTable").dataTable();
+      //设置每一列的title
+      $("table").find("tr td:not(:last-child)").each(function (index, obj) {
+        $(obj).attr("title", $(obj).text());
+      })
+      //添加跳转到指定页
+      $(".dataTables_paginate").append("<span style='margin-left: 10px;font-size: 14px;'>到第 </span><input style='height:20px;line-height:28px;width:28px;margin-top: 5px;' class='margin text-center' id='changePage' type='text'> <span style='font-size: 14px;'>页</span>  <a class='shiny' href='javascript:void(0);' id='dataTable-btn'>确认</a>");
+      $('#dataTable-btn').click(function (e) {
+        if ($("#changePage").val() && $("#changePage").val() > 0) {
+          var redirectpage = $("#changePage").val() - 1;
+        } else {
+          var redirectpage = 0;
+        }
+        oTable.fnPageChange(redirectpage);
+      });
+
+      //键盘事件  回车键 跳页
+      $("#changePage").keydown(function () {
+        var e = event || window.event;
+        if (e && e.keyCode == 13) {
+          if ($("#changePage").val() && $("#changePage").val() > 0) {
+            var redirectpage = $("#changePage").val() - 1;
+          } else {
+            var redirectpage = 0;
+          }
+          oTable.fnPageChange(redirectpage);
+        }
+      })
+    }
+  }).on('xhr.dt', function (e, settings, json, xhr) {
+    //登陆超时重定向
+    if (xhr.getResponseHeader('isRedirect') == 'yes') {
+      location.href = "/vdp/login";
+    }
+  });
+}
+
+/**
+ *  获取前几天或后几天的日期 格式  例：2016-11-15格式不能乱
+ * @param {*2016-11-15} AddDayCount
+ */
+function getDateStr(AddDayCount) {
+  var dd = new Date();
+  dd.setDate(dd.getDate() + AddDayCount); //获取AddDayCount天后的日期
+  var y = dd.getFullYear();
+  var m = (dd.getMonth() + 1) < 10 ? "0" + (dd.getMonth() + 1) : (dd.getMonth() + 1); //获取当前月份的日期，不足10补0
+  var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate(); //获取当前几号，不足10补0
+  return y + "-" + m + "-" + d;
+}

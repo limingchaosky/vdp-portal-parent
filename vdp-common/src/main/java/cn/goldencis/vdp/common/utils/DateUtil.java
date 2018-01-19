@@ -7,6 +7,8 @@ import java.util.*;
 
 public class DateUtil {
 
+    //24小时时间
+    public static final long ONE_DAY_TIME = 24 * 60 * 60 * 1000L;
     //24小时过期时间
     public static final long OVER_DUE_TIME = 24 * 60 * 60 * 1000L;
 
@@ -668,6 +670,18 @@ public class DateUtil {
         } catch (ParseException e) {
             return null;
         }
+    }
+
+    /**
+     * 获取一天后的时间
+     * @param date
+     * @return
+     */
+    public static Date getNextDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        return calendar.getTime();
     }
 
     /**

@@ -62,7 +62,7 @@ function initEvents() {
         }
       });
     })
-    //删除流程未完成
+    //删除流程
     .on('click', '.list-del', function () {
       var el = $(this);
       var id  = $(this).data("id");

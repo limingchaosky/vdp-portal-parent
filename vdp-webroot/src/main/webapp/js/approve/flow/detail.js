@@ -220,7 +220,7 @@ function saveApprove(ele) {
     postData.flowId = flowid;
     postData.id = id;
     postData.name = name;
-    postData.approverArr = approvers;
+    postData.approvers = approvers;
     postData.seniorId = senid;
     postData.standard = standid;
     console.log(postData);

@@ -1723,6 +1723,7 @@ body label {
   text-align: left;
   width: 140px;
   vertical-align: middle;
+  margin-right: 5px;
 }
 .sureButton{
   height: 32px;
@@ -1745,9 +1746,10 @@ body label {
   background-color: #38CFC0;
   color: #fff;
   cursor: pointer;
+  display: inline-block;
 }
 .cancel-button{
-  margin: 20px 0px 0px 85px;
+  margin: 20px 0px 0px 20px;
   width: 90px;
   height: 30px;
   line-height: 30px;
@@ -1755,13 +1757,28 @@ body label {
   background-color: #E5E5E5;
   color: #333333;
   cursor: pointer;
+  display: inline-block;
 }
-
-//::-webkit-scrollbar {
-//  width: 5px;
-//  height: 8px;
-//}
-
+//tab页切换样式
+.titleTab{
+  height: 40px;
+  width: 100%;
+  border-bottom: 1px solid #dedede;
+  background-color: #fff;
+  li{
+    float: left;
+    height: 40px;
+    line-height: 40px;
+    width: 110px;
+    text-align: center;
+    cursor: pointer;
+  }
+}
+.titleTabactive {
+  color: #38D1BF;
+  border-bottom: 3px solid #38D1BF;
+  box-sizing: border-box;
+}
 /*layer msg样式*/
 .layui-layer-msg{min-width:100px!important;background-color:#000!important;filter:alpha(opacity=60)!important;background-color:rgba(0,0,0,.6)!important;color:#fff!important;border:none!important}
 .layui-layer-msg .layui-layer-padding{padding:15px 58px 15px 70px !important}
@@ -1769,3 +1786,6 @@ body label {
 .layui-layer-ico1{background:url(../images/tips_icon_success.png) 0 0 no-repeat!important;}
 .layui-layer-ico2{background:url(../images/tips_icon_failed.png) 0 0 no-repeat!important;}
 .layui-layer-ico7{background:url(../images/tips_icon_warning.png) 0 0 no-repeat!important;}
+.layui-layer-dialog .layui-layer-content{
+  text-align: center;
+}

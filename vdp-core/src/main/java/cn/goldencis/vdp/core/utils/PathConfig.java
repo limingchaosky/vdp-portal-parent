@@ -34,6 +34,9 @@ public class PathConfig {
 
     public final static String UPDATEUPLOADFILENAME;
 
+    public final static String GOLBALCFG_PATH;//全局配置文件路径golbalcfg.path
+
+
     static {
         bundle = ResourceBundle.getBundle("vdp-common");
 
@@ -53,6 +56,7 @@ public class PathConfig {
         PACKAGEUPLOADFILENAME = bundle.getString("packageupload.fileName");
         UPDATEUPLOADPATH = bundle.getString("updateupload.path");
         UPDATEUPLOADFILENAME = bundle.getString("updateupload.fileName");
+        GOLBALCFG_PATH = bundle.getString("golbalcfg.path");
     }
 
 }
