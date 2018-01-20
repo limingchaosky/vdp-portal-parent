@@ -32,8 +32,31 @@
   width: 98%;
   height: 93%;
 }
+.main-contentall .complatecon {
+  padding: 5px 20px 10px 20px;
+}
+.main-contentall .complatecon .processtop {
+  height: 44px;
+  line-height: 44px;
+  width: 100%;
+}
+.main-contentall .complatecon .processtop .left {
+  float: left;
+}
+.main-contentall .complatecon .processtop .left a {
+  margin-left: 18px;
+  color: #10C7BE;
+}
+.main-contentall .complatecon .processtop .right {
+  float: right;
+}
+.main-contentall .complatecon .processshow {
+  position: absolute;
+  width: 98%;
+  height: 93%;
+}
 .bar-item-box .bar-item-search input[type="text"] {
-  background: #ededed;
+  background-color: #ededed;
   width: 200px;
 }
 .approve-opt-icon {
@@ -50,6 +73,12 @@ textarea {
   vertical-align: top;
   width: 500px;
   height: 100px;
+}
+.wind-content .wind-content-input-date {
+  background-image: url(../../../images/calendar.png);
+  background-repeat: no-repeat;
+  background-position: right center;
+  cursor: pointer;
 }
 #openWind .dataTables_wrapper {
   position: inherit;

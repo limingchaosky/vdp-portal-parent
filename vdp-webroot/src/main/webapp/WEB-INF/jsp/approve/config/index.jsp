@@ -107,7 +107,7 @@
     <div class="table-opt-box">
         <i class="iconfont icon-nav-system table-opt-icon"></i>
         <div class="opt-hover-box">
-            <div class="opt-hover-row j-opt-hover-detail" data-id="{{id}}">
+            <div class="opt-hover-row j-opt-hover-detail" data-id="{{id}}" data-type="{{type}}">
                 <i class="iconfont icon-btn-edit text-sm"></i>
                 <span class="text-sm margin-left-xs">查看详情</span>
             </div>
@@ -203,8 +203,8 @@
 
                 </div>
             </label>
-            {{each data item}}
-            <label class="default default-hover" for="">
+            {{each data.detailList item}}
+            <label class="default {{if item.pointId == data.pointId}}default-hover{{/if}}" for="">
                 <div class="default_bar">
                     <label for=""></label>
                     <span class="text-ellipsis">{{item.name}}</span>
@@ -225,10 +225,10 @@
 </script>
 <!--<script id=""></script>-->
 <script id="temp_approve" type="text/html">
-    {{if type == 1}}
+    {{if isa == true}}
     <!--1是导出-->
     <i class="iconfont icon-nav-system approve-opt-icon" title="导出" data-id="{{id}}" data-type="{{type}}" data-is="{{isa}}"></i>
-    {{else if type == 0}}
+    {{else if isa == false}}
     <i class="iconfont icon-menu-user approve-opt-icon" title="外发" data-id="{{id}}" data-type="{{type}}" data-is="{{isa}}"></i>
     {{/if}}
 </script>

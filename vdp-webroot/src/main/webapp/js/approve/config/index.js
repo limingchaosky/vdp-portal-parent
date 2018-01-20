@@ -4,15 +4,14 @@
 var processTable = null;
 var processDetailTable = null;
 var processOverTable = null;
-var needOnly = 1;
+var needOnly = '';
 var submitDate = getDateStr(0);
 var applicantOrType = '';
 var submitDateOver = getDateStr(0);
-var fl = true;
+var applicantOrTypeOver = '';
 $(function () {
   initEvent();
   initProcessTable(0);
-  // initProcessOverTable(1);
 
 
 });
@@ -22,6 +21,8 @@ function initEvent() {
   $("body")
   //tab页导航
     .on("click", ".titleTab li", function () {
+      initProcessOverTable(1);
+      initProcessTable(0);
       $(this).addClass("titleTabactive").siblings("li").removeClass("titleTabactive");
       var classcon = $(this).data("class");
       $("." + classcon + "con").show().siblings("div").hide();
@@ -35,7 +36,7 @@ function initEvent() {
 
     //用户名点击搜索
     .on('click', '#bar_searchstr_icon', function () {
-      processTable.settings()[0].ajax.data.searchstr = $('#bar_searchstr').val().trim();
+      processTable.settings()[0].ajax.data.applicantOrType = $('#bar_searchstr').val().trim();
       processTable.settings()[0].ajax.data.submitDate = $.trim($("#timechange").val());
       if ($("#onlyProcess").is(':checked')) {
         processTable.settings()[0].ajax.data.needOnly = 1;
@@ -61,7 +62,7 @@ function initEvent() {
         btn: ['确定', '取消'],
         yes: function (index, layero) {
 
-          if (fl) {
+          if (is) {
             var result = $("#openWind input[name=approveIdea]:checked").val();
             var remark = $("#openWind textarea[name=textarea]").val();
             // console.log(result,remark);
@@ -94,7 +95,7 @@ function initEvent() {
           });
           //获取环节
           getAjax(ctx + '/approveDetail/getApproveFlowModel', {approveFlowId: id}, function (msg) {
-            // console.log(msg);
+            console.log(msg);
             if (msg.resultCode == 1) {
               if (type == 0) {
                 $("#openWind .flow").html(template('getNode_tem', msg));
@@ -105,12 +106,10 @@ function initEvent() {
             }
           });
           ProcessTable(id);
-          if (is == 0) {//到了当前人审批，需要审批
+          if (is == true) {//到了当前人审批，需要审批
             $("#openWind .table").hide();
-            fl = true
           } else {
             $("#openWind .opinion").hide();
-            fl = false;
           }
         }
       });
@@ -126,13 +125,63 @@ function initEvent() {
         processTable.ajax.reload();
 
       } else {
-        processTable.settings()[0].ajax.data.needOnly = 0;
+        processTable.settings()[0].ajax.data.needOnly = '';
         processTable.ajax.reload();
       }
     })
 
     //删除已完成的流程
     .on('click', '#bar_del_process', function () {
+
+    })
+    //点击查看详情
+    .on('click', '.j-opt-hover-detail', function () {
+      var id = $(this).data('id');//他的id是多少
+      var type = $(this).data('type');//类型是不是外发
+      layer.open({
+        id: 'openWind',//这个地方会自动给弹出框添加一个id
+        type: 1,
+        title: '审批详情',
+        content: $('#approve_wind').html(),
+        area: ['900px', '650px'],
+        btn: ['确定', '取消'],
+        yes: function (index, layero) {
+
+        },
+        success: function (layero, index) {
+          // 获取详情
+          getAjax(ctx + '/approveFlow/getApproveFlowInfoById', {approveFlowId: id}, function (msg) {
+            // console.log(msg);
+            if (msg.resultCode == 1) {
+              if (type == 0) {
+                $("#openWind .top").html(template('approve_tem_out_top', msg.data));
+              } else {
+                $("#openWind .top").html(template('approve_tem_export_top', msg.data));
+              }
+
+            }
+          });
+          //获取环节
+          getAjax(ctx + '/approveDetail/getApproveFlowModel', {approveFlowId: id}, function (msg) {
+            // console.log(msg);
+            if (msg.resultCode == 1) {
+              if (type == 0) {
+                $("#openWind .flow").html(template('getNode_tem', msg));
+              } else {
+                $("#openWind .flow").html(template('getNode_tem', msg));
+              }
+
+            }
+          });
+          ProcessTable(id);
+          $("#openWind .opinion").hide();
+        }
+
+      });
+    })
+
+    //删除已完成的流程
+    .on('click', '.j-opt-hover-delete', function () {
 
     })
     //显示操作悬浮框
@@ -165,14 +214,14 @@ function ininDateTimePicker() {
     endDate: new Date()
   })
     .on('changeDate', function (ev) {
-      processTable.settings()[0].ajax.data.searchstr = $('#bar_searchstr').val().trim();
+      processTable.settings()[0].ajax.data.applicantOrType = $('#bar_searchstr').val().trim();
       processTable.settings()[0].ajax.data.submitDate = $.trim($("#timechange").val());
       if ($("#onlyProcess").is(':checked')) {
         processTable.settings()[0].ajax.data.needOnly = 1;
         processTable.ajax.reload();
 
       } else {
-        processTable.settings()[0].ajax.data.needOnly = 0;
+        processTable.settings()[0].ajax.data.needOnly = '';
         processTable.ajax.reload();
       }
     }).on('hide', function () {
@@ -195,16 +244,8 @@ function ininDateTimePickerOver() {
     endDate: new Date()
   })
     .on('changeDate', function (ev) {
-      processOverTable.settings()[0].ajax.data.searchstr = $('#bar_searchstrOver').val().trim();
+      processOverTable.settings()[0].ajax.data.applicantOrType = $('#bar_searchstrOver').val().trim();
       processOverTable.settings()[0].ajax.data.submitDate = $.trim($("#timechangeOver").val());
-      // if ($("#onlyProcess").is(':checked')) {
-      //   processTable.settings()[0].ajax.data.needOnly = 1;
-      //   processTable.ajax.reload();
-      //
-      // } else {
-      //   processTable.settings()[0].ajax.data.needOnly = 0;
-      //   processTable.ajax.reload();
-      // }
     }).on('hide', function () {
     setTimeout(function () {
       $('#timechangeOver').blur();
@@ -247,15 +288,15 @@ function initProcessTable(status) {
       "dataSrc": function (json) {
         console.log(json);
         return json.data.map(function (obj) {
-          return [obj.name, obj.type, obj.applicantName, obj.type, obj.applyTime, {id: obj.id, type: obj.type, isa: obj.type}];//是不是到了当前人
+          return [obj.name, obj.type, obj.applicantName, obj.pointName, obj.applyTime, {id: obj.id, type: obj.type, isa: obj.checked}];//是不是到了当前人
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象
       "data": {
-        // "needOnly": needOnly,
-        // "applicantOrType": applicantOrType,
-        // "submitDate": submitDate,
-        // "status": status,
+        "needOnly": needOnly,
+        "applicantOrType": applicantOrType,
+        "submitDate": submitDate,
+        "status": status,
       },
     },
     "columnDefs": [{
@@ -268,7 +309,7 @@ function initProcessTable(status) {
       "orderable": false,
       "class": "text-ellipsis",
       "render": function (data, type, full) {
-        if (data == 1) {
+        if (data == 0) {
           return '<span>外发</span>'
         } else {
           return '<span>导出</span>'
@@ -295,7 +336,6 @@ function initProcessTable(status) {
 
         return template('temp_approve', {id: data.id, type: data.type, isa: data.isa});
 
-        // return template('temp_opt_box', {id: data.id,guid:data.guid,only:data.only});
       }
     }],
     //当每次表格重绘的时候触发一个操作，比如更新数据后或者创建新的元素
@@ -372,15 +412,14 @@ function initProcessOverTable(status) {
       "dataSrc": function (json) {
         console.log(json);
         return json.data.map(function (obj) {
-          return [obj.id,obj.name, obj.type, obj.applicantName, obj.type, obj.applyTime, {id: obj.id, type: obj.type, isa: obj.type}];//是不是到了当前人
+          return [obj.id, obj.name, obj.type, obj.applicantName, obj.applyTime, obj.status, obj.finishTime, {id: obj.id, type: obj.type}];//是不是到了当前人
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象
       "data": {
-        // "needOnly":needOnly,
-        // "applicantOrType":applicantOrType,
-        // "submitDate":submitDate,
-        // "status":status
+        "applicantOrType":applicantOrTypeOver,
+        "submitDate":submitDateOver,
+        "status": status
       },
     },
     "columnDefs": [{
@@ -404,7 +443,7 @@ function initProcessOverTable(status) {
       "orderable": false,
       "class": "text-ellipsis",
       "render": function (data, type, full) {
-        if (data == 1) {
+        if (data == 0) {
           return '<span>外发</span>'
         } else {
           return '<span>导出</span>'
@@ -421,7 +460,14 @@ function initProcessOverTable(status) {
     }, {
       "targets": [5],
       "orderable": false,
-      "class": "text-ellipsis"
+      "class": "text-ellipsis",
+      "render": function (data, type, full) {
+        if (data == -1) {
+          return '<span>拒绝</span>'
+        } else {
+          return '<span>通过</span>'
+        }
+      }
     }, {
       "targets": [6],
       "orderable": false,
@@ -433,7 +479,7 @@ function initProcessOverTable(status) {
       "width": "80px",
       "render": function (data, type, full) {
 
-        // return template('temp_opt_box', {id: data.id, type: data.type, isa: data.isa});
+        return template('temp_opt_box', {id: data.id, type: data.type});
 
       }
     }],
@@ -508,9 +554,9 @@ function ProcessTable(id) {
       "url": ctx + "/approveDetail/getApproveDetailsByFlowId",
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
-        // console.log(json);
+        console.log(json);
         return json.data.map(function (obj) {
-          return [obj.approver, obj.result, obj.remark, obj.modifyTime];//是不是到了当前人
+          return [obj.approver, obj.result, obj.remark || '--', obj.modifyTime];//是不是到了当前人
         });
       },
       //将额外的参数添加到请求或修改需要被提交的数据对象

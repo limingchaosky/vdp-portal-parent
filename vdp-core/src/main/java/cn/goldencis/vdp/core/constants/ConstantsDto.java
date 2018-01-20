@@ -35,6 +35,9 @@ public class ConstantsDto {
 
     public static final Integer APPROVE_NEEDAPPROVE = 1;
 
+    public static final String APPROVE_SUBMIT_SUCCESS = "success";
+    public static final String APPROVE_SUBMIT_FAILED = "failed";
+
     public static final String CONST_FORM_PROPERTY_TYPE = "formProperty";
 
     public static final String CONST_TASK_LISTENER_TYPE = "taskListener";

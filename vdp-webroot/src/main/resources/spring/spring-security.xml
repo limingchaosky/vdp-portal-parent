@@ -36,10 +36,13 @@
 
 	<!-- 开放客户端提交审批请求的接口 -->
 	<http pattern="/approveFlow/submitApproveFlow" security="none" />
-	<http pattern="/approveDetail/getApproveDetailsByFlowId" security="none" />
 
 	<!-- 开发测试接口 -->
-	<http pattern="/approveFlow/getApproveFlowPage" security="none" />
+
+	<!-- 动态IP http的接口 -->
+	<http pattern="/access/applyClientAccess" security="none" />
+	<http pattern="/access/checkClientAccessList" security="none" />
+	<http pattern="/access/removeClientAccess" security="none" />
 
 	<!-- <http pattern="/system/import/import" security="none"></http> <http
 		pattern="/system/import/importdevice" security="none"></http> -->
