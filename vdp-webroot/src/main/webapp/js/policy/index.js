@@ -5,8 +5,8 @@ var approveList = null;
 var export_file=0;//审批流程的选择的id
 var out_file=0;//审批流程的选择的id
 var obj = {
-  "out_file":'0',
-  "export_file":'0',
+  // "out_file":'0',
+  // "export_file":'0',
   "sbscrnwatermark":{
     "content": {
       "computername": 1,
@@ -22,7 +22,7 @@ var obj = {
     },
     "enable": 1,
   },
-  "sbfileoutcfg": {
+  "sbfileoutcfg": {//外发
     "content": {
       "validtimecheck": 0,//设置有效时间
       "autodelouttime": 0,
@@ -118,6 +118,8 @@ function initEvents() {
           },
         }
       });
+      // 审批流程外发
+
       if($("body input[name=diyWater]").is(":checked")){
         if($("body input[name=screendiyWaterContent]").val()!=''){
 
@@ -149,22 +151,40 @@ function initEvents() {
       console.log(temp);
       //下面是关于审批的
       if(out_file == 0){//说明进来没有点审批
-        if(msg.out_file!=0){
-          obj.out_file = msg.out_file;
+        if(msg.sbfileoutcfg.content.flowid!=0){
+          obj.sbfileoutcfg.content.flowid = msg.sbfileoutcfg.content.flowid;
         }else {
-          obj.out_file = out_file;
+          obj.sbfileoutcfg.content.flowid = out_file;
         }
       }else {//第一次进来点了审批，out_file有值了，不用管了
-          obj.out_file=out_file;
+          obj.sbfileoutcfg.content.flowid=out_file;
       }
       if(export_file == 0){
-        if(msg.export_file!=0){
-          obj.export_file = msg.export_file;
+        if(msg.sbfileopt.content.flowid!=0){
+          obj.sbfileopt.content.flowid = msg.sbfileopt.content.flowid;
         }else {
-          obj.export_file = 0;
+          obj.sbfileopt.content.flowid = 0;
         }
       }else {//第一次进来点了审批，export_file，不用管了
-          obj.export_file=export_file;
+          obj.sbfileopt.content.flowid=export_file;
+      }
+      debugger;
+      if($("body input[name=approveOut]").is(":checked")){
+        if(obj.sbfileoutcfg.content.flowid>0){
+
+        }else {
+          layer.msg("请选择文件外发流程",{icon:2});
+          return;
+        }
+      }
+      // 审批流程导出
+      if($("body input[name=approveExport]").is(":checked")){
+        if(obj.sbfileopt.content.flowid>0){
+
+        }else {
+          layer.msg("请选择文件导出流程",{icon:2});
+          return;
+        }
       }
       //这是关于策略内容的
       //屏幕水印
@@ -287,15 +307,24 @@ function initEvents() {
             layer.close(index);
           },
           success:function(index, layero){
-            var approvehtml = '';
-            for (var i = 0;i<approveList.length;i++){
-              var ischecked = '';
-              if(msg.export_file == approveList[i].id) ischecked="checked";
-              approvehtml+='<div class="beauty-radio margin-right-sm"> <input '+ischecked+' id="approveListAll'+approveList[i].id+'" class="beauty-radio-input" type="radio" name="exportSelect" value="'+approveList[i].id+'"> <label for="approveListAll'+approveList[i].id+'" class="beauty-radio-label">'+approveList[i].name+'</label> </div>';
-
-
+            if(export_file == 0){//说明刚进来  没有点过审批选项
+              var approvehtml = '';
+              for (var i = 0;i<approveList.length;i++){
+                var ischecked = '';
+                if(msg.sbfileopt.content.flowid == approveList[i].id) ischecked="checked";
+                approvehtml+='<div class="beauty-radio margin-right-sm"><input '+ischecked+' id="approveListAll'+approveList[i].id+'" class="beauty-radio-input" type="radio" name="exportSelect" value="'+approveList[i].id+'"> <label for="approveListAll'+approveList[i].id+'" class="beauty-radio-label">'+approveList[i].name+'</label> </div>';
+              }
+              $("#exportOpenWind").html(approvehtml);
+            }else {
+              var approvehtml = '';
+              for (var i = 0;i<approveList.length;i++){
+                var ischecked = '';
+                if(export_file == approveList[i].id) ischecked="checked";
+                approvehtml+='<div class="beauty-radio margin-right-sm"><input '+ischecked+' id="approveListAll'+approveList[i].id+'" class="beauty-radio-input" type="radio" name="exportSelect" value="'+approveList[i].id+'"> <label for="approveListAll'+approveList[i].id+'" class="beauty-radio-label">'+approveList[i].name+'</label> </div>';
+              }
+              $("#exportOpenWind").html(approvehtml);
             }
-            $("#exportOpenWind").html(approvehtml);
+
           }
         })
       } else if ($(this).is('#fileOutApprove')) {
@@ -312,15 +341,24 @@ function initEvents() {
             layer.close(index);
           },
           success:function(index, layero){
-
-
-            var approvehtml = '';
-            for (var i = 0;i<approveList.length;i++){
-              var ischecked = '';
-              if(msg.out_file == approveList[i].id) ischecked="checked";
-              approvehtml+='<div class="beauty-radio margin-right-sm"> <input '+ischecked+' id="approveListAll'+approveList[i].id+'" class="beauty-radio-input" type="radio" name="exportSelect" value="'+approveList[i].id+'"> <label for="approveListAll'+approveList[i].id+'" class="beauty-radio-label">'+approveList[i].name+'</label> </div>';
+            if(out_file == 0){
+              var approvehtml = '';
+              for (var i = 0;i<approveList.length;i++){
+                var ischecked = '';
+                if(msg.sbfileoutcfg.content.flowid == approveList[i].id) ischecked="checked";
+                approvehtml+='<div class="beauty-radio margin-right-sm"> <input '+ischecked+' id="approveListAll'+approveList[i].id+'" class="beauty-radio-input" type="radio" name="exportSelect" value="'+approveList[i].id+'"> <label for="approveListAll'+approveList[i].id+'" class="beauty-radio-label">'+approveList[i].name+'</label> </div>';
+              }
+              $("#outOpenWind").html(approvehtml);
+            }else {
+              var approvehtml = '';
+              for (var i = 0;i<approveList.length;i++){
+                var ischecked = '';
+                if(out_file == approveList[i].id) ischecked="checked";
+                approvehtml+='<div class="beauty-radio margin-right-sm"> <input '+ischecked+' id="approveListAll'+approveList[i].id+'" class="beauty-radio-input" type="radio" name="exportSelect" value="'+approveList[i].id+'"> <label for="approveListAll'+approveList[i].id+'" class="beauty-radio-label">'+approveList[i].name+'</label> </div>';
+              }
+              $("#outOpenWind").html(approvehtml);
             }
-            $("#outOpenWind").html(approvehtml);
+
           }
         })
       }
@@ -375,8 +413,12 @@ function initEvents() {
 // 获取所有的审批流程
 function getAllApprove() {
 
-  getAjax(ctx + '/js/policy/approve.json', '', function (msg) {
-    approveList= msg.data;
+  getAjax(ctx + '/approveDefinition/getAllApproveDefinition', '', function (msg) {
+    if (msg.resultCode == 1){
+      console.log(msg.data);
+      approveList= msg.data;
+    }
+
   });
 
 }

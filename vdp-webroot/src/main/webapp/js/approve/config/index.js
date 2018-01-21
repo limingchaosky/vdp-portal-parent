@@ -246,6 +246,7 @@ function ininDateTimePickerOver() {
     .on('changeDate', function (ev) {
       processOverTable.settings()[0].ajax.data.applicantOrType = $('#bar_searchstrOver').val().trim();
       processOverTable.settings()[0].ajax.data.submitDate = $.trim($("#timechangeOver").val());
+      processOverTable.ajax.reload();
     }).on('hide', function () {
     setTimeout(function () {
       $('#timechangeOver').blur();

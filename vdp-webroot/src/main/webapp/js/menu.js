@@ -117,7 +117,7 @@ $(function () {
     // 一级菜单悬停
     mli0s.hover(function () {
         if ($(window).height() - $(this).offset().top < $(this).find(".mul1").height()) {
-            $(this).find(".mul1").css('top', 0 - $(this).find(".mul1").height() + 60).find('.listhover').css({ 'bottom': '14px', 'top': 'auto' });
+            $(this).find(".mul1").css('top', 0 - $(this).find(".mul1").height() + 60).find('.listhover').css({ 'bottom': '24px', 'top': 'auto' });
         } else {
             $(this).find(".mul1").css('top', 0).find('.listhover').css({ 'top': '14px', 'bottom': 'auto' });
         }

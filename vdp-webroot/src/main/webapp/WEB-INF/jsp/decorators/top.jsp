@@ -83,7 +83,7 @@
                 />
             </div>
             <div class="u-row">
-                <div class="label-box"><label>电话：</label></div><input type="text" name="phone" placeholder="请输入11位正整数" />
+                <div class="label-box"><label>手机：</label></div><input type="text" name="phone" placeholder="请输入11位正整数" />
             </div>
             <input type="hidden" name="id" value="" />
         </form>
