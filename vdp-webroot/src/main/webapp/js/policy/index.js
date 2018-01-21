@@ -148,7 +148,9 @@ function initEvents() {
         return;
       }
       var temp = $(".policy-content form").serializeJSON();
+      var  temp1 = $(".policy-content form").serialize();
       console.log(temp);
+      console.log(temp1);
       //下面是关于审批的
       if(out_file == 0){//说明进来没有点审批
         if(msg.sbfileoutcfg.content.flowid!=0){
@@ -168,7 +170,6 @@ function initEvents() {
       }else {//第一次进来点了审批，export_file，不用管了
           obj.sbfileopt.content.flowid=export_file;
       }
-      debugger;
       if($("body input[name=approveOut]").is(":checked")){
         if(obj.sbfileoutcfg.content.flowid>0){
 
@@ -446,6 +447,10 @@ function allChecked(){
   if($("body #outWaterHidden").is(":checked")){
     $("body .fileOut .waterShowContent label.ms input").prop("checked","checked");
     $("body .fileOut .waterShowContent label.ms input").prop("disabled",true);
+  }
+  if($("body #waterHidden").is(":checked")){
+    $("body .fileExport .waterShowContent label.ms input").prop("checked","checked");
+    $("body .fileExport .waterShowContent label.ms input").prop("disabled",true);
   }
   if($("body #isScreenWater").is(":checked")){
     $("body input[name=outWater]").removeAttr("disabled");

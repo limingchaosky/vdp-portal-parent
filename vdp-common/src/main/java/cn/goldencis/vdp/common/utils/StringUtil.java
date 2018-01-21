@@ -117,12 +117,29 @@ public class StringUtil {
         return sb.toString();
     }
 
-    public static String generateScrnwatermarkId(String authId) {
+    public static String generateScrnwatermarkId(String authId, Integer markRecordId) {
         StringBuffer sb = new StringBuffer();
         sb.append("s");
         String last4Str = authId.substring(authId.length() - 4);
         sb.append(StringUtil.stringToHex(last4Str));
-        sb.append(UUID.randomUUID().toString().replaceAll("-", ""));
+        sb.append(intToStr32(markRecordId));
+        return sb.toString();
+    }
+
+    /**
+     *
+     * 将int转换为32位的二进制，保存在字符串中返回。
+     * @param num
+     * @return
+     */
+    public static String intToStr32(int num) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 31; i >= 0; i--) {
+            // &1 也可以改为num&0x01,表示取最地位数字.
+            sb.insert(0, (byte) (num & 1));
+            // 右移一位.
+            num >>= 1;
+        }
         return sb.toString();
     }
 }

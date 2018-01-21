@@ -80,8 +80,8 @@
                         <tr>
                             <th class="text-center">
                                 <div class="beauty-checkbox">
-                                    <input id="check_user_all" type="checkbox" class="j-check-user-all">
-                                    <label for="check_user_all" class="checkbox-icon"></label>
+                                    <input id="check_process_all" type="checkbox" class="j-check-process-all">
+                                    <label for="check_process_all" class="checkbox-icon"></label>
                                 </div>
                             </th>
                             <th>流程名称</th>

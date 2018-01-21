@@ -53,6 +53,7 @@ function initEvent() {
       var id = $(this).data('id');//他的id是多少
       var type = $(this).data('type');//类型是不是外发
       var is = $(this).data('is');//是不是到他审批了
+      var detailId;
       layer.open({
         id: 'openWind',
         type: 1,
@@ -65,10 +66,10 @@ function initEvent() {
           if (is) {
             var result = $("#openWind input[name=approveIdea]:checked").val();
             var remark = $("#openWind textarea[name=textarea]").val();
-            // console.log(result,remark);
-            postAjax(ctx + '/approveFlow/approveFlow', {approveDetailId: id, result: result, remark: remark}, function (msg) {
+            postAjax(ctx + '/approveFlow/approveFlow', {approveDetailId: detailId, result: result, remark: remark}, function (msg) {
               if (msg.resultCode == 1) {
-                layer.msg('审批！', {icon: 1});
+                layer.msg('审批成功！', {icon: 1});
+                processTable.ajax.reload();
                 layer.close(index);
               } else {
                 layer.msg('审批失败！' + (msg.resultMsg || ''), {icon: 2});
@@ -83,8 +84,8 @@ function initEvent() {
         success: function (layero, index) {
           // 获取详情
           getAjax(ctx + '/approveFlow/getApproveFlowInfoById', {approveFlowId: id}, function (msg) {
-            // console.log(msg);
             if (msg.resultCode == 1) {
+              console.log(msg)
               if (type == 0) {
                 $("#openWind .top").html(template('approve_tem_out_top', msg.data));
               } else {
@@ -97,6 +98,7 @@ function initEvent() {
           getAjax(ctx + '/approveDetail/getApproveFlowModel', {approveFlowId: id}, function (msg) {
             console.log(msg);
             if (msg.resultCode == 1) {
+              detailId = msg.data.detailId;
               if (type == 0) {
                 $("#openWind .flow").html(template('getNode_tem', msg));
               } else {
@@ -129,10 +131,55 @@ function initEvent() {
         processTable.ajax.reload();
       }
     })
-
+    //用户全选或取消全选
+    .on('change', '.j-check-process-all', function () {
+      $('.j-check-process').prop('checked', $(this).prop('checked'));
+    })
+    //用户单个选择或取消选择
+    .on('change', '.j-check-process', function () {
+      $('.j-check-process-all').prop('checked', $('.j-check-process').not(':checked').length == 0);
+    })
     //删除已完成的流程
-    .on('click', '#bar_del_process', function () {
-
+    .on('click', '.j-opt-hover-delete,#bar_del_process', function () {
+      var ids = [];
+      if ($(this).is('#bar_del_process')) {
+        if ($('.j-check-process:checked').length == 0) {
+          layer.msg('请先选中流程！', { icon: 7 });
+          return;
+        }
+        else {
+          ids = $('.j-check-process:checked').map(function (index, obj) {
+            return $(obj).attr('data-id');
+          }).toArray();
+        }
+      }
+      else {
+        ids.push($(this).attr('data-id'));
+      }
+      layer.confirm(ids.length > 1 ? '确定要删除选中的流程吗？' : '确定要删除该流程吗？', {
+        btn: ['确定', '取消']
+      }, function () {
+        var postData = {};
+        postData.approveFlowArr = ids.join(',');
+        console.log(postData);
+        $.ajax({
+          type: 'post',
+          url: ctx + '/approveFlow/deleteApproveFlow',
+          data: postData,
+          success: function (msg) {
+            if (msg.resultCode == 1) {
+              processOverTable.ajax.reload(function () { }, true);
+              $('.j-check-process-all').prop('checked', false);
+              layer.msg('删除成功！', { icon: 1 });
+            } else {
+              layer.msg('删除失败！', { icon: 2 });
+            }
+          },
+          error: function () {
+            layer.msg('删除失败！', { icon: 2 });
+          }
+        })
+      });
     })
     //点击查看详情
     .on('click', '.j-opt-hover-detail', function () {
@@ -287,7 +334,6 @@ function initProcessTable(status) {
       "url": ctx + "/approveFlow/getApproveFlowPage",
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
-        console.log(json);
         return json.data.map(function (obj) {
           return [obj.name, obj.type, obj.applicantName, obj.pointName, obj.applyTime, {id: obj.id, type: obj.type, isa: obj.checked}];//是不是到了当前人
         });
@@ -411,7 +457,6 @@ function initProcessOverTable(status) {
       "url": ctx + "/approveFlow/getApproveFlowPage",
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
-        console.log(json);
         return json.data.map(function (obj) {
           return [obj.id, obj.name, obj.type, obj.applicantName, obj.applyTime, obj.status, obj.finishTime, {id: obj.id, type: obj.type}];//是不是到了当前人
         });
@@ -430,7 +475,7 @@ function initProcessOverTable(status) {
       "class": "text-center",
       "render": function (data, type, full) {
         return '<div class="beauty-checkbox">' +
-          '<input id="table_check_' + data + '" type="checkbox" class="j-check-user" data-id="' + data + '">' +
+          '<input id="table_check_' + data + '" type="checkbox" class="j-check-process" data-id="' + data + '">' +
           '<label for="table_check_' + data + '" class="checkbox-icon"></label>' +
           '</div>';
       }
@@ -555,7 +600,6 @@ function ProcessTable(id) {
       "url": ctx + "/approveDetail/getApproveDetailsByFlowId",
       //改变从服务器返回的数据给Datatable
       "dataSrc": function (json) {
-        console.log(json);
         return json.data.map(function (obj) {
           return [obj.approver, obj.result, obj.remark || '--', obj.modifyTime];//是不是到了当前人
         });
