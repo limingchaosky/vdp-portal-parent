@@ -2,6 +2,7 @@ package cn.goldencis.vdp.common.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  *
@@ -90,5 +91,38 @@ public class StringUtil {
             return rlist;
         }
         return null;
+    }
+
+    public static String stringToHex(String str) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            int n_1, n_2, n_3, n_4;
+            char cT;
+            int nC;
+            if (c > '9') {
+                cT = 'a';
+                nC = (c - cT) + 10;
+            } else {
+                cT = '0';
+                nC = (c - cT);
+            }
+            n_1 = nC / 8;
+            n_2 = (nC % 8) / 4;
+            n_3 = (nC % 4) / 2;
+            n_4 = nC % 2;
+
+            sb.append("" + n_1 + n_2 + n_3 + n_4);
+        }
+        return sb.toString();
+    }
+
+    public static String generateScrnwatermarkId(String authId) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("s");
+        String last4Str = authId.substring(authId.length() - 4);
+        sb.append(StringUtil.stringToHex(last4Str));
+        sb.append(UUID.randomUUID().toString().replaceAll("-", ""));
+        return sb.toString();
     }
 }
