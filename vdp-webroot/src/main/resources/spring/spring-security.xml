@@ -51,6 +51,9 @@
 	<!-- 开放水印接口 -->
 	<http pattern="/scrnwatermark/generateScrnwatermarkId" security="none" />
 
+	<!-- 开放视频流转日志接口 -->
+	<http pattern="/report/submitVideoTransferLog" security="none" />
+
 	<!-- <http pattern="/system/import/import" security="none"></http> <http
 		pattern="/system/import/importdevice" security="none"></http> -->
 	<http pattern="/ueditor/config*" security="none" />

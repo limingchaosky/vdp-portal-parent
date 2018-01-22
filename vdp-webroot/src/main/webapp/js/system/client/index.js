@@ -25,14 +25,19 @@ function initEvent() {
         return;
       }
       if (checkValue(netval)) {
-        postAjax(ctx + '/systemClient/addVedioNetAccess', {ip: netval}, function (msg) {
-          if (msg.resultCode == 1) {
-            layer.msg('编辑成功！', {icon: 1});
-            getNetData(0, 20)
-          } else {
-            layer.msg('保存失败！' + (msg.resultMsg || ''), {icon: 2});
-          }
-        });
+        if($("body .netShow .netShowList").length!=20){
+          postAjax(ctx + '/systemClient/addVedioNetAccess', {ip: netval}, function (msg) {
+            if (msg.resultCode == 1) {
+              layer.msg('保存成功！', {icon: 1});
+              getNetData(0, 20);
+            } else {
+              layer.msg('保存失败！' + (msg.resultMsg || ''), {icon: 2});
+            }
+          });
+        }else {
+          layer.msg('最多只能添加20条！', {icon: 2});
+        }
+
       }else {
         layer.msg('请勿重复添加！', {icon: 2});
         return;
@@ -42,7 +47,7 @@ function initEvent() {
     .on("click", "#netClose", function () {
       var id = $(this).parents(".netShowList").data("id");
       var idx = $(this).parents(".netShowList").index();
-      layer.confirm("是否确定删除", {
+      layer.confirm("是否确定删除？", {
         btn: ['确定', '取消']
       }, function () {
         postAjax(ctx + '/systemClient/deleteVedioNetAccess', {VedioNetAccessId: id}, function (msg) {
@@ -97,7 +102,7 @@ function initEvent() {
     .on("click", "#logoClose", function () {
       var id = $(this).parents(".logoShowList").data("id");
       var idx = $(this).parents(".logoShowList").index();
-      layer.confirm("是否确定删除", {
+      layer.confirm("是否确定删除？", {
         btn: ['确定', '取消']
       }, function () {
         postAjax(ctx + '/systemClient/deleteVedioLogonAccess', {vedioLogonAccessId: id}, function (msg) {

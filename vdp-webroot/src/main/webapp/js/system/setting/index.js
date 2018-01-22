@@ -25,7 +25,7 @@ function initEvent() {
     .on('click', '.j-opt-hover-delete', function () {
       var id = $(this).attr('data-id');
       if (id == 1 || id == 2 || id == 3|| id == 4) {
-        layer.msg("内置管理员不能删除", {icon: 2});
+        layer.msg("内置管理员不能删除！", {icon: 2});
         return
       }
       layer.confirm('确定要删除该账户吗？', {

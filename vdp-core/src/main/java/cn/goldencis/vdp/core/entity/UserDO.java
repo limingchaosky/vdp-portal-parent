@@ -1,22 +1,30 @@
 package cn.goldencis.vdp.core.entity;
 
+import cn.goldencis.vdp.common.annotation.MyFieldAnnotation;
 import cn.goldencis.vdp.common.entity.BaseEntity;
 import java.io.Serializable;
 import java.util.Date;
 
 public class UserDO extends BaseEntity implements Serializable {
+    @MyFieldAnnotation(order = 0, desc = "export")
     private Integer id;
 
+    @MyFieldAnnotation(order = 1, desc = "export")
     private String guid;
 
+    @MyFieldAnnotation(order = 2, desc = "export")
     private String userName;
 
+    @MyFieldAnnotation(order = 3, desc = "export")
     private String password;
 
+    @MyFieldAnnotation(order = 4, desc = "export")
     private Integer department;
 
+    @MyFieldAnnotation(order = 5, desc = "export")
     private String name;
 
+    @MyFieldAnnotation(order = 6, desc = "export")
     private Integer sex;
 
     private Integer visible;

@@ -66,6 +66,13 @@
   color: #38D1BF;
   cursor: pointer;
 }
+.table-opt-icon {
+  color: #E1E1E1;
+}
+.table-opt-icon:hover {
+  color: #38D1BF;
+  cursor: pointer;
+}
 .wind-label {
   text-align: left !important;
 }

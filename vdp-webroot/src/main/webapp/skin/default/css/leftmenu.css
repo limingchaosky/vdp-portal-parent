@@ -35,7 +35,9 @@
     background-repeat: no-repeat;
     background-position: center;
 }
-
+#menubtn:hover{
+    background-image: url(../images/leftmenu/menubtn-hover.png);
+}
 #menulist {
     width: 100%;
     position: absolute;

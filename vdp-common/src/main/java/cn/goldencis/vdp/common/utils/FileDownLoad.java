@@ -16,7 +16,7 @@ public class FileDownLoad {
      * 文件下载
      * @param response
      * @param request
-     * @param key
+     * @param path
      */
     public void download(HttpServletResponse response, HttpServletRequest request, String path) {
         FileInputStream inputstream = null;

@@ -78,7 +78,7 @@
 <script id="logoList" type="text/html">
     {{each $data item}}
     <div class="logoShowList inline-block" data-id="{{item.id}}" data-method="{{item.startMethod}}">
-        <span class="inline-block text-ellipsis">{{item.name}}</span>
+        <span class="inline-block text-ellipsis" title="{{item.name}}">{{item.name}}</span>
         <div class="con inline-block text-top">
             {{if item.startMethod == 0}}
             <i class="iconfont icon-nav-monitor"></i>

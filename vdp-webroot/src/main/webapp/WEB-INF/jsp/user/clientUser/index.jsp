@@ -25,12 +25,12 @@
             <div class="bar-item-box">
                 <div class="bar-item bar-item-search">
                     <input id="bar_searchstr" type="text" placeholder="用户名/IP地址">
-                    <i id="bar_searchstr_icon" class="iconfont icon-btn-serch"></i>
+                    <i id="bar_searchstr_icon" class="iconfont icon-btn-search1"></i>
                 </div>
                 <a id="bar_add_user" class="bar-item bar-item-icon iconfont icon-btn-add" title="添加用户"></a>
-                <a id="bar_policy_user" class="bar-item bar-item-icon iconfont icon-btn-edit" title="批量修改策略"></a>
-                <a id="bar_import" class="bar-item bar-item-icon iconfont icon-btn-import1" title="导入"></a>
-                <a id="bar_export" class="bar-item bar-item-icon iconfont icon-btn-export1" title="导出"></a>
+                <a id="bar_policy_user" class="bar-item bar-item-icon iconfont icon-btn-edit1" title="批量修改策略"></a>
+                <a id="bar_import" class="bar-item bar-item-icon iconfont icon-btn-import" title="导入"></a>
+                <a id="bar_export" class="bar-item bar-item-icon iconfont icon-btn-export" title="导出"></a>
                 <!--<a id="bar_relieve" class="bar-item bar-item-icon iconfont icon-btn-remove" title="解绑UKey"></a>-->
             </div>
         </div>
@@ -113,7 +113,7 @@
         <i class="iconfont icon-nav-system table-opt-icon"></i>
         <div class="opt-hover-box">
             <div class="opt-hover-row j-opt-hover-edit" data-id="{{id}}">
-                <i class="iconfont icon-btn-edit text-sm"></i>
+                <i class="iconfont icon-btn-edit1 text-sm"></i>
                 <span class="text-sm margin-left-xs">编辑</span>
             </div>
             <div class="opt-hover-row j-opt-hover-delete" data-id="{{id}}">

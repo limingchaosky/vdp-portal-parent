@@ -189,7 +189,7 @@ public class UserController implements ServletContextAware {
     @RequestMapping(value = "/exportxslall", method = RequestMethod.GET)
     public void exportXslAll(UserDO user, HttpServletRequest request, HttpServletResponse response) {
 
-        List<UserDO> dlist = userService.getUserList(user);
+        List<UserDO> dlist = userService.getAllUser();
         CommonPoiXsl<UserDO> poiXsl = new CommonPoiXsl<UserDO>();
         String path = "";
         try {

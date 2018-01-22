@@ -6,6 +6,7 @@
 <head>
     <title>金盾VDP</title>
     <link href="${ctxCss}/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="icon" href="${ctxImg}/logo.ico" type="image/x-ico" />
     <!--<link href="${ctxCss}/ztree/ztree.css" rel="stylesheet" type="text/css"/>-->
     <!--<link href="${ctxCss}/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css"/>-->
     <!--<link href="${ctxCss}/dataTables/dataTablesgray.css" rel="stylesheet" type="text/css"/>-->
@@ -14,7 +15,10 @@
 <body>
 <div id="download_page">
     <div class="content">
-sdfsdfsd
+        <div class="logo"></div>
+        <div class="down">
+            <a href="${ctx}/resource/policy/5/bdppolicy.json">下载控件</a>
+        </div>
     </div>
 </div>
 </body>

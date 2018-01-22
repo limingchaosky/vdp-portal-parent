@@ -38,6 +38,7 @@ public class PathConfig {
 
     public final static String APPROVE_FILEPATH;
 
+    public final static String VIDEOTRANSFERLOG_FILEPATH;
 
     static {
         bundle = ResourceBundle.getBundle("vdp-common");
@@ -60,6 +61,7 @@ public class PathConfig {
         UPDATEUPLOADFILENAME = bundle.getString("updateupload.fileName");
         GOLBALCFG_PATH = bundle.getString("golbalcfg.path");
         APPROVE_FILEPATH = bundle.getString("approve.filePath");
+        VIDEOTRANSFERLOG_FILEPATH = bundle.getString("videotransferlog.filePath");
     }
 
 }

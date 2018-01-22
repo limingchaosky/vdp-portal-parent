@@ -25,10 +25,10 @@
             <div class="bar-item-box">
                 <!--<div class="bar-item bar-item-search">-->
                     <!--<input id="bar_searchstr" type="text" placeholder="部门名称">-->
-                    <!--<i id="bar_searchstr_icon" class="icon-search"></i>-->
+                    <!--<i id="bar_searchstr_icon" class="iconfont icon-btn-search1"></i>-->
                 <!--</div>-->
                 <a id="bar_add_dept" class="bar-item bar-item-icon iconfont icon-btn-add" title="添加部门"></a>
-                <a id="bar_export" class="bar-item bar-item-icon iconfont icon-btn-export1" title="导出"></a>
+                <a id="bar_export" class="bar-item bar-item-icon iconfont icon-btn-export" title="导出"></a>
             </div>
         </div>
         <!--右侧顶部操作结束-->
@@ -84,7 +84,7 @@
         <i class="iconfont icon-nav-system table-opt-icon"></i>
         <div class="opt-hover-box">
             <div class="opt-hover-row j-opt-hover-edit" data-id="{{id}}" data-treePath="{{treePath}}">
-                <i class="iconfont icon-btn-edit"></i>
+                <i class="iconfont icon-btn-edit1"></i>
                 <span class="text-sm margin-left-xs">编辑</span>
             </div>
             <div class="opt-hover-row j-opt-hover-delete" data-id="{{id}}">

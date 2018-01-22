@@ -69,7 +69,7 @@ function initEvent() {
             postAjax(ctx + '/approveFlow/approveFlow', {approveDetailId: detailId, result: result, remark: remark}, function (msg) {
               if (msg.resultCode == 1) {
                 layer.msg('审批成功！', {icon: 1});
-                processTable.ajax.reload();
+
                 layer.close(index);
               } else {
                 layer.msg('审批失败！' + (msg.resultMsg || ''), {icon: 2});
@@ -86,6 +86,8 @@ function initEvent() {
           getAjax(ctx + '/approveFlow/getApproveFlowInfoById', {approveFlowId: id}, function (msg) {
             if (msg.resultCode == 1) {
               console.log(msg)
+              msg.data.flowInfo.policyParam = JSON.parse(msg.data.flowInfo.policyParam);
+
               if (type == 0) {
                 $("#openWind .top").html(template('approve_tem_out_top', msg.data));
               } else {
@@ -96,8 +98,8 @@ function initEvent() {
           });
           //获取环节
           getAjax(ctx + '/approveDetail/getApproveFlowModel', {approveFlowId: id}, function (msg) {
-            console.log(msg);
             if (msg.resultCode == 1) {
+              console.log(msg)
               detailId = msg.data.detailId;
               if (type == 0) {
                 $("#openWind .flow").html(template('getNode_tem', msg));
@@ -227,10 +229,6 @@ function initEvent() {
       });
     })
 
-    //删除已完成的流程
-    .on('click', '.j-opt-hover-delete', function () {
-
-    })
     //显示操作悬浮框
     .on('mouseover', '.table-opt-icon', function () {
       var offset = document.documentElement.clientHeight - $(this).offset().top;

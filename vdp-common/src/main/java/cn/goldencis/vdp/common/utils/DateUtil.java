@@ -21,7 +21,7 @@ public class DateUtil {
 
     public static final String[] DateFormats = new String[] { "yyyy-MM-dd", "HH:mm", "yyyyMMddHHmm" };
 
-    public static final String DateFormat = "yyyy-MM-dd";
+    public static final String DateFormatStr = "yyyy-MM-dd";
 
     public static final String TimeFormat = "HH:mm";
 
@@ -32,6 +32,18 @@ public class DateUtil {
         SimpleDateFormat fm = new SimpleDateFormat(DateTimeFormat, Locale.US);
         fm.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         return fm.format(date);
+    }
+
+    public static Date getCurrentDateChinaTimezone() {
+        Calendar now = Calendar.getInstance();
+        now.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));//important
+        return now.getTime();//获取系统时间
+    }
+
+    public static Date getDateByStrWithFormat(String dateStr, String pattern ) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        sdf.applyPattern(pattern);
+        return sdf.parse(dateStr);
     }
 
     /**.
@@ -939,7 +951,6 @@ public class DateUtil {
      * 某个时间点 加减 N个月
      * @param format
      * @param n
-     * @param flag
      * @return
      */
     public static String getDateAdd(int n, String dateStr, String format) {
@@ -961,7 +972,6 @@ public class DateUtil {
      * 某个时间点 加减 几天
      * @param format
      * @param n
-     * @param flag
      * @return
      */
     public static String getDateAddDay(int n, String dateStr, String format) {

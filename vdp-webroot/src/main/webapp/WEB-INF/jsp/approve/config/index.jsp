@@ -38,7 +38,7 @@
                         </div>
                         <div class="bar-item bar-item-search">
                             <input id="bar_searchstr" type="text" placeholder="提交人">
-                            <i id="bar_searchstr_icon" class="iconfont icon-btn-serch"></i>
+                            <i id="bar_searchstr_icon" class="iconfont icon-btn-search1"></i>
                         </div>
                     </div>
 
@@ -69,7 +69,7 @@
                         </div>
                         <div class="bar-item bar-item-search">
                             <input id="bar_searchstrOver" type="text" placeholder="提交人">
-                            <i id="bar_searchstr_iconOver" class="iconfont icon-btn-serch"></i>
+                            <i id="bar_searchstr_iconOver" class="iconfont icon-btn-search1"></i>
                         </div>
                     </div>
 
@@ -108,7 +108,7 @@
         <i class="iconfont icon-nav-system table-opt-icon"></i>
         <div class="opt-hover-box">
             <div class="opt-hover-row j-opt-hover-detail" data-id="{{id}}" data-type="{{type}}">
-                <i class="iconfont icon-btn-edit text-sm"></i>
+                <i class="iconfont icon-btn-review text-sm"></i>
                 <span class="text-sm margin-left-xs">查看详情</span>
             </div>
             <div class="opt-hover-row j-opt-hover-delete" data-id="{{id}}">
@@ -162,24 +162,24 @@
     <div class="title">文件外发申请详情</div>
     <div class="content">
         <div class="left">
-            <label for="" class="dig">摘要：</label><a href=""><i class="iconfont icon-btn-review"></i></a>
-            <label for="">接收方信息：XXXXXX</label>
-            <label for="">禁止截屏：XXXXXX</label>
+            <label for="" class="dig">摘要：</label><a href="${ctx}/{{flowInfo.filePath}}"><i class="iconfont icon-btn-review"></i></a>
+            <label for="">接收方信息：{{flowInfo.policyParam.recv}}</label>
+            <label for="">禁止截屏：{{if flowInfo.policyParam.forbidScreenShot == 1}} 是 {{else}} 否 {{/if}}</label>
             <label for="">外发原因：{{reason}}</label>
         </div>
         <div class="right">
             <label for="">申请人：{{applicantName}}</label>
-            <label for="">打开次数：4次，未启动自动删除</label>
-            <label for="">机器码绑定：XXXXXX</label>
-            <label for="">有效日期：20171.1-20171.2</label></div>
+            <label for="">打开次数：{{flowInfo.policyParam.openCount}}次，{{if flowInfo.policyParam.autoDelete==1}}启动自动删除{{else}} 启动自动删除 {{/if}}</label>
+            <label for="">机器码绑定：{{if flowInfo.policyParam.machineCode == ''}} 空 {{else}} {{flowInfo.policyParam.machineCode}} {{/if}}</label>
+            <label for="">有效日期：{{if flowInfo.policyParam.beginTime == ''}} 无 {{else}} {{flowInfo.policyParam.beginTime}} - {{flowInfo.policyParam.endTime}} {{/if}}</label></div>
     </div>
 </script>
 <script id="approve_tem_export_top" type="text/html">
     <div class="title">文件导出申请详情</div>
     <div class="content">
         <div class="left">
-            <label for="" class="dig">摘要：</label><a href=""><i class="iconfont icon-btn-review"></i></a>
-            <label for="">接收方信息：XXXXXX</label>
+            <label for="" class="dig">摘要：</label><a href="${ctx}/{{flowInfo.filePath}}"><i class="iconfont icon-btn-review"></i></a>
+            <label for="">接收方信息：{{flowInfo.policyParam.recv}}</label>
             <label for="">申请人：{{applicantName}}</label>
             <label for="">导出原因：{{reason}}</label>
         </div>
@@ -226,10 +226,10 @@
 <!--<script id=""></script>-->
 <script id="temp_approve" type="text/html">
     {{if isa == true}}
-    <!--1是导出-->
-    <i class="iconfont icon-nav-system approve-opt-icon" title="导出" data-id="{{id}}" data-type="{{type}}" data-is="{{isa}}"></i>
+    <!--1是需要批准-->
+    <i class="iconfont icon-btn-pass approve-opt-icon" title="批准" data-id="{{id}}" data-type="{{type}}" data-is="{{isa}}"></i>
     {{else if isa == false}}
-    <i class="iconfont icon-menu-user approve-opt-icon" title="外发" data-id="{{id}}" data-type="{{type}}" data-is="{{isa}}"></i>
+    <i class="iconfont icon-btn-search1 approve-opt-icon" title="详情" data-id="{{id}}" data-type="{{type}}" data-is="{{isa}}"></i>
     {{/if}}
 </script>
 <!--<script src="${ctxJs}/plugins/echarts/echarts.common.min.js"></script>-->

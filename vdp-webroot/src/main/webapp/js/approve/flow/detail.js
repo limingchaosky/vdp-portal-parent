@@ -102,7 +102,7 @@ function initEvents() {
       }
 
       if ($(this).parents('label.default').data('stepid') == '') {
-        layer.msg('该流程还未保存，不能删除', {icon: 7});
+        layer.msg('该流程还未保存，不能删除！', {icon: 7});
         return false;
       } else {
         var stepid = $(this).data("stepid");
@@ -143,14 +143,26 @@ function initEvents() {
         }
       });
       if (fl) {
-        var a = $(this).closest("label").next("label.default");
-        var t = $("#default_template").find("label.default");
-        var b = t.clone(true);
+        if($(this).closest("label.default").next("label").attr('class') == 'end'){
+          var a = $(this).closest("label").next("label.end");
+          var t = $("#default_template").find("label.default");
+          var b = t.clone(true);
 
 
-        b.insertBefore(a);
+          b.insertBefore(a);
 
-        b.find(".default_bar_title").trigger('click');
+          b.find(".default_bar_title").trigger('click');
+          b.find("#stand99").prop('checked','checked');
+        }else{
+          var a = $(this).closest("label").next("label.default");
+          var t = $("#default_template").find("label.default");
+          var b = t.clone(true);
+
+
+          b.insertBefore(a);
+
+          b.find(".default_bar_title").trigger('click');
+        }
       } else {
         // layer.msg("有未保存的流程");
         return;
@@ -217,7 +229,7 @@ function saveApprove(ele) {
   } else {//说明是编辑
     // debugger;
     var standid = $(ele).parents("label.default").find('input[name=mode' + id + ']:checked').val();
-    postData.flowId = flowid;
+    postData.flowId = Number(flowid);
     postData.id = id;
     postData.name = name;
     postData.approvers = approvers;
@@ -228,6 +240,15 @@ function saveApprove(ele) {
       console.log(msg)
       if (msg.resultCode == 1) {
         layer.msg('保存成功！', {icon: 1});
+        getAjax(ctx + '/approveDefinition/getApproveDefinitionModel', {approveDefinitionId: flowid}, function (msg) {
+          // console.log(msg);
+          // return;
+          if (msg.resultCode == 1) {
+
+
+            $(".approve_start").html(template('approveAllList', msg.data));
+          }
+        });
       }
       else {
         layer.msg('保存失败！' + (msg.resultMsg || ''), {icon: 2});

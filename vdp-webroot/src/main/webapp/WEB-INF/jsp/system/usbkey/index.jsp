@@ -15,7 +15,7 @@
         <div class="bar-item-box">
             <div class="bar-item bar-item-search">
                 <input id="bar_searchstr" type="text" placeholder="">
-                <i id="bar_searchstr_icon" class="iconfont icon-btn-serch"></i>
+                <i id="bar_searchstr_icon" class="iconfont icon-btn-search1"></i>
             </div>
             <a id="bar_add_user" class="bar-item bar-item-icon icon-add" title="添加"></a>
             <a id="bar_del_user" class="bar-item bar-item-icon icon-delete" title="删除"></a>

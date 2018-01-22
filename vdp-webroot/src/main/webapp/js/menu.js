@@ -4,7 +4,7 @@ $(function () {
     var menus = $("#menus"); // 菜单
 
     var mli0s = $(".mli0"); // 一级菜单列表
-    var mli1s = $(".mli1"); // 二级菜单列表
+    var mli1s = $("body .mli1"); // 二级菜单列表
     var mli2s = $(".mli2"); // 三级级菜单列表
 
     var mul1 = $(".mul1"); // 二级菜单容器
@@ -197,5 +197,9 @@ $(function () {
         else
             return null;
     }
+
+
+
+
 
 });

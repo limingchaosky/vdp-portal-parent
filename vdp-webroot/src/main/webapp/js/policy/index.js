@@ -148,9 +148,7 @@ function initEvents() {
         return;
       }
       var temp = $(".policy-content form").serializeJSON();
-      var  temp1 = $(".policy-content form").serialize();
       console.log(temp);
-      console.log(temp1);
       //下面是关于审批的
       if(out_file == 0){//说明进来没有点审批
         if(msg.sbfileoutcfg.content.flowid!=0){
@@ -187,6 +185,24 @@ function initEvents() {
           return;
         }
       }
+      //关于隐式水印的，文件外发，如果点击了隐式水印，所有的下级都要被选中，但是serialize不能够获取disabled状态下的值，所以只能手动获取
+      if($("#outWaterHidden").is(':checked')){
+        temp.fileOutDept = 1;
+        temp.fileOutName = 1;
+        temp.fileOutIpWater = 1;
+        temp.fileOutMACWater = 1;
+        temp.fileOutComputerWater = 1;
+        temp.fileOutTimeWater = 1;
+      }
+      if($("#waterHidden").is(':checked')){
+        temp.fileExportDept = 1;
+        temp.fileExportName = 1;
+        temp.fileExportIpWater = 1;
+        temp.fileExportMACWater = 1;
+        temp.fileExportComputerWater = 1;
+        temp.fileExportTimeWater = 1;
+      }
+      console.log(temp);
       //这是关于策略内容的
       //屏幕水印
       obj.sbscrnwatermark.enable = temp.screenSwitch?Number(temp.screenSwitch):0;

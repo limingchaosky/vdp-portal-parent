@@ -34,7 +34,7 @@
             </div>
             <div class="bar-item bar-item-search">
                 <input id="bar_searchstr" type="text" placeholder="">
-                <i id="bar_searchstr_icon" class="iconfont icon-btn-serch"></i>
+                <i id="bar_searchstr_icon" class="iconfont icon-btn-search1"></i>
             </div>
         </div>
     </div>
